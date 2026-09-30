@@ -1,0 +1,15 @@
+# 主机快查链（社区版新增）：安全基线 + 内存/进程事实两步收口。
+# 与 system-patrol 全域巡检（P1）错位：快查链只做单主机轻量两步，不给巡检报告；
+# 路由词刻意避开「巡检/体检」域词，防止劫持全域入口。
+slug: workflow/host-quick-audit
+name: 主机快查链
+route_priority: P3
+route_group: system
+route_keywords: [快查链, 主机快查, 安全快查]
+symptoms: [快查]
+route_desc: 单主机轻量两步快查（安全基线 + 内存进程事实），不产出全域巡检报告；全面体检请走系统巡检入口
+steps:
+  - agent: specialists/security-assistant
+    instruction: "对目标主机做安全基线快查（SSH 攻击/root 登录/sudo 提权/可疑进程四路核查）：{{input}}"
+  - agent: specialists/memory-analysis
+    instruction: "基于上一步安全结论与用户诉求，核查目标主机内存与进程事实（占用 TOP/异常增长/OOM 线索）：{{input}}"

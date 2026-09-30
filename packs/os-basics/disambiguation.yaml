@@ -1,0 +1,94 @@
+disambiguation:
+- keyword: 审计
+  rules:
+  - context:
+    - 安全
+    - 等保
+    - CIS
+    - 合规
+    - 风险
+    - audit
+    - 审计异常
+    target: specialists/security-assistant
+    note: 安全审计
+  - context:
+    - 日志
+    - journal
+    - 时间线
+    target: workflow/log-analysis
+    note: 日志审计
+  - context:
+    - '*'
+    action: clarify
+    note: 先澄清：您要做的是安全审计还是日志审计？
+- keyword: 报错
+  rules:
+  - context:
+    - 日志
+    - dmesg
+    - journal
+    - 时间线
+    target: workflow/log-analysis
+    note: 日志类报错
+  - context:
+    - '*'
+    target: workflow/fault-diagnosis
+    note: 默认归故障链
+- keyword: 检查
+  rules:
+  - context:
+    - 脚本
+    target: platform/script-assistant
+    note: 脚本生成意图（「写个脚本批量检查X」是工具诉求，先于域内检查判定）
+  - context_from_symptoms: specialists/security-assistant
+    context:
+    - 安全
+    - 合规
+    - 等保
+    - CIS
+    - 基线
+    target: specialists/security-assistant
+    note: 安全检查
+  - context_from_symptoms: specialists/io-analysis
+    context:
+    - 空间
+    - 容量
+    - 存储
+    - 挂载
+    - inode
+    target: specialists/io-analysis
+    note: IO/存储域内检查
+  - context_from_symptoms: specialists/memory-analysis
+    context:
+    - NUMA
+    target: specialists/memory-analysis
+    note: 内存域内检查
+  - context_from_symptoms: specialists/network-analysis
+    target: specialists/network-analysis
+    note: 网络域内检查
+  - context:
+    - 资源
+    - 服务
+    - 硬件
+    - 健康
+    - 状态
+    - 巡检
+    target: workflow/system-patrol
+    note: 例行巡检
+  - context:
+    - '*'
+    target: workflow/system-patrol
+    note: 默认归巡检
+- keyword: 切换
+  rules:
+  - context:
+    - 巡检
+    - 变更前
+    - 变更后
+    - 对比
+    target: workflow/system-patrol
+    note: 变更前后巡检对比
+  - context:
+    - '*'
+    target: workflow/fault-diagnosis
+    note: 故障场景切换走故障链（执行必经审批闸门）

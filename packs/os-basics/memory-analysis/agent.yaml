@@ -1,0 +1,35 @@
+slug: specialists/memory-analysis
+name: 内存分析Agent
+layer: expert
+kind: llm
+status: active
+temperature: 0.1
+max_iterations: 10
+prompt_file: prompt.md
+prompt_includes:
+- _shared/prompts/platform-matrix.md
+tools:
+- server: ask-ops
+  allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: system
+domain:
+- 内存
+route_keywords:
+- 内存泄漏
+- swap满
+- 内存碎片
+- NUMA失衡
+- HugePage
+- memcg
+- 回收抖动
+- 内存告警
+symptoms:
+- oom
+- 内存
+- swap
+- RSS
+- VSZ
+- oom_score
+- 内存不够

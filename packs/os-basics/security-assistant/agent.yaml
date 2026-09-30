@@ -1,0 +1,77 @@
+slug: specialists/security-assistant
+name: 安全检测Agent
+layer: expert
+kind: llm
+status: active
+temperature: 0.1
+max_iterations: 11
+prompt_file: prompt.md
+prompt_includes:
+- _shared/prompts/platform-matrix.md
+skills:
+- security-ssh-attack
+- security-process-detection
+- security-root-login-detection
+- security-sudo-detection
+tools:
+- server: security-assistant
+  allow:
+  - security_inspection
+  - collect_security_logs
+  - collect_system_info
+  - collect_process_info
+  - collect_network_status
+  - collect_service_info
+  - collect_filesystem
+  - grep_file
+  - read_file
+  - tail_file
+  - list_directory
+dispatch_allow: []
+route_priority: P0
+route_keywords:
+- 安全
+- 等保
+- CIS
+- 合规
+- 入侵
+- 暴力破解
+- 后门
+- 挖矿
+- 漏洞
+- root登录
+- 基线
+- 安全基线
+- 安全巡检
+- 安全检测
+- 风险评估
+- 弱口令
+- sudo提权
+- SELinux
+- KYSEC
+- AppArmor
+- 证书过期
+- 证书到期
+- 证书有效期
+- HTTPS 证书
+- SSL 证书
+route_group: security
+domain:
+- 安全
+- CVE
+- 等保
+- CIS
+symptoms:
+- 入侵
+- 异常登录
+- 漏洞
+- 弱口令
+- 暴力破解
+- sudo
+- SELinux
+- KYSEC
+- AppArmor
+- PAM
+- SSH
+- 证书过期
+pluggable: false

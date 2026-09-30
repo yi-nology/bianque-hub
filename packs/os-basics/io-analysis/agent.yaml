@@ -1,0 +1,40 @@
+slug: specialists/io-analysis
+name: IO与存储分析Agent
+layer: expert
+kind: llm
+status: active
+temperature: 0.1
+max_iterations: 10
+prompt_file: prompt.md
+prompt_includes:
+- _shared/prompts/platform-matrix.md
+tools:
+- server: ask-ops
+  allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: storage
+domain:
+- IO
+- 存储
+route_keywords:
+- iowait高
+- io慢
+- 慢盘
+- 磁盘满
+- RAID降级
+- LVM
+- 多路径
+- NVMe
+- 块IO
+- 设备队列
+symptoms:
+- iowait
+- 磁盘
+- 磁盘io
+- 慢盘
+- RAID
+- LVM
+- 多路径
+- NVMe
+- 块设备

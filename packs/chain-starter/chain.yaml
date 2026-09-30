@@ -1,0 +1,13 @@
+# 起步示例链：两步演示（第一步技能钉扎、第二步聚合收口）。
+slug: workflow/starter-chain
+name: 起步示例链
+route_priority: P4
+route_group: tooling
+route_keywords: [起步链, 示例链]
+route_desc: 最小两步示例链（结构演示）：先按钉扎技能口径归类，再收口建议；真实链请替换为领域专家
+steps:
+  - agent: imports/starter-analyst
+    skill: starter-method          # 技能钉扎：本步强制注入技能全文执行（不靠 LLM 自觉 use_skill）
+    instruction: "第一步——现象归类与信息缺口：{{input}}"
+  - agent: imports/starter-analyst
+    instruction: "第二步——基于上一步结论给建议与置信度：{{input}}"

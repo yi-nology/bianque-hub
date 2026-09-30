@@ -1,0 +1,42 @@
+slug: specialists/network-analysis
+name: 网络分析Agent
+layer: expert
+kind: llm
+status: active
+temperature: 0.1
+max_iterations: 10
+prompt_file: prompt.md
+prompt_includes:
+- _shared/prompts/platform-matrix.md
+tools:
+- server: ask-ops
+  allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: network
+domain:
+- 网络
+route_keywords:
+- 网络不通
+- 丢包
+- 断网
+- 连接超时
+- DNS解析
+- TLS握手
+- conntrack满
+- TCP重传
+- 网络延迟高
+- 协议栈丢包
+- 链路断
+symptoms:
+- 网络
+- 丢包
+- 防火墙
+- 路由
+- DNS
+- TLS
+- conntrack
+- TCP
+- 重传
+- 链路
+- ping不通

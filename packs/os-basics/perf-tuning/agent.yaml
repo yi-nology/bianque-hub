@@ -1,0 +1,35 @@
+slug: workflow/perf-tuning
+name: 性能调优Agent
+layer: flow
+kind: llm
+status: active
+temperature: 0.1
+max_iterations: 15
+prompt_file: prompt.md
+prompt_includes:
+- _shared/prompts/platform-matrix.md
+approval_subject: true
+tools:
+- server: ask-ops
+  allow:
+  - get_performance_snapshot
+  - get_processes
+dispatch_allow:
+- specialists/memory-analysis
+- specialists/io-analysis
+- specialists/network-analysis
+- platform/ask-ops
+route_priority: P2
+route_keywords:
+- 调优
+- 瓶颈
+- 吞吐
+- 性能调优
+- 性能瓶颈
+route_desc: 性能瓶颈定位与参数调优建议（建议模式，执行需审批）
+domain:
+- 性能调优
+symptoms:
+- 调优
+- 瓶颈
+- 吞吐

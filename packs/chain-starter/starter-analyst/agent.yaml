@@ -1,0 +1,16 @@
+slug: imports/starter-analyst
+name: 起步分析专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 6
+prompt_file: prompt.md
+skills:
+  - starter-method
+dispatch_allow: []
+route_priority: P4
+route_group: tooling
+route_keywords: [起步示例]
+symptoms: [示例症状]
+route_desc: 最小示例专家：按 starter-method 技能四段式做轻量分析。复制本包起步时请换掉 slug/关键词/提示词
+pluggable: true

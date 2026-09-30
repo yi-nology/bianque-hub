@@ -1,0 +1,10 @@
+api_version: 1
+name: chain-starter
+version: 0.1.0
+description: 最小示例包：一个专家 + 一项技能 + 一条两步诊断链（含技能钉扎演示）。贡献者以此为模板起步，README 逐文件拆解。
+provides:
+  experts:
+    - imports/starter-analyst
+  skills:
+    - starter-method
+changelog: CHANGELOG.md

@@ -1,0 +1,22 @@
+# A1 确定性巡检：域 slug → sysprobe 检查器组映射（spec 2026-09-14-aiops-uplift-design §1）。
+# 缺失本文件 = 零映射（patrolFlow 回落存量全量路径）；组键合法性由 sysprobe 工具调用时报错兜底。
+# 原则：每个巡检扇出域必须全覆盖（部分映射会造成检查盲区，加载期整体回落）。
+#
+# A7 检查源声明（2026-09-15-a5-a7-kickoff-decision 决策点 5）：source: k8sgpt = 该域
+# findings 由 k8sgpt analyze 采集，经检查源适配器（scheduler/flows_k8sgpt.go
+# mapK8sgptFindings）映射为统一 Finding 信封；缺省 source 为 sysprobe。
+# k8sgpt 分析结果与 Finding schema 的映射关系：kind/name → analyzer_id；
+# error[].Text → evidence；severity 由 kind 分档（workload/节点=3，其余=2）；
+# suggestion 留空由解释子步产出。
+analyzers:
+  - slug: specialists/security-assistant
+    groups: [security]
+  - slug: specialists/memory-analysis
+    groups: [memory]
+  - slug: specialists/io-analysis
+    groups: [disk, diskio]
+  - slug: specialists/network-analysis
+    groups: [net]
+  - slug: specialists/k8s-health
+    groups: [k8s]
+    source: k8sgpt

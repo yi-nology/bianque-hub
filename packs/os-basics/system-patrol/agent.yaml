@@ -1,0 +1,34 @@
+slug: workflow/system-patrol
+name: 系统巡检Agent
+layer: flow
+kind: engine
+temperature: 0.1
+max_iterations: 18
+dispatch_allow:
+- platform/ask-ops
+- specialists/security-assistant
+- specialists/memory-analysis
+- specialists/io-analysis
+- specialists/network-analysis
+- platform/knowledge-base
+- workflow/verdict-judge
+route_priority: P1
+route_keywords:
+- 巡检
+- 健康
+- 体检
+- 变更前
+- 变更后
+- 巡检报告
+route_desc: 全面多域例行体检（CPU/内存/IO/网络/安全并行采集）与变更前后对比；单项指标或单一资源的问题不进本入口（单项即时事实走 ask-ops
+  快速问答）
+domain:
+- 巡检
+- 健康检查
+- 变更前后
+symptoms:
+- 巡检
+- 健康
+- 变更前
+- 变更后
+pluggable: false
