@@ -4,7 +4,6 @@ description: 检测 Linux 服务器（CentOS/Ubuntu/麒麟 V10/openEuler 等）�
 mode: on_demand
 version: 1.0.0
 maturity: stable
-compatibility: opencode
 requires_mcp:
   - server: security-assistant
     tools:

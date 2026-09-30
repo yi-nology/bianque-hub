@@ -66,6 +66,18 @@ go run ./validator ./packs knowledge   # CI 同款：结构契约 + 跨包唯一
 新增/修改技能、专家、诊断链请读 [CONTRIBUTING.md](CONTRIBUTING.md)——复制
 `chain-starter` 起步，校验器全绿即可提 PR。
 
+## 维护者：同步进扁鹊内置 seed
+
+本仓是包内容**唯一编辑点**；扁鹊仓的 `internal/agents/seed/` 只是随二进制分发的
+新机引导快照（直接改 seed 会在下次同步被覆盖）。PR 合并后由维护者执行：
+
+```bash
+cd <扁鹊仓>
+go run ./cmd/bq-markettool seed-sync --hub <本仓路径> --repo . --packs os-basics --apply
+go run ./cmd/pack-lint   # 内嵌 seed 校验（在无 experts/ 的目录跑才走内嵌源）
+go build                 # seed 是 go:embed，改完必须重编译
+```
+
 ## 许可
 
 [Apache-2.0](LICENSE)

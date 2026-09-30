@@ -4,8 +4,10 @@
 （k8s-health 专家 + k8sgpt 分析桥）。
 
 本包是扁鹊（bianque）内置同名核心包的**社区上游版**：slug/路由/技能与内置版完全
-等位，安装后原位接管内置包（upgrade 接管，uninstall 后重启自动还原内置版）。上游
-内容以本仓为准，欢迎 PR 更新专家方法论、技能与诊断链。
+等位，安装后原位接管内置包（upgrade 接管，uninstall 后重启自动还原内置版）。**本仓
+是唯一编辑点**——扁鹊仓库的 `internal/agents/seed/os-basics` 只是本包的同步快照
+（维护者经 `bq-markettool seed-sync` 单向同步，直接改 seed 会在下次同步被覆盖），
+欢迎 PR 更新专家方法论、技能与诊断链。
 
 ## 与其他智能体的兼容性
 
