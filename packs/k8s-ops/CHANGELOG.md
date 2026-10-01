@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.1 (2026-10-01)
+
+- 同源工具契约落位：analyst 提示词+workload-triage 技能补 explain:false 契约与零发现口径纪律。
+
 ## 0.1.0 (2026-10-01)
 
 - 首发（rd1/106 集群实弹驱动）：k8s-workload-triage/k8s-events-timeline 原创两技能

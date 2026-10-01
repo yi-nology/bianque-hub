@@ -5,6 +5,21 @@
 2. 只读诊断；修复建议给步骤与风险，不直接执行（执行走平台方案审批链）；
 3. 输出统一报告 JSON（字段与全仓协议一致）。
 
+## k8sgpt 工具契约（2026-10-01 rd1/106 实弹：explain 模式吞发现）
+
+1. `analyze` 一律传 `explain: false`——`explain:true` 会让 k8sgpt 把发现送往解释后端
+   （本平台部署挂哑后端过启动检查，连接必拒）：**凡有发现的扫描整体报错、发现全丢**，
+   只有零发现的过滤器侥幸返回"No problems detected"。解释/判读是平台 LLM（你）的职责，
+   不需要 k8sgpt 解释。
+2. 「零发现」结论必须带口径：说清过滤器与命名空间（如「Pod/Deployment/Node 过滤器下
+   零发现」），禁止把过滤扫描的零发现表述为「全量无问题」；要断言全量，须发一次**无
+   filters、无 namespace、explain:false** 的全量调用并以其结果为准。
+3. 系统级噪音降权：kube-public/kube-system 下 kubeadm-config、kubelet-config、
+   cluster-info、extension-apiserver-authentication 等 ConfigMap「未被引用」是系统
+   配置的正常形态，归入噪音清单不进结论主体；业务命名空间的未引用 ConfigMap 才列
+   清理建议。
+4. 事件计数类证据标注采集时刻（events 缺省 1 小时时效，count 是累计值不是当前速率）。
+
 ## 目标工作负载定位纪律（2026-09-21 实弹：LLM 瞎猜命名空间空转 20 轮超限失败）
 
 用户提到某服务/pod（如「iam-server」）时，**禁止凭记忆或名字猜命名空间/资源名**，

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.1 (2026-10-01)
+
+- k8s-health 提示词补 k8sgpt 工具契约：analyze 一律 explain:false（explain:true 走哑后端必失败、有发现的扫描整体报错——rd1/106 实弹 9 条发现被吞）；零发现必须带过滤器口径；系统 ConfigMap 未引用降权；事件计数标注时效。
+
 ## 1.3.0 (2026-09-30)
 
 - 社区版首发（bianque-hub 上游化）：本包成为内置同名核心包的上游，slug/路由/技能

@@ -14,6 +14,13 @@ requires_mcp:
 - 症状关键词：CrashLoopBackOff、OOMKilled、pod 重启、拉不起来、Pending、ImagePullBackOff、Evicted、工作负载异常
 - 组合场景：节点压力传导（os-basics/k8s-node-diagnosis 联动）；Helm release 部署后异常（k8s-helm-ops 联动）
 
+## 工具契约
+
+- `analyze` 一律 `explain:false`——explain 模式把发现送往解释后端，平台部署的哑后端
+  必拒连：**有发现的扫描整体报错、发现全丢**（rd1/106 实弹在案）；解释是宿主 LLM 职责。
+- 零发现结论必须带过滤器口径；系统命名空间（kube-system/kube-public）ConfigMap
+  「未被引用」是正常形态，不进结论主体。
+
 ## 分诊路径（按异常类定位，固定顺序）
 
 1. **CrashLoopBackOff**：`get-logs`（previous=true 取崩溃前输出）→ 进程启动失败原因三查：配置错误/依赖不可达/权限；退出码 137=SIGKILL（内存），1=应用错误，0=立即退出（命令形态错）。
