@@ -1,0 +1,7 @@
+{
+  "base_url": "https://github.com/yi-nology/bianque-hub",
+  "pack": "k8s-ops",
+  "edition": "community",
+  "generated_at": "2026-10-01",
+  "origin_note": "技能 k8s-helm-ops/k8s-certs-ops 由 oo-devops（openocta 收割）k8s-helm/k8s-certs 改写去工具耦合；k8s-workload-triage/k8s-events-timeline 为本仓原创"
+}

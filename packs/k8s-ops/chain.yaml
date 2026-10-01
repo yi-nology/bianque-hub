@@ -1,0 +1,18 @@
+# 集群巡检链（k8s-ops 首发资产）：两步收口——全景采集分析 + 工作负载深挖。
+# 设计动机（2026-10-01 rd1/106 实弹）：意图路由层「检查」消歧会把 K8s 诊断诉求劫去
+# 主机域 patrol（SSH 采集中败），expert 显式绑定又会被出域症状词推翻——链入口带
+# 自有关键词直达，是 K8s 例检的可靠通道。步骤①跨包引用内置包 os-basics 的
+# specialists/k8s-health（叶子专家，k8sgpt 采集分析面）。
+slug: workflow/k8s-cluster-audit
+name: K8s 集群巡检链
+route_priority: P2
+route_group: kubernetes
+route_keywords: [k8s巡检链, 集群巡检链, k8s诊断链, 集群体检链]
+symptoms: [集群快查]
+route_desc: K8s 集群两步例检（全景采集分析 → 工作负载与事件深挖）；单 pod/单节点异常请走 K8s 健康专家入口
+steps:
+  - agent: specialists/k8s-health
+    instruction: "第一步——集群全景采集与健康分析（节点/命名空间/资源/事件扫描）：{{input}}"
+  - agent: imports/k8s-workload-analyst
+    skill: k8s-workload-triage   # 技能钉扎：分诊方法论全文强制注入执行
+    instruction: "第二步——基于上一步全景结论，按分诊方法论深挖异常工作负载（CrashLoop/OOM/Pending/事件链）：{{input}}"

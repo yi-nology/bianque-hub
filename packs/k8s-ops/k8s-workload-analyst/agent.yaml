@@ -1,0 +1,22 @@
+slug: imports/k8s-workload-analyst
+name: K8s 工作负载分析专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 14
+prompt_file: prompt.md
+skills:
+  - k8s-workload-triage
+  - k8s-events-timeline
+  - k8s-helm-ops
+  - k8s-certs-ops
+tools:
+  - server: k8sgpt
+    allow: [analyze, cluster-info, get-logs, get-resource, list-events, list-namespaces, list-resources]
+dispatch_allow: []
+route_priority: P3
+route_group: kubernetes
+route_keywords: [工作负载诊断, pod诊断, crashloop诊断, helm排查, k8s证书巡检, 集群事件分析]
+symptoms: [工作负载异常, pod异常重启, release异常, 证书告警]
+route_desc: Kubernetes 工作负载深诊专家：CrashLoopBackOff/OOMKilled/Pending 分诊、事件时间线归因、Helm release 排查与证书巡检（k8sgpt 工具面）
+pluggable: true

@@ -1,0 +1,31 @@
+# k8sgpt MCP 契约清单（工具面事实记录；k8s-ops 包声明）。
+# 版本基线 0.4.39（2026-09-15 kind 集群实测工具名终稿；rd1/106 复测一致）。
+# 服务形态：sidecar 常驻（k8sgpt serve --mcp-http），扁鹊侧 url 模式挂载。
+name: k8sgpt
+version: 0.4.39
+description: Kubernetes 集群只读诊断（k8sgpt 桥；analyze 需 sidecar 挂目标集群 kubeconfig）
+tools:
+  - name: analyze
+    desc: 集群级异常扫描（输出统一问题清单）
+  - name: cluster-info
+    desc: 集群版本与节点概览
+  - name: get-logs
+    desc: 按 pod 取日志（支持 previous 取崩溃前输出）
+  - name: get-resource
+    desc: 取单个资源对象详情（Node/Pod 等）
+  - name: list-events
+    desc: 命名空间事件列表
+  - name: list-namespaces
+    desc: 命名空间列表
+  - name: list-resources
+    desc: 按类型列资源
+  - name: list-filters
+    desc: 分析器过滤器列表（诊断面外，运维核对用）
+  - name: add-filters
+    desc: 添加过滤器（变更面，包白名单不含）
+  - name: remove-filters
+    desc: 移除过滤器（变更面，包白名单不含）
+  - name: list-integrations
+    desc: 集成列表
+  - name: config
+    desc: 运行配置查看

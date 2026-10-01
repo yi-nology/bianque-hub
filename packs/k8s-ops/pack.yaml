@@ -1,0 +1,13 @@
+api_version: 1
+name: k8s-ops
+version: 0.1.0
+description: Kubernetes 集群诊断包（社区版首批）：工作负载异常分诊/事件时间线/Helm 排查/证书巡检四技能 + 工作负载分析专家 + 集群巡检链（链入口直达，不经意图路由）。工具面声明 k8sgpt 0.4.39 契约清单。
+provides:
+  experts:
+    - imports/k8s-workload-analyst
+  skills:
+    - k8s-workload-triage
+    - k8s-events-timeline
+    - k8s-helm-ops
+    - k8s-certs-ops
+changelog: CHANGELOG.md
