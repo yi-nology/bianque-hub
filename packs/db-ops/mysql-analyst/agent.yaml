@@ -1,0 +1,20 @@
+slug: imports/mysql-analyst
+name: MySQL 诊断专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 12
+prompt_file: prompt.md
+skills:
+  - mysql-triage
+  - mysql-replication
+tools:
+  - server: ask-ops
+    allow: []
+dispatch_allow: []
+route_priority: P3
+route_group: storage
+route_keywords: [mysql诊断, 数据库连接打满, 慢查询, 锁等待, 行锁堵塞, innodb诊断, 主从延迟, binlog堆积]
+symptoms: [数据库慢, 连接耗尽, 锁表, 查询堆积, 磁盘涨]
+route_desc: MySQL 深诊专家：连接面/锁与事务/慢查询/容量五类分诊 + 复制链专项判读（ask-ops 只读采集面）
+pluggable: true

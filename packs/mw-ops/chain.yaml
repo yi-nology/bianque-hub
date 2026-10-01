@@ -1,0 +1,17 @@
+# 中间件例检链（mw-ops 首发资产）：缓存域 → 消息队列域两步收口。
+# 设计沿用 k8s-ops 集群巡检链的链入口形态：意图路由对「检查」类词会消歧到主机域
+# 巡检，中间件例检诉求易被劫走——链入口带自有关键词直达，不经意图路由。
+slug: workflow/mw-quick-audit
+name: 中间件例检链
+route_priority: P2
+route_group: middleware
+route_keywords: [中间件例检链, 缓存队列例检链, 中间件快查链]
+symptoms: [中间件快查]
+route_desc: 缓存与消息队列两步例检（Redis 健康四面板 → Kafka/RabbitMQ 积压与集群面）；深度排障请走缓存/消息队列专家入口
+steps:
+  - agent: imports/cache-analyst
+    skill: redis-triage   # 技能钉扎：分诊方法论全文强制注入执行
+    instruction: "第一步——缓存域例检（内存与驱逐/命中率/主从/连接四面板快速采集判读，异常项标记供第二步参考）：{{input}}"
+  - agent: imports/mq-analyst
+    skill: kafka-triage
+    instruction: "第二步——消息队列域例检（消费组积压/分区 ISR/水位告警面板，Kafka 与 RabbitMQ 按环境实际部署取舍）：{{input}}"

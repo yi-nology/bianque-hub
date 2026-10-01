@@ -1,0 +1,7 @@
+{
+  "base_url": "https://github.com/yi-nology/bianque-hub",
+  "pack": "db-ops",
+  "edition": "community",
+  "generated_at": "2026-10-02",
+  "origin_note": "mysql-triage/mysql-replication 由 oo-devops（openocta 收割）mysql-ops/mysql-dba-employee 技能面合并重写；pg-triage 由 postgres-ops/postgresql 技能重写。全部剥离原版环境变量/MCP 假设，统一 ask-ops 只读采集面与扁鹊输出协议。oo-devops 整包自此冻结，数据库域由本包承接。"
+}

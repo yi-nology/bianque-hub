@@ -1,0 +1,20 @@
+slug: imports/cache-analyst
+name: 缓存诊断专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 12
+prompt_file: prompt.md
+skills:
+  - redis-triage
+  - redis-hotkey-bigkey
+tools:
+  - server: ask-ops
+    allow: []
+dispatch_allow: []
+route_priority: P3
+route_group: middleware
+route_keywords: [缓存诊断, redis诊断, redis延迟, redis内存满, 热key, 大key, 缓存雪崩, 缓存击穿, 缓存穿透, 主从中断, redis连接打满]
+symptoms: [redis慢, 缓存命中率下降, key被驱逐, redis不可达, 主从断开]
+route_desc: Redis/缓存域深诊专家：内存与驱逐、热Key大Key、命中率异常、主从复制中断、连接打满五类分诊与判读（ask-ops 只读采集面）
+pluggable: true

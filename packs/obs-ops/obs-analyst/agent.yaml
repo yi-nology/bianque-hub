@@ -1,0 +1,21 @@
+slug: imports/obs-analyst
+name: 可观测自诊专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 12
+prompt_file: prompt.md
+skills:
+  - prometheus-triage
+  - grafana-triage
+  - es-triage
+tools:
+  - server: ask-ops
+    allow: []
+dispatch_allow: []
+route_priority: P3
+route_group: monitoring
+route_keywords: [监控失明, 采集断点, target掉线, 告警失效, prometheus排障, 面板无数据, grafana排障, es集群红, 分片未分配, 监控栈排障]
+symptoms: [指标断了, 无数据, 图表空白, 告警没响, 监控慢]
+route_desc: 监控栈自诊专家（“监控系统的监控”）：Prometheus 采集/规则面、Grafana 数据源/面板面、ES 集群/分片面分诊判读（ask-ops 只读采集面）；用监控数据查业务问题请走平台监控查询入口
+pluggable: true

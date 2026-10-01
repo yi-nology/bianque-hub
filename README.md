@@ -7,6 +7,11 @@
 ```
 ├── packs/                  # 可安装的领域包（每个子目录 = 一个包）
 │   ├── os-basics/          # 主机/OS + K8s 诊断包（社区版，内置同名包的上游）
+│   ├── k8s-ops/            # Kubernetes 集群诊断包（工作负载/事件/Helm/证书）
+│   ├── mw-ops/             # 中间件诊断包（Redis 缓存 / Kafka / RabbitMQ）
+│   ├── db-ops/             # 数据库诊断包（MySQL / PostgreSQL）
+│   ├── cicd-ops/           # 交付链诊断包（Jenkins / GitLab CI / Harbor / ArgoCD）
+│   ├── obs-ops/            # 可观测自诊包（Prometheus / Grafana / ES——监控失明场景）
 │   └── chain-starter/      # 最小示例包（贡献模板：专家+技能+链逐文件拆解）
 ├── knowledge/              # 平台速查知识副本（platform-matrix 等，供非扁鹊运行时）
 ├── validator/              # 结构契约校验器（CI 与本地同款，独立无平台依赖）
@@ -52,8 +57,21 @@ curl -X POST http://127.0.0.1:8900/api/v1/plugins/install \
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [os-basics](packs/os-basics/) | 1.3.0 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
+| [os-basics](packs/os-basics/) | 1.3.1 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
+| [k8s-ops](packs/k8s-ops/) | 0.1.1 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt 工具面） |
+| [mw-ops](packs/mw-ops/) | 0.1.0 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 |
+| [db-ops](packs/db-ops/) | 0.1.0 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
+| [cicd-ops](packs/cicd-ops/) | 0.1.0 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位） |
+| [obs-ops](packs/obs-ops/) | 0.1.0 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面（监控失明场景） |
 | [chain-starter](packs/chain-starter/) | 0.1.0 | 最小示例包（贡献模板，含技能钉扎演示） |
+
+## oo-devops 迁移说明
+
+扁鹊仓原 `experts/oo-devops`（openocta 市场归化整包：31 员工 + 189 技能，构建产物
+禁手改）**已冻结，不再整包承接**。其中有诊断价值的方法论按域收割重写为本仓四包：
+**mw-ops / db-ops / cicd-ops / obs-ops**（血缘与未搬运清单见各包 provenance.json 与
+README 改造说明）。该域能力的后续维护只在对应领域包进行——改包内资产、升版本、
+走 PR，不再经市场转换管线。
 
 ## 本地校验
 

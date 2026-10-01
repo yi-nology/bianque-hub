@@ -1,0 +1,17 @@
+# 数据库例检链（db-ops 首发资产）：MySQL → PostgreSQL 两步收口。
+# 链入口设计同 mw-ops/k8s-ops：带自有关键词直达，不经意图路由（「检查」类词会被
+# 消歧到主机域巡检）。按环境实际部署取舍步骤（只有 MySQL 时第二步返回空结论即可）。
+slug: workflow/db-quick-audit
+name: 数据库例检链
+route_priority: P2
+route_group: storage
+route_keywords: [数据库例检链, 数据库快查链, 库例检]
+symptoms: [数据库快查]
+route_desc: 数据库两步例检（MySQL 连接/锁/容量面板 → PostgreSQL 连接/膨胀/WAL 面板）；深度排障请走 MySQL/PG 专家入口
+steps:
+  - agent: imports/mysql-analyst
+    skill: mysql-triage   # 技能钉扎：分诊方法论全文强制注入执行
+    instruction: "第一步——MySQL 域例检（连接面/锁与事务/慢查询/容量四面板快速采集判读，异常项标记供第二步参考）：{{input}}"
+  - agent: imports/pg-analyst
+    skill: pg-triage
+    instruction: "第二步——PostgreSQL 域例检（连接与 idle 事务/膨胀/WAL 与复制槽面板）：{{input}}"

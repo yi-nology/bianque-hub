@@ -1,0 +1,7 @@
+{
+  "base_url": "https://github.com/yi-nology/bianque-hub",
+  "pack": "cicd-ops",
+  "edition": "community",
+  "generated_at": "2026-10-02",
+  "origin_note": "jenkins-pipeline-triage/gitlab-ci-triage/harbor-triage/argocd-sync-triage 分别由 oo-devops（openocta 收割）jenkins-ops/gitlab-ops/harbor-ops/argocd-ops 技能重写；分诊路径与判读基准为本仓重构补齐。全部剥离原版环境变量/MCP 假设，统一 ask-ops 只读采集面与扁鹊输出协议。oo-devops 整包自此冻结，交付链域由本包承接。"
+}

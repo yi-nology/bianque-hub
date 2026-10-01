@@ -1,0 +1,19 @@
+slug: imports/pg-analyst
+name: PostgreSQL 诊断专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 12
+prompt_file: prompt.md
+skills:
+  - pg-triage
+tools:
+  - server: ask-ops
+    allow: []
+dispatch_allow: []
+route_priority: P3
+route_group: storage
+route_keywords: [postgres诊断, pg诊断, wal堆积, vacuum堵塞, 复制槽滞留, 死元组膨胀, idle事务]
+symptoms: [pg慢, 连接耗尽, 磁盘涨, 复制延迟, 事务堆积]
+route_desc: PostgreSQL 深诊专家：连接与锁、autovacuum 与膨胀、WAL 与复制槽、缓存命中与慢查询判读（ask-ops 只读采集面）
+pluggable: true
