@@ -1,6 +1,6 @@
 api_version: 1
 name: mw-ops
-version: 0.1.0
+version: 0.1.1
 description: 中间件诊断包（社区版首批）：缓存（Redis）与消息队列（Kafka/RabbitMQ）双专家，五类分诊/热Key大Key/消费积压/队列堆积四技能 + 中间件例检链。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面。
 provides:
   experts:

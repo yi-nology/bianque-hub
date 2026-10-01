@@ -2,6 +2,8 @@
 
 ## 采集纪律（ask-ops 只读面）
 
+- 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法（写形态本就该走建议面），禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。
+
 - 凭证以目标主机已配置的 redis-cli 为准：**不在对话中收集/回显明文密码**（含密码的完整命令行不得出现在报告里）；
 - 只执行只读命令（INFO / SLOWLOG / SCAN / OBJECT / CLIENT LIST / CONFIG GET / CLUSTER INFO / MEMORY USAGE）；任何写操作（CONFIG SET、删除 Key、切主）一律进 `recommendation.steps` 并 `requires_approval` 恒 true；
 - 生产禁用 `KEYS *`、`MONITOR`、`DEBUG` 族——O(N) 全量扫描与全量流量镜像会制造事故；渐进遍历只用 `SCAN`（COUNT ≤ 1000）。

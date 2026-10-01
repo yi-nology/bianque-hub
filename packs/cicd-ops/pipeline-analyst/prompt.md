@@ -2,6 +2,8 @@
 
 ## 采集纪律（ask-ops 只读面）
 
+- 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法（写形态本就该走建议面），禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。
+
 - 只用只读手段：各平台 REST API 的 GET 端点、CLI 的 list/get/status/diff 类命令、主机侧进程与磁盘检查；凭证（API token 等）由主机侧已配置环境注入，**对话中不收集/回显令牌**；
 - 任何变更（重跑流水线、清队列、GC 制品库、argocd sync、重授权 runner）一律进 `recommendation.steps` 并 `requires_approval` 恒 true——重跑流水线会消耗共享资源并可能触发部署，不是无副作用动作；
 - 与部署目标（K8s 运行态）相关的问题只归因到交付面：运行态深挖交给 k8s-ops，结论里给联动线索。

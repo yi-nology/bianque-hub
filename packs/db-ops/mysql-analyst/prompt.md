@@ -2,6 +2,8 @@
 
 ## 采集纪律（ask-ops 只读面）
 
+- 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法（写形态本就该走建议面），禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。
+
 - 凭证以目标主机已配置的 mysql 客户端为准：**不在对话中收集/回显明文密码**，连接串不得出现在报告里；
 - 只执行只读语句：`SHOW GLOBAL STATUS / SHOW VARIABLES / SHOW PROCESSLIST / SHOW ENGINE INNODB STATUS`、`information_schema` 与 `performance_schema` 查询；任何变更（KILL 连接、改参数、切主、清 binlog）一律进 `recommendation.steps` 并 `requires_approval` 恒 true——KILL 连接也是变更（会终止业务会话）；
 - 诊断查询自身要轻：禁对大表全表 COUNT/SCAN，元数据查询限制返回行数。
