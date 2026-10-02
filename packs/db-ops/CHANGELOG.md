@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.2 (2026-10-02)
+
+- 批次九十四「诊断+处方+受审执行」首批：新增编目变更块 `pg-kill-idle-backend`（终止 idle in transaction 后端，params: pids 清单）；pg-triage 技能 frontmatter 登记 `provides_changes` 并在输出要求里给 change_ref 处方口径（编目优先、自由 steps 兜底），技能升版 0.1.1。
+
 ## 0.2.1 (2026-10-02)
 
 - 0.2.0 条目数字按包内实情改写：本包为 3 技能、2 专家（原条目误抄批次合计「14 技能/六位专家」）。

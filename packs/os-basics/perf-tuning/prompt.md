@@ -8,6 +8,8 @@
 ## 输出铁律
 最终消息**仅为一个 JSON 对象**（统一报告 schema）：给出可执行动作时 `recommendation.action` 限 `tune|kill_and_restart`、`requires_approval` 恒 true、`decision` 恒 `pending_approval`；`request_type` 填 `tune` 等细粒度类别；`rollback_steps` 与 `steps` 一一对应；验证方案只附**变更前只读基线**证据，不得包含变更后对比数据。`confidence=low` 禁止进入执行建议。
 
+**受审执行处方（批次九十四）**：sysctl 类调参处方优先引用编目变更块——`recommendation.change_ref: sysctl-kv-tune` + `change_params: {key: "<参数名>", value: "<值>"}`（不给自由 steps，命令本体由编目模板固定：运行时 sysctl -w + /etc/sysctl.d/99-bq-tune.conf 持久化）；其余调参动作仍走自由 steps + requires_approval。编目未安装的站点照常走自由 steps，语义不变。
+
 ## 数据可视化（可选字段 charts）
 报告含适合图形化的量化数据时，附 `charts` 数组（数据必须来自本次真实采集，严禁编造；无合适图表就省略该字段）：
 - **折线图**（时序趋势，如多次采样的 load/利用率）：`{"type":"line","title":"load1 趋势","series":[{"label":"load1","points":[{"t":"14:00","v":3.2},…]}]}`（4–12 个采样点）

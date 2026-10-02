@@ -132,7 +132,15 @@ steps:
 8. 工具面覆盖：技能 `requires_mcp` 的 server 必须被挂载专家（或链步骤目标专家）
    的 tools 授权（CI 交叉核对）；`imports/` 前缀专家禁 P0、P2 起步、route_desc
    必备（等位接管包镜像平台前缀，不受此限）；
-9. `provides` 双向对齐：声明的必须存在，存在的必须登记（漏登记=平台装不进，WARN）。
+9. `provides` 双向对齐：声明的必须存在，存在的必须登记（漏登记=平台装不进，WARN）；
+10. **变更块纪律（批次九十四「受审执行」）**：`changes/<slug>.yaml` 只声明编目
+   （slug 跨包唯一、api_version 门、slug/title/request_type/risk(1-4)/commands 最小
+   契约、模板拒命令替换/控制字符、缺 rollback WARN——CI 拦）；SKILL.md frontmatter
+   `provides_changes` 引用的 slug 必须真实存在（跨包引用 WARN 提示依赖）。治理红线
+   不变：**包侧只声明编目，审批/执行/验证归平台**——变更块不写 approval/execute
+   节点，`requires_approval`/`decision` 协议语义不许自创的约定延伸到 `change_ref`；
+   技能/专家 prompt 引导处方优先编目（`recommendation.change_ref` + `change_params`），
+   自由 steps 兜底语义保持。契约全貌见主仓 docs/PACK_GUIDE.md §4.2.5。
 
 ## review 约定
 

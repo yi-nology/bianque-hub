@@ -1,0 +1,17 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」首批参考件）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+api_version: 1
+slug: pg-kill-idle-backend
+title: 终止 idle in transaction 后端连接
+request_type: kill
+risk: 2
+rollback: 连接级动作，无需回滚（被终止会话的应用侧重连即可；如误杀活跃事务由应用幂等重试兜底）
+verify_readonly:
+  - "sudo -u postgres psql -c \"SELECT count(*) AS idle_in_txn FROM pg_stat_activity WHERE state = 'idle in transaction'\""
+params:
+  - name: pids
+    kind: string_list
+    required: true
+commands:
+  - "sudo -u postgres psql -c \"SELECT pg_terminate_backend({{pids}})\""

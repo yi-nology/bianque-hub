@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.2 (2026-10-02)
+
+- 批次九十四「诊断+处方+受审执行」首批：新增编目变更块 `sysctl-kv-tune`（sysctl 运行时+持久化调参，params: key/value）；perf-tuning 输出铁律补 change_ref 处方口径（sysctl 类调参优先编目、自由 steps 兜底）。
+
 ## 1.3.1 (2026-10-01)
 
 - k8s-health 提示词补 k8sgpt 工具契约：analyze 一律 explain:false（explain:true 走哑后端必失败、有发现的扫描整体报错——rd1/106 实弹 9 条发现被吞）；零发现必须带过滤器口径；系统 ConfigMap 未引用降权；事件计数标注时效。
