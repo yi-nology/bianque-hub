@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.3.1 (2026-10-02)
+
+- 补 loki-triage 接线（0.3.0 遗漏，技能已发布但无入口可达）：obs-analyst 挂载该技能、
+  tools 增授 datasources（loki_query_range/loki_labels）、提示词职责/采集纪律/判读依据
+  补 Loki 面、路由词补 loki排障/日志断流/logql查询失败。
+- 0.2.0 条目数字按包内实情改写：本包当时为 3 技能、1 专家（原条目误抄批次合计）。
+
 ## 0.3.0 (2026-10-02)
 
 - 新增 loki-triage 技能：Loki 日志分诊方法论（标签面断流/查询空结果三分型/429 限频/store 压力），
@@ -8,9 +15,10 @@
 
 ## 0.2.0 (2026-10-02)
 
-- 14 技能补 requires_mcp 声明（ask-ops：run_readonly_command/run_readonly_commands）——
+- 3 技能（prometheus-triage/grafana-triage/es-triage）补 requires_mcp 声明
+  （ask-ops：run_readonly_command/run_readonly_commands）——
   采集依赖显式化，装载期可对账（旧 bianque-tools 二进制缺工具时先重建再装包）。
-- 六位专家新增「采集脱敏」纪律：docker inspect Env / kubectl describe 环境变量等
+- obs-analyst 专家新增「采集脱敏」纪律：docker inspect Env / kubectl describe 环境变量等
   凭证面字段引用前打码；Secret 材料面（kubectl get secrets、config view --raw）
   已被工具层拒收，禁绕过。
 
