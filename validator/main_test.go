@@ -218,3 +218,56 @@ func errorMessages(findings []finding) []string {
 	}
 	return out
 }
+
+// TestRunChangeBlocks 编目变更块校验层（批次九十四「受审执行」）：
+// 合法块通过；模板带命令替换/最小契约缺失 ERROR；provides_changes 引用闭包
+// （引用不存在 slug ERROR、引用存在块 0 error）。
+func TestRunChangeBlocks(t *testing.T) {
+	root := t.TempDir()
+	pack := filepath.Join(root, "demo")
+	writeMinimalPack(t, pack)
+	must := func(rel, content string) {
+		p := filepath.Join(pack, rel)
+		if err := os.MkdirAll(filepath.Dir(p), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(p, []byte(content), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	must("changes/good.yaml", "api_version: 1\nslug: demo-restart\ntitle: 重启服务\nrequest_type: restart\nrisk: 2\nrollback: 再启一次\ncommands:\n  - \"systemctl restart demo\"\n")
+
+	// 合法块 + 技能引用存在 slug → 0 error
+	skill := filepath.Join(pack, "skills", "demo-skill", "SKILL.md")
+	s := readFileT(t, skill)
+	writeFileT(t, skill, strings.Replace(s, "maturity: experimental",
+		"maturity: experimental\nprovides_changes: [demo-restart]", 1))
+	findings, errN, _ := run([]string{pack})
+	if errN != 0 {
+		t.Fatalf("合法变更块+引用应 0 error：%v", errorMessages(findings))
+	}
+
+	// 模板带命令替换 → ERROR
+	must("changes/tainted.yaml", "api_version: 1\nslug: demo-taint\ntitle: 坏模板\nrequest_type: restart\nrisk: 2\nrollback: x\ncommands:\n  - \"echo `id`\"\n")
+	findings, errN, _ = run([]string{pack})
+	if errN == 0 || !hasMsg(findings, "命令模板非法") {
+		t.Fatalf("命令替换模板应 ERROR：%v", errorMessages(findings))
+	}
+	_ = os.Remove(filepath.Join(pack, "changes", "tainted.yaml"))
+
+	// 最小契约缺失（缺 request_type）→ ERROR
+	must("changes/minimal.yaml", "api_version: 1\nslug: demo-min\ntitle: 缺字段\nrisk: 2\ncommands: [a]\n")
+	findings, errN, _ = run([]string{pack})
+	if errN == 0 || !hasMsg(findings, "最小契约") {
+		t.Fatalf("缺 request_type 应 ERROR：%v", errorMessages(findings))
+	}
+	_ = os.Remove(filepath.Join(pack, "changes", "minimal.yaml"))
+
+	// 引用不存在 slug → ERROR（编目引用闭包）
+	writeFileT(t, skill, strings.Replace(s, "maturity: experimental",
+		"maturity: experimental\nprovides_changes: [no-such-change]", 1))
+	findings, errN, _ = run([]string{pack})
+	if errN == 0 || !hasMsg(findings, "provides_changes 引用") {
+		t.Fatalf("引用不存在变更块应 ERROR：%v", errorMessages(findings))
+	}
+}

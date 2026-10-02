@@ -127,6 +127,22 @@ type skillFront struct {
 	Version     string      `yaml:"version"`
 	Maturity    string      `yaml:"maturity"`
 	RequiresMCP []mcpServer `yaml:"requires_mcp"`
+	// ProvidesChanges 编目变更块引用（批次九十四「受审执行」）：本技能方法论
+	// 覆盖的处方编目 slug 清单，须与包内（或跨包）changes/*.yaml 对上——
+	// 开放键，其他运行时可忽略（requires_mcp 同例）。
+	ProvidesChanges []string `yaml:"provides_changes"`
+}
+
+// changeDef 编目变更块（<包>/changes/<slug>.yaml；平台 agents.ChangeDef 同构镜像，
+// 校验子集）。治理红线：包侧只声明编目，审批/执行/验证归平台。
+type changeDef struct {
+	APIVersion  int      `yaml:"api_version"`
+	Slug        string   `yaml:"slug"`
+	Title       string   `yaml:"title"`
+	RequestType string   `yaml:"request_type"`
+	Risk        int      `yaml:"risk"`
+	Rollback    string   `yaml:"rollback"`
+	Commands    []string `yaml:"commands"`
 }
 
 type finding struct {
@@ -162,6 +178,8 @@ type validator struct {
 	findings     []finding
 	skillOwner   map[string]string   // 技能名 → 包（跨包唯一性）
 	skillNeeds   map[string][]string // 技能名 → requires_mcp server 清单（工具面覆盖核对）
+	changeOwner  map[string]string   // 变更块 slug → 包（跨包唯一性，平台装载同规则）
+	skillChanges map[string][]string // 技能名 → provides_changes 引用（延迟核对存在性）
 	expertOwner  map[string]string   // 专家 slug → 包
 	expertTools  map[string][]string // 专家 slug → tools 授权的 server 清单
 	chainOwner   map[string]string   // 链 slug → 包
@@ -200,6 +218,8 @@ func run(dirs []string) ([]finding, int, int) {
 	v := &validator{
 		skillOwner:   map[string]string{},
 		skillNeeds:   map[string][]string{},
+		changeOwner:  map[string]string{},
+		skillChanges: map[string][]string{},
 		expertOwner:  map[string]string{},
 		expertTools:  map[string][]string{},
 		chainOwner:   map[string]string{},
@@ -235,6 +255,7 @@ func run(dirs []string) ([]finding, int, int) {
 		}
 	}
 	v.checkCrossRefs()
+	v.checkChangeRefs()
 	v.checkReadme()
 	// 脱敏扫描：显式参数 + 当前目录（默认仓库根——根 README/CONTRIBUTING 也必须
 	// 在覆盖内），文件级去重防双报。
@@ -454,6 +475,13 @@ func (v *validator) checkPack(packDir, packName string) {
 				}
 				v.skillNeeds[sf.Name] = append(v.skillNeeds[sf.Name], mc.Server)
 			}
+			for _, cs := range sf.ProvidesChanges {
+				if strings.TrimSpace(cs) == "" {
+					add("ERROR", "skills/%s provides_changes 含空 slug", name)
+					continue
+				}
+				v.skillChanges[sf.Name] = append(v.skillChanges[sf.Name], cs)
+			}
 			if strings.TrimSpace(body) == "" {
 				add("ERROR", "skills/%s 正文为空", name)
 			}
@@ -489,6 +517,49 @@ func (v *validator) checkPack(packDir, packName string) {
 		for _, n := range names {
 			if !present[n] {
 				add("WARN", "%s 引用技能 %q 不在本包（跨包引用合法，请确认目标包已安装）", slug, n)
+			}
+		}
+	}
+
+	// 编目变更块（批次九十四「受审执行」）：changes/*.yaml 契约门 + 跨包 slug 唯一
+	// + 模板结构层快检（命令替换/控制字符拒——平台装载同规则，CI 先拦）。
+	if changeDirs, _ := os.ReadDir(filepath.Join(packDir, "changes")); changeDirs != nil {
+		for _, e := range changeDirs {
+			if e.IsDir() || !strings.HasSuffix(e.Name(), ".yaml") {
+				continue
+			}
+			craw, cerr := os.ReadFile(filepath.Join(packDir, "changes", e.Name()))
+			if cerr != nil {
+				add("ERROR", "changes/%s: %v", e.Name(), cerr)
+				continue
+			}
+			var cd changeDef
+			if yerr := yaml.Unmarshal(craw, &cd); yerr != nil {
+				add("ERROR", "changes/%s 解析: %v", e.Name(), yerr)
+				continue
+			}
+			if cd.APIVersion != wantAPIVersion {
+				add("ERROR", "changes/%s api_version=%d 与契约 %d 不兼容", e.Name(), cd.APIVersion, wantAPIVersion)
+			}
+			if cd.Slug == "" || cd.Title == "" || cd.RequestType == "" || len(cd.Commands) == 0 {
+				add("ERROR", "changes/%s 缺 slug/title/request_type/commands（变更块最小契约）", e.Name())
+				continue
+			}
+			if cd.Risk < 1 || cd.Risk > 4 {
+				add("ERROR", "changes/%s risk=%d 越界（1-4）", e.Name(), cd.Risk)
+			}
+			if strings.TrimSpace(cd.Rollback) == "" {
+				add("WARN", "changes/%s 缺 rollback（审批卡回退说明，人读必需）", e.Name())
+			}
+			for _, tmpl := range cd.Commands {
+				if msg := changeTainted(tmpl); msg != "" {
+					add("ERROR", "changes/%s 命令模板非法: %s", e.Name(), msg)
+				}
+			}
+			if prev, dup := v.changeOwner[cd.Slug]; dup {
+				add("ERROR", "变更块 slug %q 跨包重复（%s 与 %s；平台装载同规则 fail）", cd.Slug, prev, packName)
+			} else {
+				v.changeOwner[cd.Slug] = packName
 			}
 		}
 	}
@@ -606,6 +677,58 @@ func (v *validator) checkCrossRefs() {
 			}
 		}
 	}
+}
+
+// checkChangeRefs 全包扫描后核对 provides_changes 引用闭包：技能声明的编目 slug
+// 必须真实存在（本仓任一包）；跨包引用合法但 WARN 提示依赖目标包安装。
+// 注意不做工具面交叉核对：受审执行走引擎直取（不经专家 allowlist），与
+// requires_mcp 的工具面覆盖语义不同（那是技能采集面的授权）。
+func (v *validator) checkChangeRefs() {
+	for skill, refs := range v.skillChanges {
+		for _, slug := range refs {
+			owner, ok := v.changeOwner[slug]
+			if !ok {
+				v.add("ERROR", v.skillOwner[skill], "技能 %s provides_changes 引用 %q 不存在于本仓任何包（编目引用闭包）", skill, slug)
+				continue
+			}
+			if owner != v.skillOwner[skill] {
+				v.add("WARN", v.skillOwner[skill], "技能 %s provides_changes 引用 %q 属于包 %s（跨包引用合法，站点须同时安装）", skill, slug, owner)
+			}
+		}
+	}
+}
+
+// changeTainted 变更模板结构层快检（平台 agents.changeTainted 同构镜像：命令替换
+// /控制字符/未闭合引号拒；管道/重定向属审批文本合法组成）。
+func changeTainted(s string) string {
+	inSingle := false
+	runes := []rune(s)
+	for i := 0; i < len(runes); i++ {
+		r := runes[i]
+		if inSingle {
+			if r == '\'' {
+				inSingle = false
+			}
+			continue
+		}
+		if r < 0x20 || r == 0x7f {
+			return "control character / newline in command"
+		}
+		switch r {
+		case '\'':
+			inSingle = true
+		case '`':
+			return "backtick (command substitution)"
+		case '$':
+			if i+1 < len(runes) && runes[i+1] == '(' {
+				return "$( (command substitution)"
+			}
+		}
+	}
+	if inSingle {
+		return "unterminated quote"
+	}
+	return ""
 }
 
 // checkReadme 核对 README 包清单版本表与各 pack.yaml 同步（手工表格是版本纪律
