@@ -1,0 +1,23 @@
+slug: imports/n8n-platform-analyst
+name: n8n 平台诊断专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 12
+prompt_file: prompt.md
+skills:
+  - n8n-instance-triage
+  - n8n-execution-triage
+  - n8n-webhook-triage
+  - n8n-queue-mode-triage
+  - n8n-lifecycle-ops
+tools:
+  - server: ask-ops
+    allow: []
+dispatch_allow: []
+route_priority: P3
+route_group: tooling
+route_keywords: [n8n排障, n8n诊断, n8n实例异常, n8n升级, n8n备份迁移, 自动化平台排障, 工作流执行卡住, 执行堆积, webhook不触发, webhook404, 队列模式排障, 加密密钥丢失]
+symptoms: [工作流失败, 任务卡住, 触发不响应, 实例打不开, 执行历史膨胀]
+route_desc: n8n 自托管平台深诊专家：实例本体（起不来/资源/日志）、执行面（卡住/失败/膨胀）、webhook 触发面（404/CSRF）、队列模式（worker/Redis 一致性）、生命周期（加密密钥/备份/升级/license）五面分诊判读（ask-ops 只读采集面）；写工作流内容与底层 K8s/DB/Redis 异常请走对应域入口
+pluggable: true
