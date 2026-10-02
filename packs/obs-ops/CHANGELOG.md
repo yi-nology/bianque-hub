@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.3.0 (2026-10-02)
+
+- 新增 loki-triage 技能：Loki 日志分诊方法论（标签面断流/查询空结果三分型/429 限频/store 压力），
+  采集面钉 datasources server 新工具 loki_query_range/loki_labels（配套平台批次九十：datasources
+  扩五源）。
+
 ## 0.2.0 (2026-10-02)
 
 - 14 技能补 requires_mcp 声明（ask-ops：run_readonly_command/run_readonly_commands）——
