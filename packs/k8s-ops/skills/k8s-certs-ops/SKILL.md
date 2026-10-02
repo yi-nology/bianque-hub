@@ -1,9 +1,12 @@
 ---
 name: k8s-certs-ops
-description: K8s 证书双面排查方法论：集群面（kubeadm apiserver/etcd 证书到期巡检）与应用面（cert-manager Certificate/Order/Challenge 状态机）。纯方法论（宿主侧 CLI），只读优先。
+description: K8s 证书双面排查方法论：集群面（kubeadm apiserver/etcd 证书到期巡检）与应用面（cert-manager Certificate/Order/Challenge 状态机）。宿主侧只读 CLI 采集（ask-ops 受审通道），只读优先。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
+requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
+  - server: ask-ops
+    tools: [run_readonly_command]
 ---
 
 > 改造自 oo-devops/k8s-certs（openocta 收割）：原技能绑定 kubectl-mcp-server 的
@@ -13,6 +16,11 @@ maturity: experimental
 
 - 症状关键词：k8s 证书过期、apiserver 证书、cert-manager 排查、TLS 证书失败、Order 卡住
 - 组合场景：安全巡检证书项（os-basics 安全域）在 K8s 集群语境下的深化
+
+## 数据来源（ask-ops 只读面）
+
+- 正文处方的宿主侧命令（`kubeadm certs check-expiration`、`kubectl get/describe issuer,clusterissuer,certificate,order,challenge` 等只读子命令）统一经 ask-ops `run_readonly_command` 受审执行；被白名单拒收时降级为方法论输出（标注需人工执行）；
+- 证书文件本体与 Secret 材料面（`kubectl get secrets`、`config view --raw`）已被工具层拒收，不要尝试绕过。
 
 ## 集群面：kubeadm 证书巡检
 

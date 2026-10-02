@@ -1,14 +1,23 @@
 ---
 name: k8s-helm-ops
-description: Helm release 排查方法论：release 状态判读（deployed/failed/pending-*）、升级回滚决策、values 漂移核对。纯方法论（宿主侧 helm CLI），诊断只读优先。
+description: Helm release 排查方法论：release 状态判读（deployed/failed/pending-*）、升级回滚决策、values 漂移核对。宿主侧只读 CLI 采集（ask-ops 受审通道），诊断只读优先。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
+requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
+  - server: ask-ops
+    tools: [run_readonly_command]
 ---
 
 > 改造自 oo-devops/k8s-helm（openocta 收割）：原技能绑定 kubectl-mcp-server 的 16 个
 > Helm 工具（该 MCP 面未随包供给）——本版去工具耦合，改为通用 helm CLI 方法论，
-> 任何运行时可按此执行；后续平台接通 Helm 工具面时再补 requires_mcp 声明。
+> 任何运行时可按此执行。宿主侧 helm 只读子命令（list/history/get/values/show）
+> 经 ask-ops `run_readonly_command` 受审执行（子命令在白名单内时；被拒不绕过，
+> 降级为方法论输出）；Helm 专用 MCP 工具面接通前不另声明。
+
+## 数据来源（ask-ops 只读面）
+
+- 只读子命令经 ask-ops `run_readonly_command` 受审执行；`helm rollback/uninstall/install/upgrade` 等变更动作不处方化执行，一律进建议面走审批。
 
 ## 触发条件
 

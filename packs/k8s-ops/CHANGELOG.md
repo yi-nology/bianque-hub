@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.1.3 (2026-10-02)
+
+- 工具面补全（0.1.2 遗漏）：路由词 helm排查/k8s证书巡检 已开，但专家只授了 k8sgpt——
+  增授 ask-ops 只读命令面；k8s-helm-ops/k8s-certs-ops 补 requires_mcp 声明
+  （ask-ops run_readonly_command，技能升 0.1.1，certs 补数据来源段）；提示词新增
+  「宿主侧只读命令面」纪律（白名单外被拒不绕过、降级方法论输出）。
+
 ## 0.1.2 (2026-10-02)
 
 - 工作负载专家新增「采集脱敏」纪律（与四领域包同批）：kubectl describe 输出的
