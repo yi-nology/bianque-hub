@@ -1,6 +1,6 @@
 api_version: 1
 name: obs-ops
-version: 0.1.1
+version: 0.1.2
 description: 可观测自诊包（社区版首批）：“监控系统的监控”——Prometheus 采集与规则面、Grafana 数据源与面板面、Elasticsearch 集群与分片面三技能 + 可观测自诊专家，专治监控失明场景。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面。
 provides:
   experts:

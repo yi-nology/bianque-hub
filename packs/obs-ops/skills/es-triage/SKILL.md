@@ -13,7 +13,7 @@ maturity: experimental
 
 ## 数据来源（ask-ops 只读面）
 
-- 集群面（GET）：`/_cluster/health`（status/unassigned_shards/active_shards_percent）、`/_cluster/allocation/explain`（未分配原因——**只读解释端点，带 explain 参数的 GET**）、`/_cat/nodes?v`（角色/堆/磁盘水位列）、`/_cat/shards?v&h=...`（分片分布）；
+- 集群面（GET，URL 带 `&` 查询参数时整个 URL 必须加引号）：`/_cluster/health`（status/unassigned_shards/active_shards_percent）、`/_cluster/allocation/explain`（未分配原因——**只读解释端点**）、`/_cat/nodes?v`（角色/堆/磁盘水位列）、`/_cat/shards`（分片分布，如 `curl -s 'http://<es>:9200/_cat/shards?v&h=index,shard,prirep,state,unassigned.reason'`）；
 - 节点面（GET）：`/_nodes/stats`（jvm 压力、thread_pool 拒绝数、breaker 触发）、`/_cat/indices?v`（索引级健康与大小）；
 - 主机侧：ES 进程 CPU/内存、数据目录 df、日志尾部；
 - 凭证由主机侧已配置环境注入，对话不回显。

@@ -15,7 +15,7 @@ maturity: experimental
 
 - Harbor REST GET：`/api/v2.0/health`（组件健康）、`/api/v2.0/replication/executions?sort=-start_time`（复制任务最近态）；
 - 主机侧：`docker ps`（core/jobservice/registry/redis/db 容器状态）、存储目录 du/df、registry 日志尾部；
-- 证书面：`echo | openssl s_client -connect <harbor-host>:443 2>/dev/null | openssl x509 -noout -enddate`（只读探测剩余有效期）；
+- 证书面：`echo | openssl s_client -connect <harbor-host>:443 | openssl x509 -noout -enddate`（只读探测剩余有效期；stderr 不采集，无需也无法重定向）；
 - 凭证由主机侧已配置环境注入，对话不回显。
 
 ## 分诊路径（按症状类定位，固定顺序）
