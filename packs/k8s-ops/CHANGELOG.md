@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.2 (2026-10-02)
+
+- 工作负载专家新增「采集脱敏」纪律（与四领域包同批）：kubectl describe 输出的
+  环境变量等凭证面字段引用前打码；Secret 材料面已被 run_readonly_command 守卫
+  拒收，禁绕过。
+
 ## 0.1.1 (2026-10-01)
 
 - 同源工具契约落位：analyst 提示词+workload-triage 技能补 explain:false 契约与零发现口径纪律。

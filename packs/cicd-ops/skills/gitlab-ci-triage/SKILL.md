@@ -4,6 +4,9 @@ description: GitLab CI 分诊方法论：runner 掉线与并发饱和、job 卡 
 mode: on_demand
 version: 0.1.0
 maturity: experimental
+requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
+  - server: ask-ops
+    tools: [run_readonly_command, run_readonly_commands]
 ---
 
 ## 触发条件
