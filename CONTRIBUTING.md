@@ -12,10 +12,10 @@
 2. 改 `pack.yaml`（包名/版本/描述/provides）、`provenance.json`（pack 字段）；
 3. 换掉专家（slug 用 `imports/` 前缀）与技能（四段式正文）；
 4. 需要编排就写 `chain.yaml`；
-5. 本地校验全绿再提 PR：
+5. 本地校验全绿再提 PR（在仓库根运行，脱敏扫描自动覆盖全仓）：
 
 ```bash
-go run ./validator ./packs
+go run ./validator ./packs        # CI 同款；校验单个包可直达包目录：./packs/你的包名
 ```
 
 ## 契约速查
@@ -55,15 +55,16 @@ route_desc: 一句话路由描述（LLM 语义面）
 name: your-skill            # 与目录名一致，全局唯一
 description: 一句话描述（触发面靠它）
 mode: on_demand             # static（全文注入系统提示）| on_demand（渐进披露，推荐）
-version: 1.0.0              # SemVer
+version: 1.0.0              # SemVer（必填；技能内容变更须同步升版）
 maturity: experimental      # experimental|stable|frozen|deprecated
-requires_mcp:               # 可选：声明的工具面
+requires_mcp:               # 可选：声明的工具面（server 必须被挂载专家的 tools 授权，CI 交叉核对）
   - server: some-mcp
     tools: [tool-a, tool-b]
 ---
 ## 触发条件
 ## 数据来源        （只允许使用已声明工具）
-## 方法论          （固定顺序步骤）
+## 方法论          （固定顺序步骤；领域分诊技能惯用标题「分诊路径（固定顺序）」）
+## 判读基准        （领域分诊技能惯用第五段：症状→结论的判读口径）
 ## 输出要求
 ```
 
@@ -79,6 +80,16 @@ requires_mcp:               # 可选：声明的工具面
 - 技能处方里的命令必须与该守卫兼容：URL 带 `&` 等特殊字符要写成引号形态；
   密码类凭证走主机侧客户端配置（裸 `-p`/`-W` 会挂起被拒）；sudo 仅支持
   `-u <user>` 目标切换；变更动作永远写进 `recommendation.steps` 走审批，不处方化。
+- 技能 `requires_mcp` 声明的 server 必须被**挂载它的专家**（或链步骤目标专家）的
+  `tools:` 授权——技能钉了面、专家没授权 = 装得上用不了（obs-ops 0.3.0 loki-triage
+  事故形态），CI 已交叉核对。
+
+### 平台耦合文件（仅等位接管包）
+
+`analyzers.yaml`（巡检域→sysprobe 检查器组映射）、`disambiguation.yaml`（意图消歧）、
+`mcp/`（随包分发的 MCP 契约清单）只出现在 os-basics 这类与内置包等位接管的包里。
+CI 做 YAML 语法门 + analyzers 映射 slug 必须是包内专家（错映射=装载期整体回落成
+检查盲区）；新领域包不需要这些文件。
 
 ### chain.yaml（诊断链，每包最多一条）
 
@@ -88,6 +99,7 @@ name: 人话名
 route_priority: P3          # 必填，禁 P0
 route_group: system
 route_keywords: [链专属词]
+route_desc: 一句话链入口语义（建议必填——链入口靠自有关键词直达，防「检查」类词被消歧劫持）
 steps:
   - agent: imports/your-expert
     instruction: "指令模板，{{input}} 占位用户输入"
@@ -113,7 +125,13 @@ steps:
    重复**（真歧义，平台装载会失败）；与平台内置域词的冲突 CI 看不到，仍靠本条
    人工把关；
 7. 版本纪律：任何内容变更都升 `version`（SemVer：修文案 patch、加条目 minor、
-   破坏契约 major）并在包内 CHANGELOG.md 记一行。
+   破坏契约 major）并在包内 CHANGELOG.md 记一行。三道机械门（CI 拦）：CHANGELOG
+   头部条目必须 == pack.yaml version；README 包清单表版本必须 == pack.yaml
+   version；技能 frontmatter `version` 必填且技能内容变更同步升版；
+8. 工具面覆盖：技能 `requires_mcp` 的 server 必须被挂载专家（或链步骤目标专家）
+   的 tools 授权（CI 交叉核对）；`imports/` 前缀专家禁 P0、P2 起步、route_desc
+   必备（等位接管包镜像平台前缀，不受此限）；
+9. `provides` 双向对齐：声明的必须存在，存在的必须登记（漏登记=平台装不进，WARN）。
 
 ## review 约定
 

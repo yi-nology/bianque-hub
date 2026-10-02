@@ -11,7 +11,7 @@
 │   ├── mw-ops/             # 中间件诊断包（Redis 缓存 / Kafka / RabbitMQ）
 │   ├── db-ops/             # 数据库诊断包（MySQL / PostgreSQL）
 │   ├── cicd-ops/           # 交付链诊断包（Jenkins / GitLab CI / Harbor / ArgoCD）
-│   ├── obs-ops/            # 可观测自诊包（Prometheus / Grafana / ES——监控失明场景）
+│   ├── obs-ops/            # 可观测自诊包（Prometheus / Grafana / ES / Loki——监控失明场景）
 │   └── chain-starter/      # 最小示例包（贡献模板：专家+技能+链逐文件拆解）
 ├── knowledge/              # 平台速查知识副本（platform-matrix 等，供非扁鹊运行时）
 ├── validator/              # 结构契约校验器（CI 与本地同款，独立无平台依赖）
@@ -58,11 +58,11 @@ curl -X POST http://127.0.0.1:8900/api/v1/plugins/install \
 | 包 | 版本 | 内容 |
 |---|---|---|
 | [os-basics](packs/os-basics/) | 1.3.1 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
-| [k8s-ops](packs/k8s-ops/) | 0.1.1 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt 工具面） |
-| [mw-ops](packs/mw-ops/) | 0.1.0 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 |
-| [db-ops](packs/db-ops/) | 0.1.0 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
-| [cicd-ops](packs/cicd-ops/) | 0.1.0 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位） |
-| [obs-ops](packs/obs-ops/) | 0.1.0 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面（监控失明场景） |
+| [k8s-ops](packs/k8s-ops/) | 0.1.3 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面） |
+| [mw-ops](packs/mw-ops/) | 0.2.1 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 |
+| [db-ops](packs/db-ops/) | 0.2.1 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
+| [cicd-ops](packs/cicd-ops/) | 0.2.1 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位） |
+| [obs-ops](packs/obs-ops/) | 0.3.1 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景） |
 | [chain-starter](packs/chain-starter/) | 0.1.0 | 最小示例包（贡献模板，含技能钉扎演示） |
 
 ## oo-devops 迁移说明
@@ -76,8 +76,10 @@ README 改造说明）。该域能力的后续维护只在对应领域包进行�
 ## 本地校验
 
 ```bash
-go run ./validator ./packs knowledge   # CI 同款：结构契约 + 跨包唯一性 + 脱敏扫描
+go run ./validator ./packs   # CI 同款：结构契约 + 跨包唯一性 + 工具面覆盖 + 版本同步 + 脱敏扫描（自动覆盖仓库根）
 ```
+
+校验单个包可直达包目录：`go run ./validator ./packs/chain-starter`。
 
 ## 参与贡献
 
