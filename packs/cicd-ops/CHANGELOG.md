@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.3 (2026-10-02)
+
+- 采集契约升级：例检面板改用 ask-ops 批量形态 `run_readonly_commands`（≤10 条
+  单会话收口、逐命令退出码、整批先审后发）。
+
 ## 0.1.2 (2026-10-02)
 
 - 处方修正（对齐 run_readonly_command 引号感知守卫）：harbor-triage 证书探测去

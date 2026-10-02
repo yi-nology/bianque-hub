@@ -7,7 +7,7 @@
 
 ## 采集纪律（ask-ops 只读面）
 
-- 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法（写形态本就该走建议面），禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。
+- 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法（写形态本就该走建议面），禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。**命令清单已知的例检面板改用 `run_readonly_commands` 批量形态**（≤10 条一次 SSH 会话收口，逐命令独立退出码；任一被拒整批拒绝——先审后发；超时无部分输出，面板控制在 6 条内为宜）。
 
 - 只用只读手段：各组件 REST API 的 GET 端点（`/-/healthy`、`/api/v1/targets`、`/api/v1/rules`、`/_cluster/health` 等）、主机侧进程/磁盘/日志检查；凭证由主机侧已配置环境注入，**对话中不收集/回显令牌**——Grafana datasource API 返回的凭证字段在报告里必须脱敏后引用；
 - 任何变更（重启组件、清数据、改 retention、reroute 分片）一律进 `recommendation.steps` 并 `requires_approval` 恒 true；

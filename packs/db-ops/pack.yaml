@@ -1,6 +1,6 @@
 api_version: 1
 name: db-ops
-version: 0.1.2
+version: 0.1.3
 description: 数据库诊断包（社区版首批）：MySQL 与 PostgreSQL 双专家，连接/锁/慢查询/容量五类分诊、复制链专项、PG 膨胀与 WAL 判读三技能 + 数据库例检链。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面。
 provides:
   experts:
