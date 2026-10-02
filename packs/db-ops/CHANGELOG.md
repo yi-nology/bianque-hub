@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.2 (2026-10-02)
+
+- pg-triage 补 sudo -u postgres 采集路径提示（对齐 run_readonly_command 的目标
+  用户切换支持与 mysql -p/psql -W 交互挂起守卫）。
+
 ## 0.1.1 (2026-10-02)
 
 - 采集契约对齐平台 ask-ops 新工具 `run_readonly_command`（受审只读命令：白名单

@@ -16,7 +16,7 @@ maturity: experimental
 - `SELECT ... FROM pg_stat_activity`（state 分布、wait_event、xact_start 最早的 idle in transaction）；
 - `pg_locks` + `pg_blocking_pids(<pid>)`（等待链）、`pg_stat_user_tables`（n_dead_tup 对 n_live_tup）、`pg_stat_progress_vacuum`（在跑的 vacuum）；
 - `pg_replication_slots`（active、restart_lsn 滞留）、`pg_stat_wal`（14+）或 WAL 目录 du、`pg_stat_database`（blks_hit/blks_read 命中率）、`pg_stat_statements`（扩展在位时 Top SQL）；
-- 凭证由主机侧已配置 psql 注入，对话不回显。
+- 凭证由主机侧已配置 psql 注入（.pgpass/PGPASSWORD），对话不回显；无独立凭证面时用 `sudo -u postgres psql -c '…'`（run_readonly_command 支持 sudo -u 目标用户形态，须在 sudoers 面内）。
 
 ## 分诊路径（固定顺序）
 
