@@ -67,6 +67,19 @@ requires_mcp:               # 可选：声明的工具面
 ## 输出要求
 ```
 
+### 工具面约定（ask-ops 两层）
+
+- **固定清单面**（十工具：inventory 四件 + 性能快照/日志/进程/端口/目录体积/探测）：
+  适合主机层事实问答。声明方式 `tools: [{server: ask-ops}]`（allow 留空=全部）；
+  问答型 support 角色请像内置 `platform/ask-ops` 一样显式钉 allow，不领受命令面。
+- **受审只读命令面**（`run_readonly_command`）：领域专家跑域 CLI 的通道——白名单
+  受审（redis 只读命令族 / kafka-\*.sh --describe / mysql -e 'SELECT…' / curl GET /
+  docker+kubectl 只读子命令等），引号外控制字符、写形态旗标、白名单外命令一律
+  拒绝；stdout-only、尾部截断 400 行/32KB、退出码在 exit_code。
+- 技能处方里的命令必须与该守卫兼容：URL 带 `&` 等特殊字符要写成引号形态；
+  密码类凭证走主机侧客户端配置（裸 `-p`/`-W` 会挂起被拒）；sudo 仅支持
+  `-u <user>` 目标切换；变更动作永远写进 `recommendation.steps` 走审批，不处方化。
+
 ### chain.yaml（诊断链，每包最多一条）
 
 ```yaml
@@ -96,7 +109,9 @@ steps:
    （缓存诊断/消息积压/主从延迟等）、db-ops（慢查询/锁等待等）、cicd-ops（构建失败/
    流水线排障等）、obs-ops（监控失明/采集断点/面板无数据等）；平台查询面词
    （prometheus/监控指标/指标查询）归内置监控入口。错位竞争会让两个入口互相劫持
-   ——一律用复合限定词；
+   ——一律用复合限定词。CI 已机械拦截**跨包同优先级的 route_keywords/symptoms
+   重复**（真歧义，平台装载会失败）；与平台内置域词的冲突 CI 看不到，仍靠本条
+   人工把关；
 7. 版本纪律：任何内容变更都升 `version`（SemVer：修文案 patch、加条目 minor、
    破坏契约 major）并在包内 CHANGELOG.md 记一行。
 

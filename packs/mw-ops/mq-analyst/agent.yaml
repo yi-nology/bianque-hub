@@ -15,6 +15,6 @@ dispatch_allow: []
 route_priority: P3
 route_group: middleware
 route_keywords: [消息积压, 消费堆积, kafka诊断, 消费者掉线, isr收缩, rabbitmq诊断, 队列堆积, 消息丢失, 消息重复, rebalance风暴]
-symptoms: [lag增长, 消费不动, 发布超时, 队列不可用, 分区掉线]
+symptoms: [lag增长, 消费不动, 消息发布超时, 队列不可用, 分区掉线]
 route_desc: Kafka/RabbitMQ 消息队列深诊专家：消费组积压、分区与 ISR 健康、水位告警、集群一致性与消息丢失/重复成因链（ask-ops 只读采集面）
 pluggable: true

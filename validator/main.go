@@ -14,6 +14,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 
@@ -74,6 +75,7 @@ type agentDef struct {
 	RoutePriority  string   `yaml:"route_priority"`
 	RouteGroup     string   `yaml:"route_group"`
 	RouteKeywords  []string `yaml:"route_keywords"`
+	Symptoms       []string `yaml:"symptoms"`
 }
 
 type chainStep struct {
@@ -89,6 +91,7 @@ type chainDef struct {
 	RoutePriority string      `yaml:"route_priority"`
 	RouteGroup    string      `yaml:"route_group"`
 	RouteKeywords []string    `yaml:"route_keywords"`
+	Symptoms      []string    `yaml:"symptoms"`
 	Steps         []chainStep `yaml:"steps"`
 }
 
@@ -106,6 +109,28 @@ type finding struct {
 	msg   string
 }
 
+// kwFirst 路由词首登记录（平台 packs.go registerRouteKeyword 同构镜像）。
+type kwFirst struct{ prio, pack string }
+
+// registerKeyword 镜像平台跨包冲突规则：同包 OK；跨包同优先级 = 真歧义（ERROR，
+// 平台装载会失败——PR 必须在 CI 拦下）；跨层 = 警告（高优先级胜出）。
+// 局限：hub 只见本仓包，与平台内置域词（_shared/os-basics 内置版）的冲突在此
+// 查不到，靠 CONTRIBUTING 路由词纪律人工把关。
+func registerKeyword(kwOwner map[string]kwFirst, kw, pack, prio string) (level, msg string, dup bool) {
+	first, hit := kwOwner[kw]
+	if !hit {
+		kwOwner[kw] = kwFirst{prio: prio, pack: pack}
+		return "", "", false
+	}
+	if first.pack == pack {
+		return "", "", false
+	}
+	if first.prio == prio {
+		return "ERROR", fmt.Sprintf("关键词/症状 %q 在 %s 与 %s 同优先级 %s 重复（真歧义，平台装载会失败）", kw, first.pack, pack, prio), true
+	}
+	return "WARN", fmt.Sprintf("关键词/症状 %q 跨层重复（%s@%s 与 %s@%s），高优先级胜出", kw, first.pack, first.prio, pack, first.prio), true
+}
+
 func main() {
 	dirs := os.Args[1:]
 	if len(dirs) == 0 {
@@ -115,6 +140,7 @@ func main() {
 	skillOwner := map[string]string{} // 技能名 → 包（跨包唯一性）
 	expertOwner := map[string]string{} // 专家 slug → 包
 	chainOwner := map[string]string{}  // 链 slug → 包
+	kwOwner := map[string]kwFirst{}    // 路由词/症状 → 首登（ prio, pack）
 
 	for _, root := range dirs {
 		entries, err := os.ReadDir(root)
@@ -130,7 +156,7 @@ func main() {
 			if _, err := os.Stat(filepath.Join(packDir, "pack.yaml")); err != nil {
 				continue // 非包目录（无 pack.yaml）不校验
 			}
-			findings = append(findings, checkPack(packDir, e.Name(), skillOwner, expertOwner, chainOwner)...)
+			findings = append(findings, checkPack(packDir, e.Name(), skillOwner, expertOwner, chainOwner, kwOwner)...)
 		}
 	}
 	findings = append(findings, scanSensitive(dirs...)...)
@@ -150,7 +176,7 @@ func main() {
 	}
 }
 
-func checkPack(packDir, packName string, skillOwner, expertOwner, chainOwner map[string]string) []finding {
+func checkPack(packDir, packName string, skillOwner, expertOwner, chainOwner map[string]string, kwOwner map[string]kwFirst) []finding {
 	var f []finding
 	add := func(level, format string, a ...any) {
 		f = append(f, finding{level, packName, fmt.Sprintf(format, a...)})
@@ -229,6 +255,11 @@ func checkPack(packDir, packName string, skillOwner, expertOwner, chainOwner map
 		}
 		if len(d.RouteKeywords) == 0 {
 			add("WARN", "%s 无 route_keywords（路由不可达，孤立专家）", d.Slug)
+		}
+		for _, kw := range append(slices.Clone(d.RouteKeywords), d.Symptoms...) {
+			if level, msg, dup := registerKeyword(kwOwner, kw, packName, d.RoutePriority); dup {
+				add(level, "%s: %s", d.Slug, msg)
+			}
 		}
 		if d.Kind == "llm" {
 			if d.PromptFile == "" {
@@ -347,6 +378,11 @@ func checkPack(packDir, packName string, skillOwner, expertOwner, chainOwner map
 			if c.RouteGroup != "" && !routeGroups[c.RouteGroup] {
 				add("ERROR", "chain %s route_group=%q 不在白名单", c.Slug, c.RouteGroup)
 			}
+			for _, kw := range append(slices.Clone(c.RouteKeywords), c.Symptoms...) {
+				if level, msg, dup := registerKeyword(kwOwner, kw, packName, c.RoutePriority); dup {
+					add(level, "chain %s: %s", c.Slug, msg)
+				}
+			}
 			for i, st := range c.Steps {
 				kind := st.Type
 				if kind == "" {
@@ -360,6 +396,9 @@ func checkPack(packDir, packName string, skillOwner, expertOwner, chainOwner map
 						add("ERROR", "chain %s 步骤%d 引用 engine 专家 %q（链步骤禁 engine）", c.Slug, i+1, st.Agent)
 					} else if !ok {
 						add("WARN", "chain %s 步骤%d 引用 %q 不在本包（跨包引用合法，请确认目标包已安装）", c.Slug, i+1, st.Agent)
+					}
+					if pin := skillRefName(st.Skill); pin != "" && !present[pin] {
+						add("WARN", "chain %s 步骤%d 钉扎技能 %q 不在本包（跨包引用合法，请确认目标包已安装且技能名无误）", c.Slug, i+1, pin)
 					}
 					if st.Instruction == "" && st.Skill == nil {
 						add("WARN", "chain %s 步骤%d 无 instruction 且未钉扎技能", c.Slug, i+1)
