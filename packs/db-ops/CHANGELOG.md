@@ -1,10 +1,15 @@
 # CHANGELOG
 
+## 0.2.1 (2026-10-02)
+
+- 0.2.0 条目数字按包内实情改写：本包为 3 技能、2 专家（原条目误抄批次合计「14 技能/六位专家」）。
+
 ## 0.2.0 (2026-10-02)
 
-- 14 技能补 requires_mcp 声明（ask-ops：run_readonly_command/run_readonly_commands）——
+- 3 技能（mysql-triage/mysql-replication/pg-triage）补 requires_mcp 声明
+  （ask-ops：run_readonly_command/run_readonly_commands）——
   采集依赖显式化，装载期可对账（旧 bianque-tools 二进制缺工具时先重建再装包）。
-- 六位专家新增「采集脱敏」纪律：docker inspect Env / kubectl describe 环境变量等
+- 两位专家（mysql-analyst/pg-analyst）新增「采集脱敏」纪律：docker inspect Env / kubectl describe 环境变量等
   凭证面字段引用前打码；Secret 材料面（kubectl get secrets、config view --raw）
   已被工具层拒收，禁绕过。
 
