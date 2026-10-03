@@ -60,11 +60,11 @@ curl -X POST http://127.0.0.1:8900/api/v1/plugins/install \
 |---|---|---|
 | [os-basics](packs/os-basics/) | 1.3.3 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
 | [k8s-ops](packs/k8s-ops/) | 0.1.4 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
-| [mw-ops](packs/mw-ops/) | 0.2.1 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 |
+| [mw-ops](packs/mw-ops/) | 0.2.2 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
 | [db-ops](packs/db-ops/) | 0.2.2 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
-| [cicd-ops](packs/cicd-ops/) | 0.2.1 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位） |
-| [obs-ops](packs/obs-ops/) | 0.3.1 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景） |
-| [n8n-ops](packs/n8n-ops/) | 0.2.1 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面） |
+| [cicd-ops](packs/cicd-ops/) | 0.2.2 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位）+ 编目变更块两件（argocd sync/rollback） |
+| [obs-ops](packs/obs-ops/) | 0.3.2 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景）+ 编目变更块两件（flood 解锁/分配恢复） |
+| [n8n-ops](packs/n8n-ops/) | 0.2.2 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
 | [chain-starter](packs/chain-starter/) | 0.1.0 | 最小示例包（贡献模板，含技能钉扎演示） |
 
 ## oo-devops 迁移说明

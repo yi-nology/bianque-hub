@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.2.2 (2026-10-03)
+
+- 批次九十四「诊断+处方+受审执行」接入：新增编目变更块两件——`cicd-argocd-app-sync`
+  （手动同步，params: app，verify: app get；前提 diff 影响面已进结论）、
+  `cicd-argocd-app-rollback`（回滚到历史 revision，params: app/revision，verify: app
+  history）；argocd-sync-triage 登记 `provides_changes` 并在输出要求给 change_ref 处方
+  口径（技能升 0.1.1）；pipeline-analyst 提示词处方纪律升为编目优先。
+
 ## 0.2.1 (2026-10-02)
 
 - 0.2.0 条目数字按包内实情改写：本包为 4 技能、1 专家（原条目误抄批次合计「14 技能/六位专家」）。

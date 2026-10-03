@@ -2,11 +2,13 @@
 name: redis-hotkey-bigkey
 description: Redis 热Key与大Key定位方法论：全量抽样扫描、嫌疑 key 定点体检、行为面交叉验证三段式，附拆分/打散/异步删除处置口径（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
+provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
+  - mw-redis-unlink-key  # 大 key 异步删除（params: host/port/key）——处方优先引用编目而非自由 steps
 ---
 
 ## 触发条件
@@ -38,3 +40,5 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 ## 输出要求
 
 - 结论给 top 榜单证据行 + 证据等级（全量抽样/定点/行为面）；处置建议分只读（观察基线）与变更（大 key 拆分、过期时间打散、UNLINK 异步删除、热 key 本地缓存/副本读）两类，变更类标注影响面并 requires_approval；`DEL` 大集合禁用（同步阻塞），建议一律 `UNLINK`。
+
+**受审执行处方（批次九十四）**：大 key 删除处方优先引用编目变更块——`recommendation.change_ref: mw-redis-unlink-key` + `change_params: {host: "<实例地址>", port: "<端口>", key: "<key 名>"}`（不给自由 steps，命令本体由编目模板固定 UNLINK；变更后 `EXISTS` 自动验证已删）；拆分/打散/本地缓存属应用侧改造，仍走自由 steps + requires_approval（审批卡标「未编目」）。编目未安装的站点照常走自由 steps，语义不变。

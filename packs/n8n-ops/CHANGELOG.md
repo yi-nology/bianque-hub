@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.2.2 (2026-10-03)
+
+- 批次九十四「诊断+处方+受审执行」接入：新增编目变更块 `n8n-container-restart`（实例/worker
+  容器重启，params: container，verify: docker ps --filter；前置纪律：先有根因结论，重启只是
+  让处置生效）；n8n-instance-triage 升 0.1.1、n8n-queue-mode-triage 升 0.1.2，frontmatter
+  登记 `provides_changes` 并在输出要求给 change_ref 处方口径；专家提示词处方纪律升为编目
+  优先（docker exec 类 n8n CLI 与生命周期大动作仍走自由 steps）。
+
 ## 0.2.1 (2026-10-03)
 
 - 专家 prompt 输出契约对齐平台 schema（实弹 e2e 发现）：recommendation.steps 每条必须是

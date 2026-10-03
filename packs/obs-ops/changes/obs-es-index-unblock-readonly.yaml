@@ -1,0 +1,27 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」obs-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：es-triage「磁盘水位三级」——flood_stage 强制索引只读，解除
+# 顺序铁律「先治磁盘、再解除锁」（直接解锁不清磁盘会立刻复发并加剧风险）；
+# index 参数可用 _all（flood 锁是全索引面的）。
+# verify_readonly 走 ask-ops 只读面（curl GET 为技能采集同款）。
+api_version: 1
+slug: obs-es-index-unblock-readonly
+title: ES 解除索引 flood_stage 只读锁（read_only_allow_delete=false）
+request_type: tune
+risk: 2
+rollback: "锁是磁盘 flood_stage（默认 95%）保护动作——前置纪律：先治磁盘（清理/扩容到水位线下）再解锁，否则立刻复发；需恢复锁时同端点置 true"
+verify_readonly:
+  - "curl -s 'http://{{host}}:{{port}}/{{index}}/_settings'"
+params:
+  - name: host
+    kind: string
+    required: true
+  - name: port
+    kind: string
+    required: true
+  - name: index
+    kind: string
+    required: true
+commands:
+  - "curl -s -X PUT 'http://{{host}}:{{port}}/{{index}}/_settings' -H 'Content-Type: application/json' -d '{\"index.blocks.read_only_allow_delete\": false}'"

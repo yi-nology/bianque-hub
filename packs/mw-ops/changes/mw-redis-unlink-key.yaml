@@ -1,0 +1,25 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」mw-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：redis-hotkey-bigkey「DEL 大集合禁用（同步阻塞），建议一律 UNLINK」。
+# verify_readonly 走 ask-ops 只读面（redis-cli EXISTS 在裸读白名单）。
+api_version: 1
+slug: mw-redis-unlink-key
+title: Redis 大 Key 异步删除（UNLINK，不阻塞主线程）
+request_type: delete
+risk: 3
+rollback: "Key 删除即数据删除，不可原地回退——删除前 key 的类型/TTL/内存占用由平台执行前只读快照留痕；误删需应用侧重写或从备份恢复（RDB/AOF）"
+verify_readonly:
+  - "redis-cli -h {{host}} -p {{port}} EXISTS {{key}}"
+params:
+  - name: host
+    kind: string
+    required: true
+  - name: port
+    kind: string
+    required: true
+  - name: key
+    kind: string
+    required: true
+commands:
+  - "redis-cli -h {{host}} -p {{port}} UNLINK {{key}}"

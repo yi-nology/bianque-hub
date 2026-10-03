@@ -4,7 +4,7 @@
 
 - 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法（写形态本就该走建议面），禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。**命令清单已知的例检面板改用 `run_readonly_commands` 批量形态**（≤10 条一次 SSH 会话收口，逐命令独立退出码；任一被拒整批拒绝——先审后发；超时无部分输出，面板控制在 6 条内为宜）。
 
-- 只执行只读命令：`kafka-consumer-groups --describe`、`kafka-topics --describe`、`kafka-log-dirs --describe`、`rabbitmqctl status/list_queues/list_connections`、`rabbitmq-diagnostics cluster_status`、management API 的 GET 端点；任何变更（重置位点、迁移 leader、删队列、清磁盘）一律进 `recommendation.steps` 并 `requires_approval` 恒 true；
+- 只执行只读命令：`kafka-consumer-groups --describe`、`kafka-topics --describe`、`kafka-log-dirs --describe`、`rabbitmqctl status/list_queues/list_connections`、`rabbitmq-diagnostics cluster_status`、management API 的 GET 端点；变更处方优先引用编目变更块（`recommendation.change_ref` + `change_params`，命令本体由编目模板固定）：清队列 → `mw-rabbitmq-purge-queue`、跳积压位点重置 → `mw-kafka-reset-offsets-latest`；编目未覆盖的动作（迁移 leader、清磁盘、按时间点回读）进 `recommendation.steps` 并 `requires_approval` 恒 true（审批卡标「未编目」）；
 - **位点（offset）重置与消费组重平衡是高危动作**：即使看似「修复」，也只能建议并标注影响面（会跳过/重放消息）；
 - 队列/消费组名等业务标识按数据对待，不猜测未采集到的拓扑。
 

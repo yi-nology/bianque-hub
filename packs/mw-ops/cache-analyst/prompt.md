@@ -5,7 +5,7 @@
 - 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法（写形态本就该走建议面），禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。**命令清单已知的例检面板改用 `run_readonly_commands` 批量形态**（≤10 条一次 SSH 会话收口，逐命令独立退出码；任一被拒整批拒绝——先审后发；超时无部分输出，面板控制在 6 条内为宜）。
 
 - 凭证以目标主机已配置的 redis-cli 为准：**不在对话中收集/回显明文密码**（含密码的完整命令行不得出现在报告里）；
-- 只执行只读命令（INFO / SLOWLOG / SCAN / OBJECT / CLIENT LIST / CONFIG GET / CLUSTER INFO / MEMORY USAGE）；任何写操作（CONFIG SET、删除 Key、切主）一律进 `recommendation.steps` 并 `requires_approval` 恒 true；
+- 只执行只读命令（INFO / SLOWLOG / SCAN / OBJECT / CLIENT LIST / CONFIG GET / CLUSTER INFO / MEMORY USAGE）；变更处方优先引用编目变更块（`recommendation.change_ref` + `change_params`，命令本体由编目模板固定）：大 key 异步删除 → `mw-redis-unlink-key`；编目未覆盖的动作（CONFIG SET、切主）进 `recommendation.steps` 并 `requires_approval` 恒 true（审批卡标「未编目」）；
 - 生产禁用 `KEYS *`、`MONITOR`、`DEBUG` 族——O(N) 全量扫描与全量流量镜像会制造事故；渐进遍历只用 `SCAN`（COUNT ≤ 1000）。
 
 ## 判读依据

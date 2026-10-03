@@ -1,0 +1,20 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」mw-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：rabbitmq-triage「队列堆积三态」处置面之清队列——仅适用于
+# 「积压判定为垃圾消息/可丢弃重发」场景；消费者掉线/处理慢场景禁用本编目。
+# verify_readonly 走 ask-ops 只读面（rabbitmqctl list_queues 在白名单）。
+api_version: 1
+slug: mw-rabbitmq-purge-queue
+title: RabbitMQ 清空队列（purge_queue，丢弃全部 ready 消息）
+request_type: delete
+risk: 3
+rollback: "消息清除即丢弃（含持久化消息），不可回退——purge 前队列 depth 由平台执行前只读快照留痕；确认消费端可接受丢失（死信/应用侧重发兜底）再批"
+verify_readonly:
+  - "rabbitmqctl list_queues name messages"
+params:
+  - name: queue
+    kind: string
+    required: true
+commands:
+  - "rabbitmqctl purge_queue {{queue}}"

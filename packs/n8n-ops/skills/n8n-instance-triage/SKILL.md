@@ -2,11 +2,13 @@
 name: n8n-instance-triage
 description: n8n 实例本体分诊方法论：健康端点两级语义（/healthz vs /healthz/readiness）、起不来与反复重启、资源占用（CPU/内存）与 task runner 隔离、日志面定位——固定顺序定位与判读基准（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
+provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
+  - n8n-container-restart # 容器重启（params: container）——根因处置到位后的重启处方优先引用编目
 ---
 
 ## 触发条件
@@ -59,3 +61,5 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 - 每个结论附端点返回/日志关键行证据；变更类动作（重启实例、改 env、开 task runners、
   清数据目录）标注影响面并 requires_approval；数据不足输出「需补充采集」清单
   （如完整首错日志段、docker inspect 的挂载与 env 键名清单、部署形态说明），不臆测。
+
+**受审执行处方（批次九十四）**：根因处置到位后的实例重启处方优先引用编目变更块——`recommendation.change_ref: n8n-container-restart` + `change_params: {container: "<容器名>"}`（不给自由 steps，命令本体由编目模板固定；前置纪律：先有根因结论，重启只是让处置生效；变更后 `docker ps --filter` 自动验证）；改 env、开 task runners、清数据目录仍走自由 steps + requires_approval（审批卡标「未编目」）。编目未安装的站点照常走自由 steps，语义不变。

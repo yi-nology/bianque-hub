@@ -1,0 +1,23 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」n8n-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：n8n-instance-triage（OOM/僵死/task runner 隔离处置后的重启）与
+# n8n-queue-mode-triage（worker 不消费/改并发后的重启）——重启让处置生效，
+# 前置纪律：先有根因结论，重启不是止血本身；重启即中断在跑执行（执行数据
+# 落库语义见 n8n-execution-triage）。升级/迁移/备份三件套属生命周期大动作，
+# 不进编目走自由 steps。
+# verify_readonly 走 ask-ops 只读面（docker ps --filter 在白名单）。
+api_version: 1
+slug: n8n-container-restart
+title: n8n 容器重启（主实例/worker/task biner）
+request_type: restart
+risk: 2
+rollback: "容器重启自愈性动作（docker restart 幂等）；中断的在跑执行按其失败路径重试——需等根因处置到位后重启，未查因重启只会复现"
+verify_readonly:
+  - "docker ps --filter name={{container}}"
+params:
+  - name: container
+    kind: string
+    required: true
+commands:
+  - "docker restart {{container}}"

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.3.2 (2026-10-03)
+
+- 批次九十四「诊断+处方+受审执行」接入：新增编目变更块两件——`obs-es-index-unblock-readonly`
+  （解除 flood_stage 只读锁，params: host/port/index，verify: _settings；前置铁律先治磁盘
+  再解锁）、`obs-es-allocation-enable`（分片分配恢复，params: host/port，verify:
+  _cluster/settings；routing.allocation.enabled=none 遗忘项）；es-triage 登记
+  `provides_changes` 并在输出要求给 change_ref 处方口径（技能升 0.1.1）；obs-analyst
+  提示词处方纪律升为编目优先。
+
 ## 0.3.1 (2026-10-02)
 
 - 补 loki-triage 接线（0.3.0 遗漏，技能已发布但无入口可达）：obs-analyst 挂载该技能、

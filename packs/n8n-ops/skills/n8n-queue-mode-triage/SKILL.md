@@ -2,13 +2,15 @@
 name: n8n-queue-mode-triage
 description: n8n 队列模式分诊方法论：消费者四同核（同 Redis/同模式/同版本/同密钥）、worker 不消费归因、队列四指标判读、Redis 面与 webhook processor 路由、multi-main——固定顺序定位与判读基准（datasources n8n 查询面 + ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.1
+version: 0.1.2
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: datasources
     tools: [n8n_list_executions]
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
+provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
+  - n8n-container-restart # worker 容器重启（params: container）——四同核/并发处置后的重启处方优先引用编目
 ---
 
 ## 触发条件
@@ -69,3 +71,5 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 
 - 每个结论附容器清单/指标行/env 键名核对证据；数据不足输出「需补充采集」清单（如
   docker-compose/helm values 中 queue 段原文、Redis 侧连通性证据），不臆测。
+
+**受审执行处方（批次九十四）**：四同核/并发配比处置到位后的 worker 容器重启处方优先引用编目变更块——`recommendation.change_ref: n8n-container-restart` + `change_params: {container: "<worker 容器名>"}`（不给自由 steps，命令本体由编目模板固定；前置纪律：先核对四同核与根因结论，未查因重启只会复现；变更后 `docker ps --filter` 自动验证）；worker 扩容/改并发/换 Redis 仍走自由 steps + requires_approval（审批卡标「未编目」）。编目未安装的站点照常走自由 steps，语义不变。

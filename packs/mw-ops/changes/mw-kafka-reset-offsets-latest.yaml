@@ -1,0 +1,24 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」mw-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：kafka-triage「消费组积压三因子」处置面之重置位点——to-latest
+# 固定形态（跳过判定为无需消费的积压）；需按时间点回读的走自由 steps 走审批。
+# 消费组须先停消费再重置（组活跃时 reset 被拒），审批前核对。
+# verify_readonly 走 ask-ops 只读面（--describe 为技能采集同款命令）。
+api_version: 1
+slug: mw-kafka-reset-offsets-latest
+title: Kafka 消费组位点重置到最新（全 topic 跳过积压）
+request_type: reset
+risk: 3
+rollback: "位点前移即跳过未消费消息，不可自动回退——重置前 CURRENT/LOG-END OFFSET 由平台执行前只读快照留痕；需重读时按快照位点再 reset 回去（同样须停消费后操作）"
+verify_readonly:
+  - "kafka-consumer-groups.sh --bootstrap-server {{brokers}} --group {{group}} --describe"
+params:
+  - name: brokers
+    kind: string
+    required: true
+  - name: group
+    kind: string
+    required: true
+commands:
+  - "kafka-consumer-groups.sh --bootstrap-server {{brokers}} --group {{group}} --all-topics --reset-offsets --to-latest --execute"

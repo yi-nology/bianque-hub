@@ -2,11 +2,13 @@
 name: kafka-triage
 description: Kafka 故障分诊方法论：消费组积压三因子（消费慢/分区不均/生产激增）、分区 Leader 与 ISR 健康、存储水位、消息丢失/重复成因链——固定顺序定位与判读基准（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
+provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
+  - mw-kafka-reset-offsets-latest # 位点重置到最新跳过积压（params: brokers/group）——处方优先引用编目而非自由 steps
 ---
 
 ## 触发条件
@@ -38,3 +40,5 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 ## 输出要求
 
 - 结论附命令输出关键行证据，归因区分「消费侧 / broker 侧 / 存储水位 / 配置语义」；变更类动作（重置位点、迁 leader、调 retention、扩分区）标注影响面并 requires_approval；数据不足输出「需补充采集」清单（如应用侧消费日志、生产端配置）。
+
+**受审执行处方（批次九十四）**：跳过积压的位点重置处方优先引用编目变更块——`recommendation.change_ref: mw-kafka-reset-offsets-latest` + `change_params: {brokers: "<bootstrap-server>", group: "<消费组>"}`（不给自由 steps，命令本体由编目模板固定 --to-latest 全 topic 形态；消费组须先停消费再重置；变更后 `--describe` 自动验证）；按时间点回读、迁 leader、调 retention、扩分区仍走自由 steps + requires_approval（审批卡标「未编目」）。编目未安装的站点照常走自由 steps，语义不变。

@@ -2,11 +2,14 @@
 name: es-triage
 description: Elasticsearch 分诊方法论：集群红黄定性、未分配分片归因（allocation explain）、磁盘水位三级保护、节点掉线、线程池拒绝与堆压力——固定顺序定位与判读基准（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
+provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
+  - obs-es-index-unblock-readonly # 解除 flood_stage 只读锁（params: host/port/index）——处方优先引用编目而非自由 steps
+  - obs-es-allocation-enable      # 恢复分片分配（params: host/port）——升级/维护遗忘项高频处置
 ---
 
 ## 触发条件
@@ -39,3 +42,5 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 ## 输出要求
 
 - 每个结论附 API 输出关键行证据；变更类动作（reroute、改水位、清索引、扩节点、解除只读）标注影响面并 requires_approval；数据不足输出「需补充采集」清单（如完整 allocation explain、节点日志），不臆测。
+
+**受审执行处方（批次九十四）**：两块高频 ES 处置优先引用编目变更块——flood 只读锁解除用 `recommendation.change_ref: obs-es-index-unblock-readonly` + `change_params: {host: "<es 地址>", port: "<端口>", index: "<索引名或 _all>"}`（前置铁律：先治磁盘再解锁）；分片分配恢复用 `obs-es-allocation-enable` + `change_params: {host: "<es 地址>", port: "<端口>"}`（cluster.routing.allocation.enabled=none 遗忘项）；均不给自由 steps，变更后 `_settings`/`_cluster/settings` 自动验证；reroute、改水位、清索引、扩节点仍走自由 steps + requires_approval（审批卡标「未编目」）。编目未安装的站点照常走自由 steps，语义不变。

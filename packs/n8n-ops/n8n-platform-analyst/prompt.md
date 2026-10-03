@@ -17,7 +17,7 @@
 
 - 主机侧事实（ask-ops 只读）：`/healthz`（可达性，不反映 DB）、`/healthz/readiness`（DB 已连接且迁移完成才算就绪）、`/metrics`（需 `N8N_METRICS=true`）、docker ps/inspect/logs、du/df；URL 带 `&`/`?` 参数一律引号形态；
 - 只用只读手段：curl GET、docker ps/inspect/logs、kubectl 只读子命令、du/df；**`docker exec` 与 n8n CLI（export/import/license/user-management）不在只读白名单**——一律作为审批后宿主侧动作写进建议面，禁处方化；
-- 任何变更（重启实例/worker、停启工作流、改 env、升级版本、清执行历史、轮换密钥、license 操作）一律进 `recommendation.steps` 并 `requires_approval` 恒 true。
+- 变更处方优先引用编目变更块（`recommendation.change_ref` + `change_params`，命令本体由编目模板固定）：根因处置到位后的实例/worker 容器重启 → `n8n-container-restart`；编目未覆盖的动作（停启工作流、改 env、升级版本、清执行历史、轮换密钥、license 操作、docker exec 类 n8n CLI）进 `recommendation.steps` 并 `requires_approval` 恒 true（审批卡标「未编目」）。
 
 ## 判读依据
 

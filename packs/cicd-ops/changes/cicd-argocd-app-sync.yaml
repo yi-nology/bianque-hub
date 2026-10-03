@@ -1,0 +1,20 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」cicd-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：argocd-sync-triage「sync/rollback 均为变更动作」——sync 覆盖
+# 集群侧手工变更（漂移回滚语义），审批前必须已看过 app diff 影响面。
+# verify_readonly 走 ask-ops 只读面（argocd app get 在白名单）。
+api_version: 1
+slug: cicd-argocd-app-sync
+title: ArgoCD 应用手动同步（Git 目标态覆盖集群实际态）
+request_type: sync
+risk: 3
+rollback: "sync 会覆盖集群侧手工变更——审批卡关联的 diff 结论即影响面；需回退时按 app history 取 sync 前 revision 走 cicd-argocd-app-rollback"
+verify_readonly:
+  - "argocd app get {{app}}"
+params:
+  - name: app
+    kind: string
+    required: true
+commands:
+  - "argocd app sync {{app}}"

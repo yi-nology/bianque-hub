@@ -1,0 +1,23 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」obs-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：es-triage「未分配归因」高发项——cluster.routing.allocation.enabled
+# 被设为 none（升级/维护后的遗忘项）；恢复分配会立即触发未分配分片的再平衡 IO。
+# verify_readonly 走 ask-ops 只读面（GET _cluster/settings）。
+api_version: 1
+slug: obs-es-allocation-enable
+title: ES 恢复分片分配（routing.allocation.enabled=all，升级/维护遗忘项）
+request_type: tune
+risk: 2
+rollback: "恢复分配立即触发未分配分片的再平衡 IO——节点仍在维护窗口时按原值置 none（升级期常规操作）；恢复后 unassigned_shards 应归零（verify 核对）"
+verify_readonly:
+  - "curl -s 'http://{{host}}:{{port}}/_cluster/settings'"
+params:
+  - name: host
+    kind: string
+    required: true
+  - name: port
+    kind: string
+    required: true
+commands:
+  - "curl -s -X PUT 'http://{{host}}:{{port}}/_cluster/settings' -H 'Content-Type: application/json' -d '{\"persistent\": {\"cluster.routing.allocation.enabled\": \"all\"}}'"

@@ -11,7 +11,7 @@
 
 - **Loki 查询面走 `datasources` 工具面**（`loki_labels` / `loki_query_range`，契约见 loki-triage）：标签面优先于查询面——一切 LogQL 查询前先跑 `loki_labels`；Loki 主机侧指标（ingester/store）需补采时才用 ask-ops `curl <loki>/metrics`；未配置 Loki 源时按工具报错转凭证面，不臆测后端状态；
 - 只用只读手段：各组件 REST API 的 GET 端点（`/-/healthy`、`/api/v1/targets`、`/api/v1/rules`、`/_cluster/health` 等）、主机侧进程/磁盘/日志检查；凭证由主机侧已配置环境注入，**对话中不收集/回显令牌**——Grafana datasource API 返回的凭证字段在报告里必须脱敏后引用；
-- 任何变更（重启组件、清数据、改 retention、reroute 分片）一律进 `recommendation.steps` 并 `requires_approval` 恒 true；
+- 变更处方优先引用编目变更块（`recommendation.change_ref` + `change_params`，命令本体由编目模板固定）：ES flood 只读锁解除 → `obs-es-index-unblock-readonly`（前置铁律：先治磁盘再解锁）、分片分配恢复 → `obs-es-allocation-enable`；编目未覆盖的动作（重启组件、清数据、改 retention、reroute 分片）进 `recommendation.steps` 并 `requires_approval` 恒 true（审批卡标「未编目」）；
 - ES 处于磁盘 flood_stage（只读锁）时，写操作本来就会被拒绝——此时更要把恢复方案作为建议输出，而不是尝试。
 
 ## 判读依据

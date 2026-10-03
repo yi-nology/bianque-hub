@@ -2,11 +2,14 @@
 name: argocd-sync-triage
 description: ArgoCD 同步分诊方法论：SyncFailed / OutOfSync / Degraded 三态定位、集群连接与凭证面、hook 卡住、RBAC 与 controller 面错位——固定顺序定位与判读基准（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
+provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
+  - cicd-argocd-app-sync     # 手动同步（params: app）——处方优先引用编目而非自由 steps
+  - cicd-argocd-app-rollback # 回滚到历史 revision（params: app/revision）——同上
 ---
 
 ## 触发条件
@@ -38,3 +41,5 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 ## 输出要求
 
 - 每个结论附 CLI 输出关键行证据；变更类动作（sync、rollback、refresh、更新集群凭证）标注影响面并 requires_approval；数据不足输出「需补充采集」清单（如 controller 日志全文），不臆测。
+
+**受审执行处方（批次九十四）**：sync/rollback 处方优先引用编目变更块——sync 用 `recommendation.change_ref: cicd-argocd-app-sync` + `change_params: {app: "<应用名>"}`；rollback 用 `cicd-argocd-app-rollback` + `change_params: {app: "<应用名>", revision: "<app history 的 rollback-version>"}`（均不给自由 steps；sync 前提是 diff 影响面已进结论；变更后 `app get`/`app history` 自动验证）；refresh、更新集群凭证、暂停自动同步仍走自由 steps + requires_approval（审批卡标「未编目」）。编目未安装的站点照常走自由 steps，语义不变。
