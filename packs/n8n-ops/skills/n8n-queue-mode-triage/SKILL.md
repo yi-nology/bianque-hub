@@ -1,10 +1,12 @@
 ---
 name: n8n-queue-mode-triage
-description: n8n 队列模式分诊方法论：消费者四同核（同 Redis/同模式/同版本/同密钥）、worker 不消费归因、队列四指标判读、Redis 面与 webhook processor 路由、multi-main——固定顺序定位与判读基准（ask-ops 只读采集面）。
+description: n8n 队列模式分诊方法论：消费者四同核（同 Redis/同模式/同版本/同密钥）、worker 不消费归因、队列四指标判读、Redis 面与 webhook processor 路由、multi-main——固定顺序定位与判读基准（datasources n8n 查询面 + ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
+  - server: datasources
+    tools: [n8n_list_executions]
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
 ---
@@ -14,11 +16,14 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 - 症状关键词：worker 不消费、队列堆积、任务全在排队、queue mode 排障、加 worker 没用、执行不开始、multi-main
 - 组合场景：单工作流卡住/失败率先走 n8n-execution-triage；本技能管**消费面结构性问题**（有活没人干/有人不干活）；Redis 本体故障深挖走 mw-ops（本技能只判 n8n 视角的队列连通与水位）
 
-## 数据来源（ask-ops 只读面）
+## 数据来源（datasources n8n 查询面 + ask-ops 主机面）
 
-- worker 健康面：`curl -s http://127.0.0.1:5679/healthz`（worker 端口按部署实情；需
+- **执行侧证走 `datasources` 工具面**（`n8n_list_executions` 看 queued/waiting 堆积的
+  执行侧分布——队列指标说「堆了多少」，执行列表说「堆的是什么」；未配置 n8n 源时工具报
+  「未配置」——转凭证面补 n8n_url + n8n_api_key，不臆测）；
+- worker 健康面（ask-ops）：`curl -s http://127.0.0.1:5679/healthz`（worker 端口按部署实情；需
   `QUEUE_HEALTH_CHECK_ACTIVE=true` 才开启，未开启时报连接拒绝是**配置形态**不是死证据）；
-- 指标面：main 与 worker 各自暴露 `/metrics`——官方列名四指标
+- 指标面（ask-ops）：main 与 worker 各自暴露 `/metrics`——官方列名四指标
   `n8n_scaling_mode_queue_jobs_waiting`（gauge）、`_active`（gauge）、`_completed`、
   `_failed`（counter）；multi-main 下另有 `instance_role_leader`（谁是 leader）；
 - 进程面：`docker ps`（main/worker/webhook processor 容器清单与版本 tag）、

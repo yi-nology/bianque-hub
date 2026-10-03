@@ -14,6 +14,8 @@ skills:
 tools:
   - server: ask-ops
     allow: []
+  - server: datasources          # n8n 公共 API 只读查询面（API key 经凭证面注入）
+    allow: [n8n_list_workflows, n8n_get_workflow, n8n_list_executions, n8n_get_execution]
 dispatch_allow: []
 route_priority: P3
 route_group: tooling

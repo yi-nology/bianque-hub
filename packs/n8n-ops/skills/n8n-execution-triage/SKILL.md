@@ -1,10 +1,12 @@
 ---
 name: n8n-execution-triage
-description: n8n 执行面分诊方法论：卡住执行三态归因（queued 无消费者 / waiting 堆积 / running 不结束）、失败面判读、执行历史膨胀与 prune 三件套——固定顺序定位与判读基准（ask-ops 只读采集面）。
+description: n8n 执行面分诊方法论：卡住执行三态归因（queued 无消费者 / waiting 堆积 / running 不结束）、失败面判读、执行历史膨胀与 prune 三件套——固定顺序定位与判读基准（datasources n8n 查询面 + ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
+  - server: datasources
+    tools: [n8n_list_executions, n8n_get_execution, n8n_list_workflows]
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
 ---
@@ -14,15 +16,18 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 - 症状关键词：工作流卡住、执行卡住、一直在排队、waiting 堆积、执行失败、失败率涨、执行历史膨胀、n8n 数据库涨
 - 组合场景：卡住若伴随「队列深度持续增长/全部执行都在排队」优先转 n8n-queue-mode-triage（消费面结构性问题）；单工作流异常才在本技能深挖
 
-## 数据来源（ask-ops 只读面）
+## 数据来源（datasources n8n 查询面 + ask-ops 主机面）
 
-- 公共 API（`X-N8N-API-KEY` 经主机侧已配置环境注入，对话不收集/回显）：
-  `curl -s -H "X-N8N-API-KEY: $N8N_API_KEY" 'http://127.0.0.1:5678/api/v1/executions?status=error&limit=20'`
-  （URL 带 `&` 一律引号形态）、`.../api/v1/executions?limit=50`（近态分布）、
-  `.../api/v1/executions/<id>`（单执行明细，含节点级错误）、`.../api/v1/workflows`（active 面与数量）；
-- 指标面：`curl -s http://127.0.0.1:5678/metrics`（需 `N8N_METRICS=true`）——队列四指标
+- **n8n 公共 API 统一走 `datasources` 工具面**（`n8n_list_executions` / `n8n_get_execution` /
+  `n8n_list_workflows`，契约见 frontmatter；API key 经凭证面注入，对话不收集/回显）：
+  `n8n_list_executions`（`status` 过滤 error/success/running/waiting、`workflow_id`、`limit`
+  缺省 20 上限 100）看近态分布；`n8n_get_execution` 取单执行明细（含节点级错误与 runData）；
+  `n8n_list_workflows` 看 active 面与数量；
+- 指标面（ask-ops）：`curl -s http://127.0.0.1:5678/metrics`（需 `N8N_METRICS=true`）——队列四指标
   `n8n_scaling_mode_queue_jobs_waiting / _active / _completed / _failed`（官方文档列名）；
-- DB 侧水位（sqlite 文件 du / postgres 表体积走 db-ops 联动口径）：execution 数据是库体积第一大户。
+- DB 侧水位（sqlite 文件 du / postgres 表体积走 db-ops 联动口径）：execution 数据是库体积第一大户；
+- 未配置 n8n 源时工具报「未配置（BQ_DATASOURCES_CONFIG）」——转凭证面补 n8n_url +
+  n8n_api_key，不臆测实例状态。
 
 ## 分诊路径（固定顺序，先分布后单点再治理）
 

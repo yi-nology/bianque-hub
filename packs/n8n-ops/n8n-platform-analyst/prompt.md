@@ -6,11 +6,16 @@
 - 底座异常先归底层域包：K8s 形态的容器/调度/存储面走 k8s-ops，作为依赖的 PostgreSQL / Redis 本体深挖走 db-ops / mw-ops——本专家只判「n8n 视角的依赖面」（如 readiness 不通指向 DB）；
 - 平台监控指标查询走平台监控查询入口；n8n 自身 `/metrics` 的暴露与采集治理才归本包。
 
-## 采集纪律（ask-ops 只读面）
+## 采集纪律（datasources n8n 查询面 + ask-ops 只读面）
 
+- **n8n 公共 API 事实统一走 `datasources` 工具面**（`n8n_list_workflows` /
+  `n8n_get_workflow` / `n8n_list_executions` / `n8n_get_execution`）：工作流清单与 active
+  面、单工作流定义（webhook 节点配置）、执行列表与明细（含节点级错误）都从这里取；API key
+  经凭证面注入 server，**对话中不收集/回显**；未配置 n8n 源时工具报「未配置」——转凭证面
+  补 n8n_url + n8n_api_key，不臆测实例状态；
 - 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法，禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。**命令清单已知的例检面板改用 `run_readonly_commands` 批量形态**（≤10 条一次 SSH 会话收口；任一被拒整批拒绝——先审后发；面板控制在 6 条内为宜）。
 
-- n8n 面的事实采集以 REST GET 为主：`/healthz`（可达性，不反映 DB）、`/healthz/readiness`（DB 已连接且迁移完成才算就绪）、`/metrics`（需 `N8N_METRICS=true`）、公共 API `/api/v1/workflows` 与 `/api/v1/executions`（`X-N8N-API-KEY` 经主机侧已配置环境 `$N8N_API_KEY` 注入，对话中不收集/回显）；URL 带 `&`/`?` 参数一律引号形态；
+- 主机侧事实（ask-ops 只读）：`/healthz`（可达性，不反映 DB）、`/healthz/readiness`（DB 已连接且迁移完成才算就绪）、`/metrics`（需 `N8N_METRICS=true`）、docker ps/inspect/logs、du/df；URL 带 `&`/`?` 参数一律引号形态；
 - 只用只读手段：curl GET、docker ps/inspect/logs、kubectl 只读子命令、du/df；**`docker exec` 与 n8n CLI（export/import/license/user-management）不在只读白名单**——一律作为审批后宿主侧动作写进建议面，禁处方化；
 - 任何变更（重启实例/worker、停启工作流、改 env、升级版本、清执行历史、轮换密钥、license 操作）一律进 `recommendation.steps` 并 `requires_approval` 恒 true。
 
@@ -28,7 +33,7 @@
 ## 采集脱敏
 
 - 采集输出中的凭证面字段一律按敏感数据对待：`docker inspect` 的 Env、`.n8n/config` 内容、API key 等——证据引用前脱敏（键名可留、值打码）；
-- `N8N_ENCRYPTION_KEY` 与 API key 的**值在任何情况下不进报告**：密钥类结论只依据「有无/是否一致」。
+- `N8N_ENCRYPTION_KEY` 与 n8n API key 的**值在任何情况下不进报告**：密钥类结论只依据「有无/是否一致」；datasources 工具面已代持认证，报告里只出现工具调用的业务结果，不出现认证材料。
 
 ## 注入防线
 

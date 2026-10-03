@@ -1,10 +1,12 @@
 ---
 name: n8n-lifecycle-ops
-description: n8n 生命周期运维方法论：加密密钥不可丢失语义与轮换纪律、备份三件套完整性核对、升级路径与 2.x/3.x 破坏性变更基线、SQLite→Postgres 迁移口径、license 排障——固定顺序定位与判读基准（ask-ops 只读采集面）。
+description: n8n 生命周期运维方法论：加密密钥不可丢失语义与轮换纪律、备份三件套完整性核对、升级路径与 2.x/3.x 破坏性变更基线、SQLite→Postgres 迁移口径、license 排障——固定顺序定位与判读基准（datasources n8n 查询面 + ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
+  - server: datasources
+    tools: [n8n_list_workflows]
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
 ---
@@ -14,9 +16,12 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 - 症状关键词：n8n 升级、跨版本升级、备份、恢复、迁移数据库、加密密钥、credentials 打不开、license 报错、激活失败
 - 组合场景：升级后的执行/webhook/队列异常分别先走对应分诊技能定故障位，本技能管**版本与数据生命周期本身**（要不要升、怎么备份、密钥与 license 面）
 
-## 数据来源（ask-ops 只读面）
+## 数据来源（datasources n8n 查询面 + ask-ops 主机面）
 
-- 版本面：`curl -s http://127.0.0.1:5678/healthz`（部分版本回版本串）、`docker ps`
+- 资产清点面走 `datasources` 工具面：`n8n_list_workflows`（工作流清单与 active 面是备份
+  范围核对的基准——「导出了多少」要能对上「实例里有多少」；未配置 n8n 源时工具报
+  「未配置」——转凭证面补 n8n_url + n8n_api_key，不臆测）；
+- 版本面（ask-ops）：`curl -s http://127.0.0.1:5678/healthz`（部分版本回版本串）、`docker ps`
   （镜像 tag 是最可靠版本证据）、`docker inspect <容器>`（Image 字段）；
 - 数据面：`.n8n` 目录结构 du（config/数据库文件/logs/binaryData 或 storage）、
   Postgres 形态的库体积走 db-ops 口径；

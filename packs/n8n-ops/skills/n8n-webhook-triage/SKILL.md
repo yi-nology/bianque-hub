@@ -1,10 +1,12 @@
 ---
 name: n8n-webhook-triage
-description: n8n webhook 触发面分诊方法论：404 not registered 三查（active 状态/URL 语义/重注册）、Forbidden maybe CSRF 反代配置面、test 与 production URL 注册语义、queue 模式下 webhook 路由错位——固定顺序定位与判读基准（ask-ops 只读采集面）。
+description: n8n webhook 触发面分诊方法论：404 not registered 三查（active 状态/URL 语义/重注册）、Forbidden maybe CSRF 反代配置面、test 与 production URL 注册语义、queue 模式下 webhook 路由错位——固定顺序定位与判读基准（datasources n8n 查询面 + ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
+  - server: datasources
+    tools: [n8n_list_workflows, n8n_get_workflow]
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]
 ---
@@ -14,15 +16,17 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 - 症状关键词：webhook 不触发、webhook 404、The requested webhook is not registered、test 通 production 不通、Forbidden maybe CSRF、登录后操作被拒、回调收不到
 - 组合场景：对端系统侧的出网问题（回调没发出来）不在本技能——先经平台网络域确认「请求到没到 n8n」再进本技能
 
-## 数据来源（ask-ops 只读面）
+## 数据来源（datasources n8n 查询面 + ask-ops 主机面）
 
-- 工作流状态面：`curl -s -H "X-N8N-API-KEY: $N8N_API_KEY" 'http://127.0.0.1:5678/api/v1/workflows'`
-  （active 字段；凭证经主机侧环境注入，对话不回显）；
-- 探测面：`curl -s -i '<webhook-url>'`（原样回显状态行；URL 带 `&`/`?` 一律引号形态；
+- **工作流状态面走 `datasources` 工具面**（`n8n_list_workflows` 看 active 分布、
+  `n8n_get_workflow` 看单工作流定义与 Webhook 节点的 path/method 配置；API key 经凭证面
+  注入，对话不收集/回显）；未配置 n8n 源时工具报「未配置」——转凭证面补 n8n_url +
+  n8n_api_key，不臆测；
+- 探测面（ask-ops）：`curl -s -i '<webhook-url>'`（原样回显状态行；URL 带 `&`/`?` 一律引号形态；
   405 Method Not Allowed 本身说明路径已注册，是**健康信号**）；
-- 配置面：`docker inspect <容器>` 读 env 键名清单（`N8N_HOST`/`N8N_PROTOCOL`/
+- 配置面（ask-ops）：`docker inspect <容器>` 读 env 键名清单（`N8N_HOST`/`N8N_PROTOCOL`/
   `N8N_WEBHOOK_URL`/`N8N_PROXY_HOPS` 现值——值非敏感可引用，凭证类值打码）；
-- 日志面：`docker logs --tail 200 <容器>`（webhook 注册/404 记录）。
+- 日志面（ask-ops）：`docker logs --tail 200 <容器>`（webhook 注册/404 记录）。
 
 ## 分诊路径（固定顺序，404 三查 → 注册面 → CSRF → 路由面）
 

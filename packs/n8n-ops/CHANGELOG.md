@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.2.0 (2026-10-03)
+
+- 采集面升级：n8n 公共 API 事实改走 datasources 新源四工具（n8n_list_workflows /
+  n8n_get_workflow / n8n_list_executions / n8n_get_execution，配套平台批次：datasources
+  server 增 n8n 源、凭证面增 n8n_url/n8n_api_key 字段）——API key 经凭证面注入，
+  替代 0.1.0 的主机侧 `$N8N_API_KEY` env 约定；四技能 requires_mcp 显式声明、专家
+  tools 授权、prompt 采集纪律同步（execution/webhook/queue-mode/lifecycle 升 0.1.1，
+  instance-triage 采集面未变保持 0.1.0）。
+- ask-ops 面收敛为主机侧事实：健康端点、/metrics、docker/kubectl 面、webhook URL 探测。
+
 ## 0.1.0 (2026-10-02)
 
 - 首发（原生编写，非 oo-devops 血缘）：n8n-instance-triage / n8n-execution-triage /

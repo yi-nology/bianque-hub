@@ -24,10 +24,17 @@ worker 不消费、升级/密钥出事故——本包接管诊断。五技能 + 
 
 ## 工具面
 
-无专用 MCP 依赖：健康端点（`/healthz`、`/healthz/readiness`）、`/metrics`、公共 API
-（`/api/v1/*`，`X-N8N-API-KEY` 走主机侧已配置环境）与容器/进程面（docker/kubectl 只读
-子命令）统一经平台 `ask-ops` 采集面在目标运维主机执行，凭证不回显。`docker exec` 与
-n8n CLI（export/import/license 类）不在只读白名单，一律作为审批后宿主侧动作进建议面。
+两层采集：
+
+- **datasources n8n 查询面**（0.2.0 起）：n8n 公共 API 四只读工具
+  （`n8n_list_workflows` / `n8n_get_workflow` / `n8n_list_executions` / `n8n_get_execution`），
+  源地址与 API key 经凭证面「监控数据源」的 n8n 段配置（n8n_url + n8n_api_key），
+  认证由 server 代持、对话不回显；
+- **ask-ops 主机面**：健康端点（`/healthz`、`/healthz/readiness`）、`/metrics`、容器/进程面
+  （docker/kubectl 只读子命令）、webhook URL 探测——在目标运维主机执行，凭证不回显。
+
+`docker exec` 与 n8n CLI（export/import/license 类）不在只读白名单，一律作为审批后
+宿主侧动作进建议面。旧二进制缺 n8n 四工具时先重建工具面再升本包。
 
 ## 版本基线
 
