@@ -58,7 +58,7 @@ curl -X POST http://127.0.0.1:8900/api/v1/plugins/install \
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [os-basics](packs/os-basics/) | 1.3.2 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
+| [os-basics](packs/os-basics/) | 1.3.3 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
 | [k8s-ops](packs/k8s-ops/) | 0.1.3 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面） |
 | [mw-ops](packs/mw-ops/) | 0.2.1 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 |
 | [db-ops](packs/db-ops/) | 0.2.2 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |

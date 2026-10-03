@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.3 (2026-10-03)
+
+- verify_readonly 接入平台自动执行（批次九十五二阶段）：sysctl-kv-tune 补 `sysctl -n {{key}}` 变更后验证命令（RenderVerify 参数代换与 commands 同口径）——首个带自动验证的编目变更块。
+
 ## 1.3.2 (2026-10-02)
 
 - 批次九十四「诊断+处方+受审执行」首批：新增编目变更块 `sysctl-kv-tune`（sysctl 运行时+持久化调参，params: key/value）；perf-tuning 输出铁律补 change_ref 处方口径（sysctl 类调参优先编目、自由 steps 兜底）。

@@ -1,15 +1,16 @@
 # 编目变更块（批次九十四「诊断+处方+受审执行」首批参考件）。
 # 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
 # 审批/执行/验证归平台——本文件不写任何治理节点。
-# verify_readonly 为声明性元数据（审批卡展示；平台 post-verify 现行走快照对比，
-# 该字段后续版本接入自动执行时须为无占位符完整命令）——本块 key 是参数，
-# 无法给出无占位验证命令，故省略。
+# verify_readonly 已接入自动执行（批次九十五二阶段 RenderVerify 参数代换）：
+# 变更后 post-verify 自动跑 sysctl -n <key> 断言运行时值生效——占位符与 commands 同口径。
 api_version: 1
 slug: sysctl-kv-tune
 title: sysctl 内核参数调优（运行时 + 持久化）
 request_type: tune
 risk: 2
 rollback: "sysctl -w <key>=<旧值>（变更前基线由平台执行前只读快照留痕）；删除 /etc/sysctl.d/99-bq-tune.conf 对应行"
+verify_readonly:
+  - "sysctl -n {{key}}"
 params:
   - name: key
     kind: string
