@@ -1,0 +1,21 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」k8s-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# verify_readonly 走 ask-ops 只读面：变更后 post-verify 自动核 READY 副本回升。
+api_version: 1
+slug: k8s-rollout-restart
+title: 工作负载滚动重启（kubectl rollout restart）
+request_type: restart
+risk: 2
+rollback: "滚动重启是自愈性动作（Pod 逐个重建，Service 连续性由滚动节奏保障），无需回滚；若重启后新 Pod 起不来，按分诊方法论查根因，必要时 kubectl rollout undo 回退上一版（自由 steps 走审批）"
+verify_readonly:
+  - "kubectl get {{resource}} -n {{namespace}}"
+params:
+  - name: resource
+    kind: string
+    required: true
+  - name: namespace
+    kind: string
+    required: true
+commands:
+  - "kubectl rollout restart {{resource}} -n {{namespace}}"

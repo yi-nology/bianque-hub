@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.1.4 (2026-10-03)
+
+- 批次九十四「诊断+处方+受审执行」接入（第三波）：新增编目变更块三件——`k8s-helm-rollback`
+  （release 应急回滚，params: release/revision/namespace，verify: helm history）、
+  `k8s-kubeadm-certs-renew`（证书逐张续期，params: certs 清单，verify: check-expiration；
+  控制面静态 Pod 重启不进编目走自由 steps）、`k8s-rollout-restart`（滚动重启，
+  params: resource/namespace，verify: kubectl get）；三技能 frontmatter 登记
+  `provides_changes` 并在输出要求给 change_ref 处方口径（编目优先、自由 steps 兜底；
+  helm-ops/triage 0.1.1→0.1.2、workload-triage 0.1.0→0.1.1）；专家提示词处方铁律
+  升为编目优先。配套：bianque-tools ask-ops 只读白名单同批补 helm/kubeadm 守卫
+  （本包 0.1.3 已声明的只读面此前实际被白名单拒收降级）。
+
 ## 0.1.3 (2026-10-02)
 
 - 工具面补全（0.1.2 遗漏）：路由词 helm排查/k8s证书巡检 已开，但专家只授了 k8sgpt——

@@ -1,0 +1,21 @@
+# 编目变更块（批次九十四「诊断+处方+受审执行」k8s-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 注意边界：本编目只续期控制面节点本机 /etc/kubernetes/pki 下的证书文件；
+# 运行中的控制面静态 Pod（apiserver/etcd 等）仍持旧证书直至重启——重启属
+# 另一变更动作，不进编目，走自由 steps + requires_approval。
+# verify_readonly 走 ask-ops 只读面（kubeadm certs check-expiration 守卫已放行）。
+api_version: 1
+slug: k8s-kubeadm-certs-renew
+title: kubeadm 证书续期（控制面节点本机证书文件，逐张点名）
+request_type: renew
+risk: 3
+rollback: "证书文件已被新证书覆盖，不可原地回退；续期前 /etc/kubernetes/pki 原状由平台执行前只读快照留痕（必要时人工从快照恢复并重启控制面）"
+verify_readonly:
+  - "kubeadm certs check-expiration"
+params:
+  - name: certs
+    kind: string_list
+    required: true
+commands:
+  - "kubeadm certs renew {{certs}}"

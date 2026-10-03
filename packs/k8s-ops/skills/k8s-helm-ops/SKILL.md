@@ -2,11 +2,13 @@
 name: k8s-helm-ops
 description: Helm release 排查方法论：release 状态判读（deployed/failed/pending-*）、升级回滚决策、values 漂移核对。宿主侧只读 CLI 采集（ask-ops 受审通道），诊断只读优先。
 mode: on_demand
-version: 0.1.1
+version: 0.1.2
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
     tools: [run_readonly_command]
+provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
+  - k8s-helm-rollback    # release 应急回滚（params: release/revision/namespace）——处方优先引用编目而非自由 steps
 ---
 
 > 改造自 oo-devops/k8s-helm（openocta 收割）：原技能绑定 kubectl-mcp-server 的 16 个
@@ -41,3 +43,5 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 ## 输出要求
 
 - 结论附 revision 链证据；回滚动作必须标注「应急回滚，根因待查」并给出后续核对步骤。
+
+**受审执行处方（批次九十四）**：应急回滚处方优先引用编目变更块——报告 `recommendation.change_ref: k8s-helm-rollback` + `change_params: {release: "<release 名>", revision: "<目标 revision，取 history 链上最后 deployed>", namespace: "<ns>"}`（不给自由 steps，命令本体由编目模板固定；变更后 `helm history` 自动验证新 revision 落链）；其余变更动作（uninstall/升级重试/解 pending 锁）仍走自由 steps + requires_approval（审批卡标「未编目」）。编目未安装的站点照常走自由 steps，语义不变。

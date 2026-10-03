@@ -2,11 +2,13 @@
 name: k8s-workload-triage
 description: K8s 工作负载异常分诊方法论：CrashLoopBackOff / OOMKilled / Pending / ImagePullBackOff / Evicted 五类异常的定位路径与判读基准（k8sgpt 工具面映射）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:
   - server: k8sgpt
     tools: [get-resource, get-logs, list-events, list-namespaces]
+provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
+  - k8s-rollout-restart  # 工作负载滚动重启（params: resource/namespace）——处方优先引用编目而非自由 steps
 ---
 
 ## 触发条件
@@ -38,3 +40,5 @@ requires_mcp:
 ## 输出要求
 
 - 每个结论附 events/logs 关键行证据；无法定位时明确说「需节点层诊断」而不是猜测。
+
+**受审执行处方（批次九十四）**：配置错误修复上线后、内存泄漏应急处置等「重启工作负载让它重读配置/清内存」场景，处方优先引用编目变更块——报告 `recommendation.change_ref: k8s-rollout-restart` + `change_params: {resource: "<type/name 形式，如 deployment/api-server>", namespace: "<ns>"}`（不给自由 steps，命令本体由编目模板固定；变更后 `kubectl get` 自动验证 READY 副本回升）；注意前置纪律：**重启前必须已有根因结论**（重启只是让处置生效的手段，不是止血本身——CrashLoop 未查因就重启只会再崩）。`kubectl delete pod`（驱散单副本）、scale 扩缩容等其余动作仍走自由 steps + requires_approval（审批卡标「未编目」）。编目未安装的站点照常走自由 steps，语义不变。
