@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.2.1 (2026-10-03)
+
+- 专家 prompt 输出契约对齐平台 schema（实弹 e2e 发现）：recommendation.steps 每条必须是
+  单条可执行 shell 命令（schema 白名单校验拦说明性内容——0.2.0 首轮实弹六条 steps 全被
+  拒收重试失败），影响面/回退路径等说明一律移 needs_followup。
+
 ## 0.2.0 (2026-10-03)
 
 - 采集面升级：n8n 公共 API 事实改走 datasources 新源四工具（n8n_list_workflows /
