@@ -66,6 +66,16 @@ var (
 	}
 )
 
+// hostSideMCP 平台宿主侧工具面白名单：包内无契约文件、实例装载即存在的 server。
+// 专家级子集安装（spec 2026-10-05-per-expert-install）据此裁决 tools server
+// 可携带性——白名单外且无包内 mcp/ 契约 = 该专家装不出去。新增宿主面 server
+// 与平台侧（conf 挂载面/experts/_shared）同步。
+var hostSideMCP = map[string]bool{
+	"ask-ops":            true, // 宿主侧受审只读命令面
+	"security-assistant": true, // 安全巡检采集面（内置）
+	"datasources":        true, // 平台数据源查询面（n8n/loki 等）
+}
+
 // ---- 结构 ----
 
 type packManifest struct {
@@ -186,6 +196,16 @@ type validator struct {
 	kwOwner      map[string]kwFirst  // 路由词/症状 → 首登（prio, pack）
 	mountChecks  []mountCheck        // 专家挂载/链钉扎（跨包解析后核对工具面覆盖）
 	packVersions map[string]string   // 包名 → version（README 包清单核对）
+	// 专家独立安装性核对输入（spec 2026-10-05-per-expert-install §6）
+	packMCP    map[string]map[string]bool // 包名 → 包内 mcp/ 契约 server 集
+	expertRefs map[string]expertRef       // 专家 slug → 闭包引用快照
+}
+
+// expertRef 专家闭包引用快照（checkExpertInstall 的核对输入）。
+type expertRef struct {
+	pack   string
+	skills []string
+	tools  []string
 }
 
 // mountCheck 记一处「专家↔技能」绑定：chainSlug 空 = 专家挂载，非空 = 链步骤钉扎。
@@ -225,6 +245,8 @@ func run(dirs []string) ([]finding, int, int) {
 		chainOwner:   map[string]string{},
 		kwOwner:      map[string]kwFirst{},
 		packVersions: map[string]string{},
+		packMCP:      map[string]map[string]bool{},
+		expertRefs:   map[string]expertRef{},
 	}
 	for _, root := range dirs {
 		// 参数自身含 pack.yaml：单包模式（模板包自检命令即此形态——曾因只认
@@ -255,6 +277,7 @@ func run(dirs []string) ([]finding, int, int) {
 		}
 	}
 	v.checkCrossRefs()
+	v.checkExpertInstall()
 	v.checkChangeRefs()
 	v.checkReadme()
 	// 脱敏扫描：显式参数 + 当前目录（默认仓库根——根 README/CONTRIBUTING 也必须
@@ -420,6 +443,7 @@ func (v *validator) checkPack(packDir, packName string) {
 			skillRefs[d.Slug] = append(skillRefs[d.Slug], name)
 			v.mountChecks = append(v.mountChecks, mountCheck{pack: packName, expert: d.Slug, skill: name})
 		}
+		v.expertRefs[d.Slug] = expertRef{pack: packName, skills: skillRefs[d.Slug], tools: toolServers}
 	}
 
 	// 技能
@@ -501,6 +525,16 @@ func (v *validator) checkPack(packDir, packName string) {
 		if !slices.Contains(m.Provides.Skills, name) {
 			add("WARN", "skills/%s 存在但未登记 provides.skills（平台按 provides 装配，漏登记=装不进）", name)
 		}
+	}
+	// 包内 MCP 契约集（专家独立安装性核对：tools server 须有包内契约或属宿主面）
+	if mcpDirs, _ := os.ReadDir(filepath.Join(packDir, "mcp")); mcpDirs != nil {
+		set := map[string]bool{}
+		for _, e := range mcpDirs {
+			if !e.IsDir() && strings.HasSuffix(e.Name(), ".yaml") {
+				set[strings.TrimSuffix(e.Name(), ".yaml")] = true
+			}
+		}
+		v.packMCP[packName] = set
 	}
 	for _, s := range m.Provides.Experts {
 		if _, ok := expertSlugs[s]; !ok {
@@ -675,6 +709,28 @@ func (v *validator) checkCrossRefs() {
 			} else {
 				v.add("ERROR", mc.pack, "链 %s 步骤钉扎技能 %s 声明 requires_mcp server %q，但目标专家 %s 的 tools 未授权", mc.chainSlug, mc.skill, srv, mc.expert)
 			}
+		}
+	}
+}
+
+// checkExpertInstall 专家可独立安装性（spec 2026-10-05-per-expert-install §6）：
+// 子集安装按闭包合成迷你包，闭包只含本包资产——跨包技能引用、无契约又非宿主面的
+// tools server 都让该专家装不出去（安装器会拒），CI 提前拦。
+func (v *validator) checkExpertInstall() {
+	for slug, ref := range v.expertRefs {
+		for _, s := range ref.skills {
+			if owner, ok := v.skillOwner[s]; ok && owner != ref.pack {
+				v.add("ERROR", ref.pack, "专家 %s 引用跨包技能 %s（属 %s）——专家级子集安装无法携带，须整包安装；如确需跨包挂载请在 provenance 说明并走整包设计", slug, s, owner)
+			}
+		}
+		for _, srv := range ref.tools {
+			if v.packMCP[ref.pack][srv] || hostSideMCP[srv] {
+				continue
+			}
+			// 契约清单是工具面事实记录（inventory），平台对缺席容忍（os-basics
+			// k8s-health 引 k8sgpt、契约在 k8s-ops 即现状）——降 WARN：迷你包
+			// 不带该契约，站点须确认 server 已在平台挂载。
+			v.add("WARN", ref.pack, "专家 %s tools server %q 无包内契约（mcp/%s.yaml）且不属宿主面白名单——专家级安装不带该契约清单，站点须确认平台已挂载", slug, srv, srv)
 		}
 	}
 }

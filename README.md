@@ -65,7 +65,7 @@ curl -X POST http://127.0.0.1:8900/api/v1/plugins/install \
 | [cicd-ops](packs/cicd-ops/) | 0.2.2 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位）+ 编目变更块两件（argocd sync/rollback） |
 | [obs-ops](packs/obs-ops/) | 0.3.2 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景）+ 编目变更块两件（flood 解锁/分配恢复） |
 | [n8n-ops](packs/n8n-ops/) | 0.2.2 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
-| [chain-starter](packs/chain-starter/) | 0.1.0 | 最小示例包（贡献模板，含技能钉扎演示） |
+| [chain-starter](packs/chain-starter/) | 0.1.1 | 最小示例包（贡献模板，含技能钉扎演示） |
 
 ## oo-devops 迁移说明
 

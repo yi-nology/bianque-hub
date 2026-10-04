@@ -271,3 +271,52 @@ func TestRunChangeBlocks(t *testing.T) {
 		t.Fatalf("引用不存在变更块应 ERROR：%v", errorMessages(findings))
 	}
 }
+
+// 专家可独立安装性（spec 2026-10-05-per-expert-install §6）：跨包技能引用与
+// 无契约非宿主面 tools server 都是 ERROR；宿主面白名单放行。
+func TestCheckExpertInstall(t *testing.T) {
+	root := t.TempDir()
+	write := func(rel, content string) {
+		p := filepath.Join(root, rel)
+		if err := os.MkdirAll(filepath.Dir(p), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(p, []byte(content), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	write("demo/pack.yaml", "api_version: 1\nname: demo\nversion: 1.0.0\ndescription: 测试\nprovides:\n  experts:\n    - imports/e1\n")
+	write("demo/provenance.json", `{"base_url":"https://github.com/yi-nology/bianque-hub"}`)
+	write("demo/CHANGELOG.md", "## 1.0.0\n- init\n")
+	write("demo/e1/agent.yaml", "slug: imports/e1\nname: E1\nkind: llm\nprompt_file: prompt.md\nroute_priority: P2\nroute_keywords: [k1]\nskills:\n  - mine\n  - foreign\ntools:\n  - server: ghost-mcp\n    allow: []\n  - server: ask-ops\n    allow: []\n")
+	write("demo/e1/prompt.md", "p")
+	write("demo/skills/mine/SKILL.md", "---\nname: mine\ndescription: d\nversion: 0.1.0\n---\nbody\n")
+	write("other/pack.yaml", "api_version: 1\nname: other\nversion: 1.0.0\ndescription: 测试\nprovides:\n  skills: [foreign]\n")
+	write("other/provenance.json", `{"base_url":"https://github.com/yi-nology/bianque-hub"}`)
+	write("other/CHANGELOG.md", "## 1.0.0\n- init\n")
+	write("other/skills/foreign/SKILL.md", "---\nname: foreign\ndescription: d\nversion: 0.1.0\n---\nbody\n")
+
+	findings, _, _ := run([]string{root})
+	var errs, warns []string
+	for _, f := range findings {
+		if f.level == "ERROR" {
+			errs = append(errs, f.msg)
+		} else {
+			warns = append(warns, f.msg)
+		}
+	}
+	joined := strings.Join(errs, "\n")
+	if !strings.Contains(joined, "跨包技能") || !strings.Contains(joined, "foreign") {
+		t.Fatalf("跨包技能引用应 ERROR: %s", joined)
+	}
+	if strings.Contains(joined, "ghost-mcp") {
+		t.Fatalf("契约缺席是 WARN 不是 ERROR: %s", joined)
+	}
+	wjoined := strings.Join(warns, "\n")
+	if !strings.Contains(wjoined, "ghost-mcp") || !strings.Contains(wjoined, "宿主面") {
+		t.Fatalf("无契约非宿主面 server 应 WARN: %s", wjoined)
+	}
+	if strings.Contains(wjoined+"\n"+joined, "ask-ops") {
+		t.Fatalf("宿主面 server 不应报错: %s", wjoined)
+	}
+}
