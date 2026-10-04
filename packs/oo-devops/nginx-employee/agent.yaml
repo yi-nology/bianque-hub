@@ -1,0 +1,32 @@
+slug: imports/nginx-employee
+name: Nginx 运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - nginx-ops
+    - n9e-modify-task-tpl
+tools:
+    - server: ask-ops
+      allow: []
+    - server: sysprobe
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - Nginx
+route_keywords:
+    - nginx配置
+    - nginx调优
+    - Nginx 运维员工
+    - Nginx
+    - nginx
+symptoms:
+    - nginx 502
+    - nginx 504
+route_desc: Nginx Web 服务器运维员工，支持配置管理、负载均衡、SSL 证书、性能调优

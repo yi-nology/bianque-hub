@@ -1,0 +1,42 @@
+slug: imports/aliyun-dataworks-employee
+name: 阿里云 DataWorks 智能员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - alicloud-ops
+    - alicloud-database-analyticdb-mysql
+    - database-optimizer
+    - database-schema-designer
+    - alicloud-network-dns-cli
+    - alicloud-platform-multicloud-docs-api-benchmark
+    - alicloud-platform-docs-api-review
+    - alicloud-security-kms
+    - alicloud-observability-sls-log-query
+    - alicloud-compute-swas-open
+    - alicloud-security-center-sas
+    - cinience-alicloud-database-rds-supabase
+    - alicloud-backup-bdrc
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: infra
+domain:
+    - 阿里云 DataWorks 智能
+route_keywords:
+    - dataworks任务
+    - 数据工场运维
+    - 阿里云 DataWorks 智能员工
+    - 阿里云 DataWorks 智能
+    - 阿里云 dataworks 智能
+symptoms:
+    - dataworks调度失败
+route_desc: 阿里云 DataWorks 智能员工，支持任务管理、运行监控、调度管理、日志查询、数据开发辅助

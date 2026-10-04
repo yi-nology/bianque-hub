@@ -1,0 +1,32 @@
+slug: imports/jenkins-employee
+name: Jenkins CI/CD 员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - jenkins-ops
+    - devops-engineer
+    - release-engineering
+tools:
+    - server: ask-ops
+      allow: []
+    - server: script-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: tooling
+domain:
+    - Jenkins CI/CD
+route_keywords:
+    - jenkins流水线
+    - jenkins构建失败
+    - Jenkins CI/CD 员工
+    - Jenkins CI/CD
+    - jenkins ci/cd
+symptoms:
+    - jenkins节点离线
+route_desc: Jenkins 持续集成/持续部署员工，支持流水线管理、构建优化、插件配置、发布自动化

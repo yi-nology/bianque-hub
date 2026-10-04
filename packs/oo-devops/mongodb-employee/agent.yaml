@@ -1,0 +1,31 @@
+slug: imports/mongodb-employee
+name: MongoDB 运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - nosql-expert
+    - mongodb-ops
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - MongoDB
+route_keywords:
+    - mongodb集群
+    - mongodb慢查询
+    - MongoDB 运维员工
+    - MongoDB
+    - mongodb
+symptoms:
+    - 副本集异常
+route_desc: MongoDB NoSQL 数据库运维员工，支持文档查询、集群管理、分片配置、性能监控

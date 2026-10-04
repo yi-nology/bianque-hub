@@ -1,0 +1,38 @@
+slug: imports/sre-employee
+name: SRE 站点可靠性工程员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - CapacityPlanning
+    - ChaosEngineering
+    - SLOManagement
+    - sre-engineer
+    - sre-fundamentals
+    - grafana-lens
+tools:
+    - server: ask-ops
+      allow: []
+    - server: sysprobe
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: monitoring
+domain:
+    - SRE 站点可靠性工程
+route_keywords:
+    - slo管理
+    - 混沌演练
+    - 错误预算
+    - SRE 站点可靠性工程员工
+    - SRE 站点可靠性工程
+    - sre 站点可靠性工程
+symptoms:
+    - 错误预算烧穿
+route_desc: SRE 站点可靠性工程员工，支持容量规划、混沌工程、SLI/SLO 管理、故障演练

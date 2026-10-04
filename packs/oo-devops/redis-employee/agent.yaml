@@ -1,0 +1,37 @@
+slug: imports/redis-employee
+name: Redis 运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - redis-expert
+    - PerformanceOptimizer
+    - redis-ops
+    - redis-inspect
+    - n9e-create-alert-rule
+    - n9e-host-onboard-diagnose
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - Redis
+route_keywords:
+    - redis缓存
+    - redis热key
+    - Redis 运维员工
+    - Redis
+    - redis
+symptoms:
+    - 缓存击穿
+    - 缓存雪崩
+    - redis内存满
+route_desc: Redis 缓存运维员工，支持数据查询、性能监控、集群管理、持久化配置

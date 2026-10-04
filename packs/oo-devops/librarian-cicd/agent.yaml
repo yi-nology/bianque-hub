@@ -1,0 +1,25 @@
+slug: imports/librarian-cicd
+name: 研发效能员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - k8s-debug
+    - kubernetes-deployment
+    - loki-helm-deployment-pitfalls
+tools:
+    - server: ask-ops
+      allow: []
+dispatch_allow: []
+route_priority: ""
+route_group: ""
+domain:
+    - 研发效能
+route_keywords:
+    - 研发效能技能
+    - 流水线技能
+route_desc: 研发效能技能管家：按需加载本领域技能库给出方法与口径（3 项技能）

@@ -1,0 +1,47 @@
+slug: imports/mysql-ops-employee
+name: MySQL 运维数字员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - mysql-ops
+    - database-optimizer
+    - database-schema-designer
+    - sql-optimization
+    - PerformanceOptimizer
+    - grafana-platform-dashboard
+    - postgres-ops
+    - azure-devops
+    - kafka-ops
+    - gitlab-ops
+    - elasticsearch-ops
+    - dm-ops
+    - sre-fundamentals
+    - vmware-vsphere-ops
+    - skywalking-ops
+    - zookeeper-ops
+    - sre-engineer
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - MySQL 数字
+route_keywords:
+    - mysql备份恢复
+    - mysql主从
+    - MySQL 运维数字员工
+    - MySQL 数字
+    - mysql 数字
+symptoms:
+    - 主从延迟
+    - 备份失败
+route_desc: MySQL 运维数字员工，专注于数据库运维、数据查询、故障排查、性能优化、备份恢复

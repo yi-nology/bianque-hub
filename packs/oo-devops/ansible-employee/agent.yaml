@@ -1,0 +1,33 @@
+slug: imports/ansible-employee
+name: Ansible 自动化运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - ansible-ops
+    - devops-engineer
+    - docker-ops
+    - terraform-ops
+tools:
+    - server: ask-ops
+      allow: []
+    - server: script-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: tooling
+domain:
+    - Ansible 自动化
+route_keywords:
+    - ansible-playbook
+    - ansible批量执行
+    - Ansible 自动化运维员工
+    - Ansible 自动化
+    - ansible 自动化
+symptoms:
+    - playbook执行失败
+route_desc: Ansible 自动化运维员工，支持批量执行 playbook、远程主机管理、配置部署、应用发布

@@ -1,0 +1,41 @@
+slug: imports/skywalking-employee
+name: SkyWalking APM 员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - skywalking-ops
+    - managing-skywalking
+    - monitoring-expert
+    - skywalking-compile
+    - sentry-observability
+    - db-readonly
+    - a7-plugin-skywalking
+    - skywalking-run-e2e
+    - skywalking-compiling
+    - skywalking-gh-pull-request
+    - a6-plugin-skywalking
+tools:
+    - server: ask-ops
+      allow: []
+    - server: sysprobe
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: monitoring
+domain:
+    - SkyWalking APM
+route_keywords:
+    - skywalking链路
+    - skywalking拓扑
+    - SkyWalking APM 员工
+    - SkyWalking APM
+    - skywalking apm
+symptoms:
+    - 链路追踪异常
+    - 探针掉线
+route_desc: SkyWalking 应用性能监控员工，支持链路追踪、指标分析、告警配置、拓扑可视化

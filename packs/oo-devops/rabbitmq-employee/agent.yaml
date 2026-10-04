@@ -1,0 +1,31 @@
+slug: imports/rabbitmq-employee
+name: RabbitMQ 运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - rabbitmq-ops
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - RabbitMQ
+route_keywords:
+    - rabbitmq队列
+    - rabbitmq集群
+    - RabbitMQ 运维员工
+    - RabbitMQ
+    - rabbitmq
+symptoms:
+    - rabbitmq消息堆积
+    - 队列阻塞
+route_desc: RabbitMQ 消息队列运维员工，支持队列管理、消息路由、集群配置、高可用部署

@@ -1,0 +1,31 @@
+slug: imports/consul-employee
+name: Consul 服务网格员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - consul-ops
+    - MicroservicesArchitect
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - Consul 服务网格
+route_keywords:
+    - consul注册
+    - consul服务发现
+    - Consul 服务网格员工
+    - Consul 服务网格
+    - consul 服务网格
+symptoms:
+    - consul健康检查失败
+route_desc: Consul 服务发现与网格员工，支持服务注册、健康检查、流量管理、配置中心

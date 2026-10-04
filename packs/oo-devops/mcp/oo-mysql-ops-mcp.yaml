@@ -1,0 +1,18 @@
+# 由 bq-markettool convert 生成（员工 MCP 包声明；禁手改，改 curation/patches）。
+# 引用员工: mysql-ops-employee
+# 激活: etc/config-<env>.yaml mcp.servers 加同名条目（enabled: true + 覆盖定义）。
+definition:
+    command:
+        - npx
+        - -y
+        - '@neverinfamous/mysql-mcp'
+        - --transport
+        - stdio
+        - --mysql
+        - ${MYSQL_URL}
+    env:
+        - MYSQL_URL=mysql://root:PASSWORD@IP:3306/DB
+    selfcheck: false
+    timeout: 30s
+enabled: false
+name: oo-mysql-ops-mcp

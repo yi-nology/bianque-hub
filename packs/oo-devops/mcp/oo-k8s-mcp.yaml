@@ -1,0 +1,20 @@
+# 由 bq-markettool convert 生成（员工 MCP 包声明；禁手改，改 curation/patches）。
+# 引用员工: k8s-employee
+# 激活: etc/config-<env>.yaml mcp.servers 加同名条目（enabled: true + 覆盖定义）。
+definition:
+    command:
+        - npx
+        - -y
+        - mcp-server-kubernetes
+        - --transport
+        - stdio
+        - --kubeconfig
+        - /root/config1
+        - --default-context
+        - kubernetes-admin@cluster.local
+    env:
+        - KUBECONFIG=/root/config1,/root/config2
+    selfcheck: false
+    timeout: 30s
+enabled: false
+name: oo-k8s-mcp

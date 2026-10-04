@@ -1,0 +1,48 @@
+slug: imports/k8s-employee
+name: Kubernetes 运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - k8s-manage
+    - k8s-operations
+    - k8s-troubleshoot
+    - docker-ops
+    - helm-ops
+    - k8s-manifest-generator
+    - k8s-validator
+    - kubernetes-architect
+    - k8s-certs
+    - kubectl
+    - k8s-core
+    - k8s-diagnostics
+    - k8s-storage
+    - k8s-security-policies
+    - k8s-openapi
+    - k8s-analyzer
+    - k8s-kind
+tools:
+    - server: ask-ops
+      allow: []
+    - server: terminal-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: kubernetes
+domain:
+    - Kubernetes
+route_keywords:
+    - k8s集群查询
+    - pod管理
+    - k8s运维
+    - k8s故障排查
+    - Kubernetes 运维员工
+symptoms:
+    - Pod重启循环
+    - 镜像拉取失败
+    - CrashLoopBackOff
+route_desc: Kubernetes 运维员工，支持集群资源查询、Pod 管理、配置操作、多集群上下文切换

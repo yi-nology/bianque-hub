@@ -1,0 +1,32 @@
+slug: imports/vault-employee
+name: Vault 安全管理员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - SecureCodeGuardian
+    - vault-ops
+    - security-reviewer
+tools:
+    - server: ask-ops
+      allow: []
+    - server: security-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: security
+domain:
+    - Vault 安全管理
+route_keywords:
+    - vault密钥
+    - vault动态凭据
+    - Vault 安全管理员工
+    - Vault 安全管理
+    - vault 安全管理
+symptoms:
+    - vault封印
+route_desc: HashiCorp Vault 安全管理员工，支持密钥管理、访问控制、动态凭据、安全审计

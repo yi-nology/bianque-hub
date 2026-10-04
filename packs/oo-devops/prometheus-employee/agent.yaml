@@ -1,0 +1,45 @@
+slug: imports/prometheus-employee
+name: Prometheus 监控运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - prometheus
+    - prometheus-alerts
+    - grafana-ops
+    - monitoring-expert
+    - loki-ops
+    - grafana-observability
+    - prometheus-grafana
+    - n9e-import-prom-rule
+    - n9e-query-datasource
+    - n9e-create-alert-rule
+    - grafana-mimir-ops
+    - grafana-lens
+    - deploying-monitoring-stacks
+tools:
+    - server: ask-ops
+      allow: []
+    - server: sysprobe
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: monitoring
+domain:
+    - Prometheus 监控
+route_keywords:
+    - prometheus查询
+    - prometheus告警规则
+    - Prometheus 监控运维员工
+    - Prometheus 监控
+    - prometheus 监控
+symptoms:
+    - 监控目标down
+    - 指标缺口
+route_desc: Prometheus 监控运维员工，支持监控指标查询、告警管理、配置调整、目标状态巡检

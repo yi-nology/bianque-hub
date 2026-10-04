@@ -1,0 +1,36 @@
+slug: imports/librarian-cloud
+name: 云平台员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - alicloud-ai-content-aicontent
+    - alicloud-ai-search-dashvector
+    - alicloud-compute-fc-agentrun
+    - alicloud-data-lake-dlf
+    - alicloud-security-cloudfw
+    - alicloud-storage-oss-ossutil
+    - aws-ops
+    - awscli
+    - azure-oracle
+    - cloudflare-dns-updater
+    - oraclecloud-cost-tuning
+    - oraclecloud-observability
+    - tencent-cloud-cos
+    - tencentcloud-lighthouse-skill
+tools:
+    - server: ask-ops
+      allow: []
+dispatch_allow: []
+route_priority: ""
+route_group: ""
+domain:
+    - 云平台
+route_keywords:
+    - 云平台技能
+    - 公有云运维
+route_desc: 云平台技能管家：按需加载本领域技能库给出方法与口径（14 项技能）

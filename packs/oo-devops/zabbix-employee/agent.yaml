@@ -1,0 +1,34 @@
+slug: imports/zabbix-employee
+name: Zabbix 监控运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - zabbix
+    - monitoring-expert
+tools:
+    - server: ask-ops
+      allow: []
+    - server: sysprobe
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: monitoring
+domain:
+    - Zabbix 监控
+route_keywords:
+    - zabbix监控
+    - zabbix告警
+    - Zabbix 监控运维员工
+    - Zabbix 监控
+    - zabbix 监控
+symptoms:
+    - zabbix触发器
+    - 模板配置
+route_desc: Zabbix 企业级监控员工，支持告警配置、模板管理、自动发现、性能监控

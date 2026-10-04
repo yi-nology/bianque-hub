@@ -1,0 +1,36 @@
+slug: imports/es-employee
+name: ElasticSearch 运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - elasticsearch-ops
+    - elk-ops
+    - monitoring-expert
+    - grafana-ops
+    - n9e-query-datasource
+    - n9e-create-alert-rule
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - ElasticSearch
+route_keywords:
+    - elasticsearch索引
+    - es集群健康
+    - ElasticSearch 运维员工
+    - ElasticSearch
+    - elasticsearch
+symptoms:
+    - 分片unassigned
+    - es写入拒绝
+route_desc: ElasticSearch 运维员工，支持索引管理、日志检索、集群健康检查、性能监控

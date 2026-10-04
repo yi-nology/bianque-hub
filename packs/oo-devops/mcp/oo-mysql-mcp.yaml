@@ -1,0 +1,15 @@
+# 由 bq-markettool convert 生成（员工 MCP 包声明；禁手改，改 curation/patches）。
+# 引用员工: mysql-dba-employee
+# 激活: etc/config-<env>.yaml mcp.servers 加同名条目（enabled: true + 覆盖定义）。
+definition:
+    command:
+        - node
+        - mysql-mcp.js
+        - stdio
+    env:
+        - MYSQL_HOST=127.0.0.1
+        - MYSQL_PORT=3306
+    selfcheck: false
+    timeout: 30s
+enabled: false
+name: oo-mysql-mcp

@@ -1,0 +1,40 @@
+slug: imports/mysql-dba-employee
+name: MySQL DBA 员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - sql-optimization
+    - mysql-ops
+    - database-optimizer
+    - database-schema-designer
+    - PerformanceOptimizer
+    - alicloud-database-analyticdb-mysql
+    - n9e-query-datasource
+    - n9e-create-alert-rule
+    - db-readonly
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - MySQL DBA
+route_keywords:
+    - mysql调优
+    - 慢SQL分析
+    - mysql健康巡检
+    - MySQL DBA 员工
+    - MySQL DBA
+    - mysql dba
+symptoms:
+    - 慢查询
+    - 连接池打满
+route_desc: MySQL DBA 员工，支持自动化查询、性能诊断、慢日志分析、状态监控、健康巡检

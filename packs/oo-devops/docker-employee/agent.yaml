@@ -1,0 +1,35 @@
+slug: imports/docker-employee
+name: Docker 容器运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - docker-sandbox
+    - MicroservicesArchitect
+    - docker-ops
+    - k8s-kind
+    - k8s-dev-deploy
+tools:
+    - server: ask-ops
+      allow: []
+    - server: terminal-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: kubernetes
+domain:
+    - Docker 容器
+route_keywords:
+    - docker容器
+    - docker镜像
+    - Docker 容器运维员工
+    - Docker 容器
+    - docker 容器
+symptoms:
+    - 容器退出
+    - docker磁盘占用
+route_desc: Docker 容器运维员工，支持镜像管理、容器编排、网络配置、存储优化

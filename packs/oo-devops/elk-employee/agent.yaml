@@ -1,0 +1,32 @@
+slug: imports/elk-employee
+name: ELK 日志分析员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - elk-ops
+    - elasticsearch-ops
+    - grafana-ops
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: monitoring
+domain:
+    - ELK 日志分析
+route_keywords:
+    - ELK日志
+    - logstash管道
+    - ELK 日志分析员工
+    - ELK 日志分析
+    - elk 日志分析
+symptoms:
+    - 日志索引失败
+route_desc: ELK Stack 日志分析员工，支持日志采集、索引管理、可视化分析、异常检测

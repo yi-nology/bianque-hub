@@ -1,0 +1,32 @@
+slug: imports/kafka-employee
+name: Kafka 运维员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - kafka-ops
+    - n9e-create-alert-rule
+tools:
+    - server: ask-ops
+      allow: []
+    - server: datasources
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: middleware
+domain:
+    - Kafka
+route_keywords:
+    - kafka集群
+    - kafka消费
+    - Kafka 运维员工
+    - Kafka
+    - kafka
+symptoms:
+    - 消费延迟
+    - 消息堆积
+route_desc: Kafka 消息队列运维员工，支持 Topic 管理、消息查询、性能监控、集群扩缩容

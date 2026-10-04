@@ -1,0 +1,2652 @@
+{
+  "base_url": "https://openocta.com",
+  "employees": [
+    {
+      "id": "26",
+      "fingerprint": "03927534b791342b453526ab907dea47d70df810455be5b5c7ff28620ea6b5c7",
+      "zip": "zips/employees/26.zip"
+    },
+    {
+      "id": "25",
+      "fingerprint": "502a3da7ccce24dca7cc497a7b465ab6e6712246a3abe2375793a56fa33d84a6",
+      "zip": "zips/employees/25.zip"
+    },
+    {
+      "id": "24",
+      "fingerprint": "027d37136fc20572dcca01f9e88ff02cc53db3faa8a2aa79056fc71a8bf76fa1",
+      "zip": "zips/employees/24.zip"
+    },
+    {
+      "id": "23",
+      "fingerprint": "7da66e38340c596a13de41a8611c1550904cfea651964ec7ee3beb30c1fd28a2",
+      "zip": "zips/employees/23.zip"
+    },
+    {
+      "id": "22",
+      "fingerprint": "1f76987b1d2834ecfda05eab4308a5f5ba872ab2c5c678fa09fc2ad7d1706b61",
+      "zip": "zips/employees/22.zip"
+    },
+    {
+      "id": "21",
+      "fingerprint": "5970aa61dd7b13e50c1f5f85e4d6d8ed4cd5352d55e9cf84cb9b935c49607354",
+      "zip": "zips/employees/21.zip"
+    },
+    {
+      "id": "20",
+      "fingerprint": "3b556181d91415329ecb54fb95caa0aac6914c687c03e951093d6302ebc0e692",
+      "zip": "zips/employees/20.zip"
+    },
+    {
+      "id": "19",
+      "fingerprint": "8a76c9abd0e2640718fddff1e8258e4eee0e79c3f66f93cde759d3615034bf72",
+      "zip": "zips/employees/19.zip"
+    },
+    {
+      "id": "18",
+      "fingerprint": "ed7d2c2c5de8ebe8131d57ae3bfe838323b4b9698efba3d596728e6e25caa9f1",
+      "zip": "zips/employees/18.zip"
+    },
+    {
+      "id": "17",
+      "fingerprint": "5e501f0d9ae639235ac549fc217c468292cded2f126a53fb9e3e8ba493585952",
+      "zip": "zips/employees/17.zip"
+    },
+    {
+      "id": "16",
+      "fingerprint": "350518ef8ffd22ee694497a0102e8f277076917a8b6d60ea8ff3f0d6e44416a3",
+      "zip": "zips/employees/16.zip"
+    },
+    {
+      "id": "15",
+      "fingerprint": "33c4da5950b68d2c97dd46d7335f991b9e4817b6fe4147cbd1da681f7320de13",
+      "zip": "zips/employees/15.zip"
+    },
+    {
+      "id": "14",
+      "fingerprint": "4302e2741a764d130be81e9d8434050c2738329d45a637d8a852fc0f278e9a42",
+      "zip": "zips/employees/14.zip"
+    },
+    {
+      "id": "13",
+      "fingerprint": "4bbbeba9b208275ad87ff9cf70319233de8247c0592b4d97287409d25bdcf4ec",
+      "zip": "zips/employees/13.zip"
+    },
+    {
+      "id": "12",
+      "fingerprint": "2b29d25b3d5f03a62efdf68bbab7f3a4bf32f75db2635a0a575b08b2fbd55084",
+      "zip": "zips/employees/12.zip"
+    },
+    {
+      "id": "11",
+      "fingerprint": "11f9f5c27ec029c448c2895e4dc098862c100ddd9bb902a91a29c54b2503da0a",
+      "zip": "zips/employees/11.zip"
+    },
+    {
+      "id": "10",
+      "fingerprint": "e3b41bd47a8a7fe4144a95845e8b503050c880ce5338f0739d801b6a50436dad",
+      "zip": "zips/employees/10.zip"
+    },
+    {
+      "id": "9",
+      "fingerprint": "32a39493427a9df4a0c7dec26d45c92e315b2bf93f1da019c9de7226b1fd4705",
+      "zip": "zips/employees/9.zip"
+    },
+    {
+      "id": "8",
+      "fingerprint": "e28c4ee69bf3e3992ae6ba74c458da6a21a4d320d8088595149a27cd7f090606",
+      "zip": "zips/employees/8.zip"
+    },
+    {
+      "id": "7",
+      "fingerprint": "9812448ecbea7f92819c0e737d16b5a63c032b66024f051af3d95bf6c7797602",
+      "zip": "zips/employees/7.zip"
+    },
+    {
+      "id": "6",
+      "fingerprint": "2bc0e5191cfafe86a032c38b571f914b7450fa385ca5ca3aa7fadeb08f42e5ee",
+      "zip": "zips/employees/6.zip"
+    },
+    {
+      "id": "5",
+      "fingerprint": "20e067b760b50a3fa4e2e9c55a580b032477389c9cc9faa4d6b6c747b99641ca",
+      "zip": "zips/employees/5.zip"
+    },
+    {
+      "id": "4",
+      "fingerprint": "807879287f3347e2c3233c967ff8abde90ac6b9ab24cbf6f8faf389a4f549fe0",
+      "zip": "zips/employees/4.zip"
+    },
+    {
+      "id": "3",
+      "fingerprint": "b2fd5caad9f8cf4d8bc68ad4d8b1d1d50f8eae05cf88eab0c682898ae074a3df",
+      "zip": "zips/employees/3.zip"
+    },
+    {
+      "id": "2",
+      "fingerprint": "d34a40a62624872cb02f95f3814101130dc4373f2bcf5db2c6b5683430e7fd19",
+      "zip": "zips/employees/2.zip"
+    },
+    {
+      "id": "1",
+      "fingerprint": "9d90a508af9c80ee4781f5e71af2cae3aa7a4dba483e6da7f9dd85df37b5860e",
+      "zip": "zips/employees/1.zip"
+    }
+  ],
+  "generator": "bq-markettool convert",
+  "renames": null,
+  "skills": [
+    {
+      "id": "server-patrol",
+      "name": "server-patrol",
+      "category": "基础设施",
+      "fingerprint": "854426a7af31eaf5d602ad6ee58cca3c",
+      "zip": "zips/skills/server-patrol.zip",
+      "detail": "details/skills/server-patrol.json"
+    },
+    {
+      "id": "zookeeper-ops",
+      "name": "zookeeper-ops",
+      "category": "Kubernetes",
+      "fingerprint": "c50d0d229b1e43fb7c0309740b83d3b1",
+      "zip": "zips/skills/zookeeper-ops.zip",
+      "detail": "details/skills/zookeeper-ops.json"
+    },
+    {
+      "id": "zoho",
+      "name": "zoho",
+      "category": "CD",
+      "fingerprint": "3cf4d975fde6a0ea078b2cf9df5e9d48",
+      "zip": "zips/skills/zoho.zip",
+      "detail": "details/skills/zoho.json"
+    },
+    {
+      "id": "zabbix-ops",
+      "name": "zabbix-ops",
+      "category": "监控与可观测性",
+      "fingerprint": "5ccfed56d78315fe86e63ef2e424c7e2",
+      "zip": "zips/skills/zabbix-ops.zip",
+      "detail": "details/skills/zabbix-ops.json"
+    },
+    {
+      "id": "zabbix",
+      "name": "zabbix",
+      "category": "监控与可观测性",
+      "fingerprint": "183c17c49edb0ab13981363bc461a31b",
+      "zip": "zips/skills/zabbix.zip",
+      "detail": "details/skills/zabbix.json"
+    },
+    {
+      "id": "writing-skills",
+      "name": "writing-skills",
+      "category": "DevOps",
+      "fingerprint": "453477cf088fe8356087c3e6500e25a2",
+      "zip": "zips/skills/writing-skills.zip",
+      "detail": "details/skills/writing-skills.json"
+    },
+    {
+      "id": "wireshark-ops",
+      "name": "wireshark-ops",
+      "category": "网络与安全",
+      "fingerprint": "57eacdfa09282db0e62f422f9cd6cec2",
+      "zip": "zips/skills/wireshark-ops.zip",
+      "detail": "details/skills/wireshark-ops.json"
+    },
+    {
+      "id": "wireshark-network-traffic-analysis",
+      "name": "wireshark-network-traffic-analysis",
+      "category": "网络与安全",
+      "fingerprint": "bfeb4e0d451ad2cfa08c7c7873a7ec51",
+      "zip": "zips/skills/wireshark-network-traffic-analysis.zip",
+      "detail": "details/skills/wireshark-network-traffic-analysis.json"
+    },
+    {
+      "id": "wireshark-analysis",
+      "name": "wireshark-analysis",
+      "category": "测试与安全",
+      "fingerprint": "1e36dfcd3cffc7e5798f8cd40358fe7f",
+      "zip": "zips/skills/wireshark-analysis.zip",
+      "detail": "details/skills/wireshark-analysis.json"
+    },
+    {
+      "id": "websocket-engineer",
+      "name": "websocket-engineer",
+      "category": "DevOps",
+      "fingerprint": "d5a08863195b2d01cdd19f1b6e75ca9d",
+      "zip": "zips/skills/websocket-engineer.zip",
+      "detail": "details/skills/websocket-engineer.json"
+    },
+    {
+      "id": "webapp-testing",
+      "name": "webapp-testing",
+      "category": "测试与安全",
+      "fingerprint": "575b2a3d8bbef227f647bd660e33c84c",
+      "zip": "zips/skills/webapp-testing.zip",
+      "detail": "details/skills/webapp-testing.json"
+    },
+    {
+      "id": "volcengine-image-generate",
+      "name": "volcengine-image-generate",
+      "category": "基础设施",
+      "fingerprint": "9972d369d4af3c05d2f1ec856fbaa8ae",
+      "zip": "zips/skills/volcengine-image-generate.zip",
+      "detail": "details/skills/volcengine-image-generate.json"
+    },
+    {
+      "id": "volcengine-database-rds",
+      "name": "volcengine-database-rds",
+      "category": "数据库",
+      "fingerprint": "00e31982b0c67571e896f8646fee061b",
+      "zip": "zips/skills/volcengine-database-rds.zip",
+      "detail": "details/skills/volcengine-database-rds.json"
+    },
+    {
+      "id": "vmware-vsphere-ops",
+      "name": "vmware-vsphere-ops",
+      "category": "DevOps",
+      "fingerprint": "b51dc1e7e53c19383a7fbb18784e0f0c",
+      "zip": "zips/skills/vmware-vsphere-ops.zip",
+      "detail": "details/skills/vmware-vsphere-ops.json"
+    },
+    {
+      "id": "vibetunnel",
+      "name": "vibetunnel",
+      "category": "监控与可观测性",
+      "fingerprint": "0100cd60ad506c605cd6fa406a4ec61d",
+      "zip": "zips/skills/vibetunnel.zip",
+      "detail": "details/skills/vibetunnel.json"
+    },
+    {
+      "id": "vault-ops",
+      "name": "vault-ops",
+      "category": "测试与安全",
+      "fingerprint": "76074d121d31605198cb7deab3820dce",
+      "zip": "zips/skills/vault-ops.zip",
+      "detail": "details/skills/vault-ops.json"
+    },
+    {
+      "id": "vapi",
+      "name": "vapi",
+      "category": "网络与安全",
+      "fingerprint": "0d8e1d5d484f1c9e52fe083bd4f564d1",
+      "zip": "zips/skills/vapi.zip",
+      "detail": "details/skills/vapi.json"
+    },
+    {
+      "id": "ub2-api-health-checker",
+      "name": "ub2-api-health-checker",
+      "category": "测试与安全",
+      "fingerprint": "830552a2088e3d634e5d65c1cd2286e6",
+      "zip": "zips/skills/ub2-api-health-checker.zip",
+      "detail": "details/skills/ub2-api-health-checker.json"
+    },
+    {
+      "id": "tsh-implementing-kubernetes",
+      "name": "tsh-implementing-kubernetes",
+      "category": "Helm",
+      "fingerprint": "423f8bbe149cd24621dc4929b94c0b97",
+      "zip": "zips/skills/tsh-implementing-kubernetes.zip",
+      "detail": "details/skills/tsh-implementing-kubernetes.json"
+    },
+    {
+      "id": "trivy-ops",
+      "name": "trivy-ops",
+      "category": "CD",
+      "fingerprint": "2b3c97b22d8da64f8fafa35b70c28c28",
+      "zip": "zips/skills/trivy-ops.zip",
+      "detail": "details/skills/trivy-ops.json"
+    },
+    {
+      "id": "trawl",
+      "name": "trawl",
+      "category": "数据与人工智能",
+      "fingerprint": "e06ef861d8d3cab7fb5e7b166334f85c",
+      "zip": "zips/skills/trawl.zip",
+      "detail": "details/skills/trawl.json"
+    },
+    {
+      "id": "tidb-ops",
+      "name": "tidb-ops",
+      "category": "基础设施",
+      "fingerprint": "a96b69b790eb3bce80fa2e03d3ba8f09",
+      "zip": "zips/skills/tidb-ops.zip",
+      "detail": "details/skills/tidb-ops.json"
+    },
+    {
+      "id": "testing-workflow",
+      "name": "testing-workflow",
+      "category": "数据与人工智能",
+      "fingerprint": "485222639d4350719eab3b239a4bfb7d",
+      "zip": "zips/skills/testing-workflow.zip",
+      "detail": "details/skills/testing-workflow.json"
+    },
+    {
+      "id": "test-omnia",
+      "name": "test-omnia",
+      "category": "测试与安全",
+      "fingerprint": "93c3d91ef083841189ff6b1f2fa7f3b2",
+      "zip": "zips/skills/test-omnia.zip",
+      "detail": "details/skills/test-omnia.json"
+    },
+    {
+      "id": "terraform-ops",
+      "name": "terraform-ops",
+      "category": "开发工具",
+      "fingerprint": "c01cca4000698358905b5278d9adcd2b",
+      "zip": "zips/skills/terraform-ops.zip",
+      "detail": "details/skills/terraform-ops.json"
+    },
+    {
+      "id": "terraform-engineer",
+      "name": "terraform-engineer",
+      "category": "基础设施",
+      "fingerprint": "f6b195fff5097ef7343dcbc89710b996",
+      "zip": "zips/skills/terraform-engineer.zip",
+      "detail": "details/skills/terraform-engineer.json"
+    },
+    {
+      "id": "tencentcloud-lighthouse-skill",
+      "name": "tencentcloud-lighthouse-skill",
+      "category": "基础设施",
+      "fingerprint": "d63e5805c6dd64cdad00db2b08abf2f4",
+      "zip": "zips/skills/tencentcloud-lighthouse-skill.zip",
+      "detail": "details/skills/tencentcloud-lighthouse-skill.json"
+    },
+    {
+      "id": "tencent-ima-skill",
+      "name": "tencent-ima-skill",
+      "category": "数据与人工智能",
+      "fingerprint": "d9e70cfc9a877135192a06075fbf620c",
+      "zip": "zips/skills/tencent-ima-skill.zip",
+      "detail": "details/skills/tencent-ima-skill.json"
+    },
+    {
+      "id": "tencent-cloud-cos",
+      "name": "tencent-cloud-cos",
+      "category": "云厂商服务",
+      "fingerprint": "a2461eade4e64ca39cef3101a5022c5e",
+      "zip": "zips/skills/tencent-cloud-cos.zip",
+      "detail": "details/skills/tencent-cloud-cos.json"
+    },
+    {
+      "id": "tempo-ops",
+      "name": "tempo-ops",
+      "category": "Grafana",
+      "fingerprint": "492a7bde345ae6224b0a5a999abeba28",
+      "zip": "zips/skills/tempo-ops.zip",
+      "detail": "details/skills/tempo-ops.json"
+    },
+    {
+      "id": "teams-anthropic-integration",
+      "name": "teams-anthropic-integration",
+      "category": "内容与媒体",
+      "fingerprint": "b2210eed6af4da66438489cfb08a752f",
+      "zip": "zips/skills/teams-anthropic-integration.zip",
+      "detail": "details/skills/teams-anthropic-integration.json"
+    },
+    {
+      "id": "tavily-best-practices",
+      "name": "tavily-best-practices",
+      "category": "内容与媒体",
+      "fingerprint": "c24b20e3f22bd36db0cdb22efbf26465",
+      "zip": "zips/skills/tavily-best-practices.zip",
+      "detail": "details/skills/tavily-best-practices.json"
+    },
+    {
+      "id": "systems-architect",
+      "name": "systems-architect",
+      "category": "基础设施",
+      "fingerprint": "3de49a6cf9286f4739be1b387bc473c1",
+      "zip": "zips/skills/systems-architect.zip",
+      "detail": "details/skills/systems-architect.json"
+    },
+    {
+      "id": "switchboard-data-operator",
+      "name": "switchboard-data-operator",
+      "category": "DevOps",
+      "fingerprint": "fceaff7149cf6d09e2cbfede75c94e9d",
+      "zip": "zips/skills/switchboard-data-operator.zip",
+      "detail": "details/skills/switchboard-data-operator.json"
+    },
+    {
+      "id": "strykr-qa-bot",
+      "name": "strykr-qa-bot",
+      "category": "测试与安全",
+      "fingerprint": "a3668567b14deb4f253e4f8080bf7dc2",
+      "zip": "zips/skills/strykr-qa-bot.zip",
+      "detail": "details/skills/strykr-qa-bot.json"
+    },
+    {
+      "id": "sre-fundamentals",
+      "name": "sre-fundamentals",
+      "category": "DevOps",
+      "fingerprint": "4ca40690ffcd853573bae8b1b17de8a2",
+      "zip": "zips/skills/sre-fundamentals.zip",
+      "detail": "details/skills/sre-fundamentals.json"
+    },
+    {
+      "id": "sre-engineer",
+      "name": "sre-engineer",
+      "category": "DevOps",
+      "fingerprint": "5b373f525713e8c27212867f30e7bfa8",
+      "zip": "zips/skills/sre-engineer.zip",
+      "detail": "details/skills/sre-engineer.json"
+    },
+    {
+      "id": "sql-server",
+      "name": "sql-server",
+      "category": "基础设施",
+      "fingerprint": "4768df043ec5ce56a3834dd2e8b57f1a",
+      "zip": "zips/skills/sql-server.zip",
+      "detail": "details/skills/sql-server.json"
+    },
+    {
+      "id": "springboot-patterns",
+      "name": "springboot-patterns",
+      "category": "缓存",
+      "fingerprint": "b453cb3d19078852fa6aaf91528f888c",
+      "zip": "zips/skills/springboot-patterns.zip",
+      "detail": "details/skills/springboot-patterns.json"
+    },
+    {
+      "id": "spring-boot-engineer",
+      "name": "spring-boot-engineer",
+      "category": "基础设施",
+      "fingerprint": "4963d587a5f79d411b8de850314f822f",
+      "zip": "zips/skills/spring-boot-engineer.zip",
+      "detail": "details/skills/spring-boot-engineer.json"
+    },
+    {
+      "id": "spark-engineer",
+      "name": "spark-engineer",
+      "category": "Web 服务器",
+      "fingerprint": "165c1c72da9ca4b7edd623119c93d344",
+      "zip": "zips/skills/spark-engineer.zip",
+      "detail": "details/skills/spark-engineer.json"
+    },
+    {
+      "id": "skywalking-run-e2e",
+      "name": "skywalking-run-e2e",
+      "category": "测试与安全",
+      "fingerprint": "6ea25fb911048a2b834d4f9006170755",
+      "zip": "zips/skills/skywalking-run-e2e.zip",
+      "detail": "details/skills/skywalking-run-e2e.json"
+    },
+    {
+      "id": "skywalking-ops",
+      "name": "skywalking-ops",
+      "category": "SkyWalking",
+      "fingerprint": "6a552fc20879c3e8a1ecb5486e5f839f",
+      "zip": "zips/skills/skywalking-ops.zip",
+      "detail": "details/skills/skywalking-ops.json"
+    },
+    {
+      "id": "skywalking-gh-pull-request",
+      "name": "skywalking-gh-pull-request",
+      "category": "SkyWalking",
+      "fingerprint": "5a7ed169838134f05703bb61898d730f",
+      "zip": "zips/skills/skywalking-gh-pull-request.zip",
+      "detail": "details/skills/skywalking-gh-pull-request.json"
+    },
+    {
+      "id": "skywalking-compiling",
+      "name": "skywalking-compiling",
+      "category": "开发工具",
+      "fingerprint": "1a122facdd7e1c5ecff8cbdc1e643cb2",
+      "zip": "zips/skills/skywalking-compiling.zip",
+      "detail": "details/skills/skywalking-compiling.json"
+    },
+    {
+      "id": "skywalking-compile",
+      "name": "skywalking-compile",
+      "category": "SkyWalking",
+      "fingerprint": "8c9c865bb696a53eab32321648cd1c67",
+      "zip": "zips/skills/skywalking-compile.zip",
+      "detail": "details/skills/skywalking-compile.json"
+    },
+    {
+      "id": "skills-for-openclaw",
+      "name": "skills-for-openclaw",
+      "category": "CD",
+      "fingerprint": "a7e265468eb7b82bae7a2fdf869c6281",
+      "zip": "zips/skills/skills-for-openclaw.zip",
+      "detail": "details/skills/skills-for-openclaw.json"
+    },
+    {
+      "id": "skillbench",
+      "name": "skillbench",
+      "category": "DevOps",
+      "fingerprint": "fd8171b4c4b8a2a5480a1b4289c2c879",
+      "zip": "zips/skills/skillbench.zip",
+      "detail": "details/skills/skillbench.json"
+    },
+    {
+      "id": "skill-mixer",
+      "name": "skill-mixer",
+      "category": "开发工具",
+      "fingerprint": "03f83591f94eda7f6d83e8a64247cc9a",
+      "zip": "zips/skills/skill-mixer.zip",
+      "detail": "details/skills/skill-mixer.json"
+    },
+    {
+      "id": "skill-generator",
+      "name": "skill-generator",
+      "category": "DevOps",
+      "fingerprint": "b1aee5e50e90c325ac3c0953f8fcd2e7",
+      "zip": "zips/skills/skill-generator.zip",
+      "detail": "details/skills/skill-generator.json"
+    },
+    {
+      "id": "siyuan-task-skill",
+      "name": "siyuan-task-skill",
+      "category": "内容与媒体",
+      "fingerprint": "366a05032e7d1627108e22b107fce8d7",
+      "zip": "zips/skills/siyuan-task-skill.zip",
+      "detail": "details/skills/siyuan-task-skill.json"
+    },
+    {
+      "id": "server-health",
+      "name": "server-health",
+      "category": "生活方式",
+      "fingerprint": "35fd753f4849f6a91d96ba5fd68253e6",
+      "zip": "zips/skills/server-health.zip",
+      "detail": "details/skills/server-health.json"
+    },
+    {
+      "id": "server-audit",
+      "name": "server-audit",
+      "category": "基础设施",
+      "fingerprint": "0759ec3c4b88d506522da8b6aeb03245",
+      "zip": "zips/skills/server-audit.zip",
+      "detail": "details/skills/server-audit.json"
+    },
+    {
+      "id": "sentry-observability",
+      "name": "sentry-observability",
+      "category": "业务应用",
+      "fingerprint": "3a8c4a7b15c62c0ad3aeadb89a55e76e",
+      "zip": "zips/skills/sentry-observability.zip",
+      "detail": "details/skills/sentry-observability.json"
+    },
+    {
+      "id": "sentry-cli",
+      "name": "sentry-cli",
+      "category": "监控与可观测性",
+      "fingerprint": "bdae01aad4b9b369f3e855d0866e1bd9",
+      "zip": "zips/skills/sentry-cli.zip",
+      "detail": "details/skills/sentry-cli.json"
+    },
+    {
+      "id": "security-sentinel-skill",
+      "name": "security-sentinel-skill",
+      "category": "测试与安全",
+      "fingerprint": "bb3f35b1cd393a5870bdfebc421b8b25",
+      "zip": "zips/skills/security-sentinel-skill.zip",
+      "detail": "details/skills/security-sentinel-skill.json"
+    },
+    {
+      "id": "security-reviewer",
+      "name": "security-reviewer",
+      "category": "测试与安全",
+      "fingerprint": "5cda5aa769063300150b689329ddcccd",
+      "zip": "zips/skills/security-reviewer.zip",
+      "detail": "details/skills/security-reviewer.json"
+    },
+    {
+      "id": "samma-suit",
+      "name": "samma-suit",
+      "category": "API 网关",
+      "fingerprint": "bbb1b530aaa67e07a5fbcfe2d181c44d",
+      "zip": "zips/skills/samma-suit.zip",
+      "detail": "details/skills/samma-suit.json"
+    },
+    {
+      "id": "safe-exec-0-3-2",
+      "name": "safe-exec-0-3-2",
+      "category": "测试与安全",
+      "fingerprint": "a7fa6dd771c50da403acc2a3b9c8afb3",
+      "zip": "zips/skills/safe-exec-0-3-2.zip",
+      "detail": "details/skills/safe-exec-0-3-2.json"
+    },
+    {
+      "id": "rust-engineer",
+      "name": "rust-engineer",
+      "category": "ArgoCD",
+      "fingerprint": "7c166e5c716b71ccd5ede3d315b59ef6",
+      "zip": "zips/skills/rust-engineer.zip",
+      "detail": "details/skills/rust-engineer.json"
+    },
+    {
+      "id": "runpod",
+      "name": "runpod",
+      "category": "Kubernetes",
+      "fingerprint": "6cb8796d6ffeb1e99d48af2ba1a17424",
+      "zip": "zips/skills/runpod.zip",
+      "detail": "details/skills/runpod.json"
+    },
+    {
+      "id": "rpe-grafana",
+      "name": "rpe-grafana",
+      "category": "数据库",
+      "fingerprint": "e512178017c14c61a063ce97572888e0",
+      "zip": "zips/skills/rpe-grafana.zip",
+      "detail": "details/skills/rpe-grafana.json"
+    },
+    {
+      "id": "rose-container-tools",
+      "name": "rose-container-tools",
+      "category": "开发工具",
+      "fingerprint": "41342fabbbf03c4af036dd9541dcf9d9",
+      "zip": "zips/skills/rose-container-tools.zip",
+      "detail": "details/skills/rose-container-tools.json"
+    },
+    {
+      "id": "rook-ceph",
+      "name": "rook-ceph",
+      "category": "Kubernetes",
+      "fingerprint": "c98bc799bf3d068d438552284f0f3b6f",
+      "zip": "zips/skills/rook-ceph.zip",
+      "detail": "details/skills/rook-ceph.json"
+    },
+    {
+      "id": "rlm-controller",
+      "name": "rlm-controller",
+      "category": "内容与媒体",
+      "fingerprint": "853e2af597840723ab6919961fddd81c",
+      "zip": "zips/skills/rlm-controller.zip",
+      "detail": "details/skills/rlm-controller.json"
+    },
+    {
+      "id": "resource-monitor",
+      "name": "resource-monitor",
+      "category": "监控与可观测性",
+      "fingerprint": "77e2c80dfc926881772ccb42a71b22a6",
+      "zip": "zips/skills/resource-monitor.zip",
+      "detail": "details/skills/resource-monitor.json"
+    },
+    {
+      "id": "release-engineering",
+      "name": "release-engineering",
+      "category": "DevOps",
+      "fingerprint": "bb361889ca21c2032914a965030fa238",
+      "zip": "zips/skills/release-engineering.zip",
+      "detail": "details/skills/release-engineering.json"
+    },
+    {
+      "id": "reduce-unoptimized-query-oracle",
+      "name": "reduce-unoptimized-query-oracle",
+      "category": "日志分析",
+      "fingerprint": "18543b7e6709549ae472196084c7d1f7",
+      "zip": "zips/skills/reduce-unoptimized-query-oracle.zip",
+      "detail": "details/skills/reduce-unoptimized-query-oracle.json"
+    },
+    {
+      "id": "redis-ops",
+      "name": "redis-ops",
+      "category": "DevOps",
+      "fingerprint": "eb7fff2efc74d0e935cdd33dd8adf095",
+      "zip": "zips/skills/redis-ops.zip",
+      "detail": "details/skills/redis-ops.json"
+    },
+    {
+      "id": "redis-inspect",
+      "name": "redis-inspect",
+      "category": "监控与可观测性",
+      "fingerprint": "8c6a6acd2736d036ebe92b1fdbb848b1",
+      "zip": "zips/skills/redis-inspect.zip",
+      "detail": "details/skills/redis-inspect.json"
+    },
+    {
+      "id": "rabbitmq-ops",
+      "name": "rabbitmq-ops",
+      "category": "消息队列",
+      "fingerprint": "7434568ca210a192ef8b9c1b34f28cbd",
+      "zip": "zips/skills/rabbitmq-ops.zip",
+      "detail": "details/skills/rabbitmq-ops.json"
+    },
+    {
+      "id": "qwenz-image-gen",
+      "name": "qwenz-image-gen",
+      "category": "云厂商服务",
+      "fingerprint": "e5a25ee34bb7423f45acf61f5d62ee68",
+      "zip": "zips/skills/qwenz-image-gen.zip",
+      "detail": "details/skills/qwenz-image-gen.json"
+    },
+    {
+      "id": "qwen3-tts-instruct",
+      "name": "qwen3-tts-instruct",
+      "category": "云厂商服务",
+      "fingerprint": "c9d195111cb9e74395d1bcd35ff9b2dc",
+      "zip": "zips/skills/qwen3-tts-instruct.zip",
+      "detail": "details/skills/qwen3-tts-instruct.json"
+    },
+    {
+      "id": "python-pypi-package-builder",
+      "name": "python-pypi-package-builder",
+      "category": "开发工具",
+      "fingerprint": "9b8ba3704d3abdc62952bcdf801bb265",
+      "zip": "zips/skills/python-pypi-package-builder.zip",
+      "detail": "details/skills/python-pypi-package-builder.json"
+    },
+    {
+      "id": "prompt-log",
+      "name": "prompt-log",
+      "category": "数据与人工智能",
+      "fingerprint": "b0cd21f74d3560ef3cb668a3b88471e9",
+      "zip": "zips/skills/prompt-log.zip",
+      "detail": "details/skills/prompt-log.json"
+    },
+    {
+      "id": "prometheus-grafana",
+      "name": "prometheus-grafana",
+      "category": "Grafana",
+      "fingerprint": "dbb7023256079383ab161b1fbe782f6b",
+      "zip": "zips/skills/prometheus-grafana.zip",
+      "detail": "details/skills/prometheus-grafana.json"
+    },
+    {
+      "id": "prometheus-alerts",
+      "name": "prometheus-alerts",
+      "category": "Prometheus",
+      "fingerprint": "6e994aa09990f6094c96910d04f8439b",
+      "zip": "zips/skills/prometheus-alerts.zip",
+      "detail": "details/skills/prometheus-alerts.json"
+    },
+    {
+      "id": "prometheus-110",
+      "name": "prometheus",
+      "category": "网络与安全",
+      "fingerprint": "113d4df2acd27f54c53128f05e734021",
+      "zip": "zips/skills/prometheus-110.zip",
+      "detail": "details/skills/prometheus-110.json"
+    },
+    {
+      "id": "prometheus",
+      "name": "Prometheus Ops",
+      "category": "配置管理",
+      "fingerprint": "8a00a4fca5d8f8baf81abeb0fc7bb63e",
+      "zip": "zips/skills/prometheus.zip",
+      "detail": "details/skills/prometheus.json"
+    },
+    {
+      "id": "proactive-solvr",
+      "name": "proactive-solvr",
+      "category": "测试与安全",
+      "fingerprint": "2dd20a7a2075d6735d7fc7609a1b1d02",
+      "zip": "zips/skills/proactive-solvr.zip",
+      "detail": "details/skills/proactive-solvr.json"
+    },
+    {
+      "id": "postgres-ops",
+      "name": "postgres-ops",
+      "category": "基础设施",
+      "fingerprint": "b1d8152bc4622c8e5aca2e13ecbb4bb0",
+      "zip": "zips/skills/postgres-ops.zip",
+      "detail": "details/skills/postgres-ops.json"
+    },
+    {
+      "id": "postgres-job-queue",
+      "name": "postgres-job-queue",
+      "category": "消息队列",
+      "fingerprint": "a5ef291677720856e7116bab68228042",
+      "zip": "zips/skills/postgres-job-queue.zip",
+      "detail": "details/skills/postgres-job-queue.json"
+    },
+    {
+      "id": "portfolio-watcher",
+      "name": "portfolio-watcher",
+      "category": "监控与可观测性",
+      "fingerprint": "a0b13a3cbaa8e51092b3e33310781679",
+      "zip": "zips/skills/portfolio-watcher.zip",
+      "detail": "details/skills/portfolio-watcher.json"
+    },
+    {
+      "id": "perses-grafana-migrate",
+      "name": "perses-grafana-migrate",
+      "category": "Grafana",
+      "fingerprint": "25691f9e090274d1a23ca9cc137b65aa",
+      "zip": "zips/skills/perses-grafana-migrate.zip",
+      "detail": "details/skills/perses-grafana-migrate.json"
+    },
+    {
+      "id": "perry-workspaces",
+      "name": "perry-workspaces",
+      "category": "数据与人工智能",
+      "fingerprint": "d84d581890e8a847c1292a6d9809b6f6",
+      "zip": "zips/skills/perry-workspaces.zip",
+      "detail": "details/skills/perry-workspaces.json"
+    },
+    {
+      "id": "oss-bucket-exploit",
+      "name": "oss-bucket-exploit",
+      "category": "测试与安全",
+      "fingerprint": "0ad6505d0198253d8f6d55e02ccdd988",
+      "zip": "zips/skills/oss-bucket-exploit.zip",
+      "detail": "details/skills/oss-bucket-exploit.json"
+    },
+    {
+      "id": "oraclecloud-observability",
+      "name": "oraclecloud-observability",
+      "category": "日志分析",
+      "fingerprint": "2899f26234b843e9fe5c72df35db2394",
+      "zip": "zips/skills/oraclecloud-observability.zip",
+      "detail": "details/skills/oraclecloud-observability.json"
+    },
+    {
+      "id": "oraclecloud-cost-tuning",
+      "name": "oraclecloud-cost-tuning",
+      "category": "监控与可观测性",
+      "fingerprint": "4c5ea94ebbbc838620aa9bbea67e34e0",
+      "zip": "zips/skills/oraclecloud-cost-tuning.zip",
+      "detail": "details/skills/oraclecloud-cost-tuning.json"
+    },
+    {
+      "id": "opentelemetry-ops",
+      "name": "opentelemetry-ops",
+      "category": "开发工具",
+      "fingerprint": "ca9c84ccdcb1e7457e555a051ca9c254",
+      "zip": "zips/skills/opentelemetry-ops.zip",
+      "detail": "details/skills/opentelemetry-ops.json"
+    },
+    {
+      "id": "openpond-cli",
+      "name": "openpond-cli",
+      "category": "DevOps",
+      "fingerprint": "116e4c1b239efc17f23188f559c9eda5",
+      "zip": "zips/skills/openpond-cli.zip",
+      "detail": "details/skills/openpond-cli.json"
+    },
+    {
+      "id": "opengauss-ops",
+      "name": "opengauss-ops",
+      "category": "基础设施",
+      "fingerprint": "d7d9982a870d9f875722197574a3f72f",
+      "zip": "zips/skills/opengauss-ops.zip",
+      "detail": "details/skills/opengauss-ops.json"
+    },
+    {
+      "id": "openclaw-security-audit",
+      "name": "openclaw-security-audit",
+      "category": "测试与安全",
+      "fingerprint": "66f5724543abd99779dde32ab49060b8",
+      "zip": "zips/skills/openclaw-security-audit.zip",
+      "detail": "details/skills/openclaw-security-audit.json"
+    },
+    {
+      "id": "openclaw-marshal",
+      "name": "openclaw-marshal",
+      "category": "测试与安全",
+      "fingerprint": "c5188478b46fc44fad420c3a1a74639a",
+      "zip": "zips/skills/openclaw-marshal.zip",
+      "detail": "details/skills/openclaw-marshal.json"
+    },
+    {
+      "id": "openclaw-ledger",
+      "name": "openclaw-ledger",
+      "category": "DevOps",
+      "fingerprint": "7ac74b4fe8daebee9d1db1cd69c824cb",
+      "zip": "zips/skills/openclaw-ledger.zip",
+      "detail": "details/skills/openclaw-ledger.json"
+    },
+    {
+      "id": "openclaw-config-guide",
+      "name": "openclaw-config-guide",
+      "category": "配置管理",
+      "fingerprint": "f8a5a1757a22ad83e883ad47296c7237",
+      "zip": "zips/skills/openclaw-config-guide.zip",
+      "detail": "details/skills/openclaw-config-guide.json"
+    },
+    {
+      "id": "one-skill-to-rule-them-all",
+      "name": "one-skill-to-rule-them-all",
+      "category": "测试与安全",
+      "fingerprint": "76cbdd9ce1ef92402f3403115aede0e4",
+      "zip": "zips/skills/one-skill-to-rule-them-all.zip",
+      "detail": "details/skills/one-skill-to-rule-them-all.json"
+    },
+    {
+      "id": "oceanbase-ops",
+      "name": "oceanbase-ops",
+      "category": "基础设施",
+      "fingerprint": "2176b5b2e342b8c82c499fa7d6b8cc23",
+      "zip": "zips/skills/oceanbase-ops.zip",
+      "detail": "details/skills/oceanbase-ops.json"
+    },
+    {
+      "id": "oceanbase-design-usage",
+      "name": "oceanbase-design-usage",
+      "category": "NoSQL",
+      "fingerprint": "f09f205cc2cea45b523dd7fe7dfea851",
+      "zip": "zips/skills/oceanbase-design-usage.zip",
+      "detail": "details/skills/oceanbase-design-usage.json"
+    },
+    {
+      "id": "obscura-skill-main",
+      "name": "obscura-skill-main",
+      "category": "配置管理",
+      "fingerprint": "90f6da222df3d39888c76969f637fad7",
+      "zip": "zips/skills/obscura-skill-main.zip",
+      "detail": "details/skills/obscura-skill-main.json"
+    },
+    {
+      "id": "nvidia-image-gen",
+      "name": "nvidia-image-gen",
+      "category": "数据与人工智能",
+      "fingerprint": "820889b59061a4a24a0ed0bb6900c165",
+      "zip": "zips/skills/nvidia-image-gen.zip",
+      "detail": "details/skills/nvidia-image-gen.json"
+    },
+    {
+      "id": "nodejs-patterns",
+      "name": "nodejs-patterns",
+      "category": "中间件",
+      "fingerprint": "9b129ec90eea87a96ab7761bf5e91a36",
+      "zip": "zips/skills/nodejs-patterns.zip",
+      "detail": "details/skills/nodejs-patterns.json"
+    },
+    {
+      "id": "nginx-ops",
+      "name": "nginx-ops",
+      "category": "Web 服务器",
+      "fingerprint": "fa42d304c7bc710a70baf373a8fdbce4",
+      "zip": "zips/skills/nginx-ops.zip",
+      "detail": "details/skills/nginx-ops.json"
+    },
+    {
+      "id": "nft-skill",
+      "name": "nft-skill",
+      "category": "数据与人工智能",
+      "fingerprint": "731e563fa232ea2a924a3550bbbb6577",
+      "zip": "zips/skills/nft-skill.zip",
+      "detail": "details/skills/nft-skill.json"
+    },
+    {
+      "id": "neural-memory",
+      "name": "neural-memory",
+      "category": "数据与人工智能",
+      "fingerprint": "0024d05ccde60a40480a12f0cd737185",
+      "zip": "zips/skills/neural-memory.zip",
+      "detail": "details/skills/neural-memory.json"
+    },
+    {
+      "id": "n9e-query-datasource",
+      "name": "n9e-query-datasource",
+      "category": "日志分析",
+      "fingerprint": "cd6e260ff5d9991e6584ccf047499329",
+      "zip": "zips/skills/n9e-query-datasource.zip",
+      "detail": "details/skills/n9e-query-datasource.json"
+    },
+    {
+      "id": "n9e-modify-task-tpl",
+      "name": "n9e-modify-task-tpl",
+      "category": "Kubernetes",
+      "fingerprint": "219e1562077d5770043c50394ce57844",
+      "zip": "zips/skills/n9e-modify-task-tpl.zip",
+      "detail": "details/skills/n9e-modify-task-tpl.json"
+    },
+    {
+      "id": "n9e-import-prom-rule",
+      "name": "n9e-import-prom-rule",
+      "category": "Prometheus",
+      "fingerprint": "b900fbd247718878abfe243fb1805c10",
+      "zip": "zips/skills/n9e-import-prom-rule.zip",
+      "detail": "details/skills/n9e-import-prom-rule.json"
+    },
+    {
+      "id": "n9e-host-onboard-diagnose",
+      "name": "n9e-host-onboard-diagnose",
+      "category": "Helm",
+      "fingerprint": "a0a30bd13234fe57c7e33d098328f6a9",
+      "zip": "zips/skills/n9e-host-onboard-diagnose.zip",
+      "detail": "details/skills/n9e-host-onboard-diagnose.json"
+    },
+    {
+      "id": "n9e-host-health-diagnose",
+      "name": "n9e-host-health-diagnose",
+      "category": "数据与人工智能",
+      "fingerprint": "38aefe4755973d36fe1bc0c0b0effa17",
+      "zip": "zips/skills/n9e-host-health-diagnose.zip",
+      "detail": "details/skills/n9e-host-health-diagnose.json"
+    },
+    {
+      "id": "n9e-doc-qa",
+      "name": "n9e-doc-qa",
+      "category": "业务应用",
+      "fingerprint": "9208fce0e890d3ca640b0c3516b76e44",
+      "zip": "zips/skills/n9e-doc-qa.zip",
+      "detail": "details/skills/n9e-doc-qa.json"
+    },
+    {
+      "id": "n9e-create-dashboard",
+      "name": "n9e-create-dashboard",
+      "category": "Grafana",
+      "fingerprint": "7702aeb4aee63e785dd4c14fa6299817",
+      "zip": "zips/skills/n9e-create-dashboard.zip",
+      "detail": "details/skills/n9e-create-dashboard.json"
+    },
+    {
+      "id": "n9e-create-alert-rule",
+      "name": "n9e-create-alert-rule",
+      "category": "Prometheus",
+      "fingerprint": "031f9bb8df892bfd517c2034162fa564",
+      "zip": "zips/skills/n9e-create-alert-rule.zip",
+      "detail": "details/skills/n9e-create-alert-rule.json"
+    },
+    {
+      "id": "mysql-ops",
+      "name": "mysql-ops",
+      "category": "基础设施",
+      "fingerprint": "325b71ad62a83b1e0e2bae12f5eaa04d",
+      "zip": "zips/skills/mysql-ops.zip",
+      "detail": "details/skills/mysql-ops.json"
+    },
+    {
+      "id": "monitoring-expert",
+      "name": "monitoring-expert",
+      "category": "监控与可观测性",
+      "fingerprint": "3697ed1d7a91e81a3fb5f1699af179e6",
+      "zip": "zips/skills/monitoring-expert.zip",
+      "detail": "details/skills/monitoring-expert.json"
+    },
+    {
+      "id": "mongodb-ops",
+      "name": "mongodb-ops",
+      "category": "Kubernetes",
+      "fingerprint": "9c6131505ac18a8016051d71db3c8215",
+      "zip": "zips/skills/mongodb-ops.zip",
+      "detail": "details/skills/mongodb-ops.json"
+    },
+    {
+      "id": "miro-observability",
+      "name": "miro-observability",
+      "category": "监控与可观测性",
+      "fingerprint": "b45f8e233a1677e1e5245a20c1fd7204",
+      "zip": "zips/skills/miro-observability.zip",
+      "detail": "details/skills/miro-observability.json"
+    },
+    {
+      "id": "minio-ops",
+      "name": "minio-ops",
+      "category": "DevOps",
+      "fingerprint": "9df8619d51f67c275fc32416a2a951c9",
+      "zip": "zips/skills/minio-ops.zip",
+      "detail": "details/skills/minio-ops.json"
+    },
+    {
+      "id": "microceph",
+      "name": "microceph",
+      "category": "Kubernetes",
+      "fingerprint": "6f5efdafe46bcd6f4b98c5222e24a494",
+      "zip": "zips/skills/microceph.zip",
+      "detail": "details/skills/microceph.json"
+    },
+    {
+      "id": "memcached-ops",
+      "name": "memcached-ops",
+      "category": "缓存",
+      "fingerprint": "55d9c118b834dd61f8d2d5a5125452fa",
+      "zip": "zips/skills/memcached-ops.zip",
+      "detail": "details/skills/memcached-ops.json"
+    },
+    {
+      "id": "managing-skywalking",
+      "name": "managing-skywalking",
+      "category": "SkyWalking",
+      "fingerprint": "d3570daec42abbfc4a75e60b7bb2fdab",
+      "zip": "zips/skills/managing-skywalking.zip",
+      "detail": "details/skills/managing-skywalking.json"
+    },
+    {
+      "id": "loki-troubleshoot",
+      "name": "loki-troubleshoot",
+      "category": "日志分析",
+      "fingerprint": "51c1c20f265329c35f1578f2f522678d",
+      "zip": "zips/skills/loki-troubleshoot.zip",
+      "detail": "details/skills/loki-troubleshoot.json"
+    },
+    {
+      "id": "loki-search",
+      "name": "loki-search",
+      "category": "内容与媒体",
+      "fingerprint": "d79700474b3f485d927f7e18fb8fd89f",
+      "zip": "zips/skills/loki-search.zip",
+      "detail": "details/skills/loki-search.json"
+    },
+    {
+      "id": "loki-principal-engineer",
+      "name": "loki-principal-engineer",
+      "category": "日志分析",
+      "fingerprint": "606d8ceacc3392267a0f431e4c07357f",
+      "zip": "zips/skills/loki-principal-engineer.zip",
+      "detail": "details/skills/loki-principal-engineer.json"
+    },
+    {
+      "id": "loki-ops",
+      "name": "loki-ops",
+      "category": "Grafana",
+      "fingerprint": "94b93ddc4f4a770c7f8385ab1668abea",
+      "zip": "zips/skills/loki-ops.zip",
+      "detail": "details/skills/loki-ops.json"
+    },
+    {
+      "id": "loki-mode",
+      "name": "loki-mode",
+      "category": "日志分析",
+      "fingerprint": "dc729ced8dce46e157ecb8f1129596d2",
+      "zip": "zips/skills/loki-mode.zip",
+      "detail": "details/skills/loki-mode.json"
+    },
+    {
+      "id": "loki-logs",
+      "name": "loki-logs",
+      "category": "日志分析",
+      "fingerprint": "e0f58127706807802ed4daa5b43f0bdf",
+      "zip": "zips/skills/loki-logs.zip",
+      "detail": "details/skills/loki-logs.json"
+    },
+    {
+      "id": "loki-helm-deployment-pitfalls",
+      "name": "loki-helm-deployment-pitfalls",
+      "category": "Helm",
+      "fingerprint": "400a61f4b34b108afbfe683f174b83b3",
+      "zip": "zips/skills/loki-helm-deployment-pitfalls.zip",
+      "detail": "details/skills/loki-helm-deployment-pitfalls.json"
+    },
+    {
+      "id": "loki-config-generator",
+      "name": "loki-config-generator",
+      "category": "日志分析",
+      "fingerprint": "f05a75b48f4f6e09bfc5901ea77ab641",
+      "zip": "zips/skills/loki-config-generator.zip",
+      "detail": "details/skills/loki-config-generator.json"
+    },
+    {
+      "id": "logging-observability",
+      "name": "logging-observability",
+      "category": "监控与可观测性",
+      "fingerprint": "31a6b063be330de0702c1b37e1541d12",
+      "zip": "zips/skills/logging-observability.zip",
+      "detail": "details/skills/logging-observability.json"
+    },
+    {
+      "id": "linux-admin",
+      "name": "linux-admin",
+      "category": "测试与安全",
+      "fingerprint": "9647392cc457d8979cdc388fcc718cd6",
+      "zip": "zips/skills/linux-admin.zip",
+      "detail": "details/skills/linux-admin.json"
+    },
+    {
+      "id": "linear-observability",
+      "name": "linear-observability",
+      "category": "监控与可观测性",
+      "fingerprint": "3beed90d6a79778ea63d40aa0d4c5a35",
+      "zip": "zips/skills/linear-observability.zip",
+      "detail": "details/skills/linear-observability.json"
+    },
+    {
+      "id": "kvm-qemu-ops",
+      "name": "kvm-qemu-ops",
+      "category": "基础设施",
+      "fingerprint": "ebb9eb1e1dbc2f259cb0ffffcdd3acc5",
+      "zip": "zips/skills/kvm-qemu-ops.zip",
+      "detail": "details/skills/kvm-qemu-ops.json"
+    },
+    {
+      "id": "kubernetes-specialist",
+      "name": "kubernetes-specialist",
+      "category": "Kubernetes",
+      "fingerprint": "752b1f6e53cf782889950a3d9616a2f7",
+      "zip": "zips/skills/kubernetes-specialist.zip",
+      "detail": "details/skills/kubernetes-specialist.json"
+    },
+    {
+      "id": "kubernetes-devops",
+      "name": "kubernetes-devops",
+      "category": "测试与安全",
+      "fingerprint": "e2fed857302068b6e6fb69f8a852eec9",
+      "zip": "zips/skills/kubernetes-devops.zip",
+      "detail": "details/skills/kubernetes-devops.json"
+    },
+    {
+      "id": "kubernetes-deployment",
+      "name": "kubernetes-deployment",
+      "category": "Helm",
+      "fingerprint": "481c168c5df9340907d96fe22594b5f5",
+      "zip": "zips/skills/kubernetes-deployment.zip",
+      "detail": "details/skills/kubernetes-deployment.json"
+    },
+    {
+      "id": "kubernetes-architect",
+      "name": "kubernetes-architect",
+      "category": "Kubernetes",
+      "fingerprint": "963226a71e8867bbea5240240bfd9151",
+      "zip": "zips/skills/kubernetes-architect.zip",
+      "detail": "details/skills/kubernetes-architect.json"
+    },
+    {
+      "id": "kubectl",
+      "name": "kubectl",
+      "category": "Kubernetes",
+      "fingerprint": "152eb6a9af615cc377c074718b80b9dd",
+      "zip": "zips/skills/kubectl.zip",
+      "detail": "details/skills/kubectl.json"
+    },
+    {
+      "id": "komodo",
+      "name": "komodo",
+      "category": "容器与编排",
+      "fingerprint": "9ae664c361fba16251cb2c125ea7b000",
+      "zip": "zips/skills/komodo.zip",
+      "detail": "details/skills/komodo.json"
+    },
+    {
+      "id": "knowledge-base-collector",
+      "name": "knowledge-base-collector",
+      "category": "内容与媒体",
+      "fingerprint": "242cc0154f293d4aa5b9e663e864d65d",
+      "zip": "zips/skills/knowledge-base-collector.zip",
+      "detail": "details/skills/knowledge-base-collector.json"
+    },
+    {
+      "id": "kagi",
+      "name": "kagi",
+      "category": "内容与媒体",
+      "fingerprint": "790378147f59b0ab8caf9528d0114a3b",
+      "zip": "zips/skills/kagi.zip",
+      "detail": "details/skills/kagi.json"
+    },
+    {
+      "id": "kafka-ops",
+      "name": "kafka-ops",
+      "category": "消息队列",
+      "fingerprint": "320f1a273fb9437c58912133fc7463d1",
+      "zip": "zips/skills/kafka-ops.zip",
+      "detail": "details/skills/kafka-ops.json"
+    },
+    {
+      "id": "k8s-validator",
+      "name": "k8s-validator",
+      "category": "测试与安全",
+      "fingerprint": "c888774d24e63d35d3426501710e016d",
+      "zip": "zips/skills/k8s-validator.zip",
+      "detail": "details/skills/k8s-validator.json"
+    },
+    {
+      "id": "k8s-troubleshoot",
+      "name": "k8s-troubleshoot",
+      "category": "网络与安全",
+      "fingerprint": "74967adefe8d374586da5995ef818415",
+      "zip": "zips/skills/k8s-troubleshoot.zip",
+      "detail": "details/skills/k8s-troubleshoot.json"
+    },
+    {
+      "id": "k8s-storage",
+      "name": "k8s-storage",
+      "category": "Kubernetes",
+      "fingerprint": "a5612393bfdd0c0b492ac7f563b355f7",
+      "zip": "zips/skills/k8s-storage.zip",
+      "detail": "details/skills/k8s-storage.json"
+    },
+    {
+      "id": "k8s-service-mesh",
+      "name": "k8s-service-mesh",
+      "category": "监控与可观测性",
+      "fingerprint": "6e28eb88fd540f4a0abe96033759d4cb",
+      "zip": "zips/skills/k8s-service-mesh.zip",
+      "detail": "details/skills/k8s-service-mesh.json"
+    },
+    {
+      "id": "k8s-security-policies",
+      "name": "k8s-security-policies",
+      "category": "网络与安全",
+      "fingerprint": "efde4995a77e4f088137a08f2f1cb7c6",
+      "zip": "zips/skills/k8s-security-policies.zip",
+      "detail": "details/skills/k8s-security-policies.json"
+    },
+    {
+      "id": "k8s-policy",
+      "name": "k8s-policy",
+      "category": "测试与安全",
+      "fingerprint": "cbd2e732f8772c59ae796e535ec45436",
+      "zip": "zips/skills/k8s-policy.zip",
+      "detail": "details/skills/k8s-policy.json"
+    },
+    {
+      "id": "k8s-operator-change",
+      "name": "k8s-operator-change",
+      "category": "Kubernetes",
+      "fingerprint": "815efcd50b4a891e806fd6490307cb53",
+      "zip": "zips/skills/k8s-operator-change.zip",
+      "detail": "details/skills/k8s-operator-change.json"
+    },
+    {
+      "id": "k8s-operations",
+      "name": "k8s-operations",
+      "category": "Kubernetes",
+      "fingerprint": "222d5ae463642b2b360bcf767daea9ef",
+      "zip": "zips/skills/k8s-operations.zip",
+      "detail": "details/skills/k8s-operations.json"
+    },
+    {
+      "id": "k8s-openapi",
+      "name": "k8s-openapi",
+      "category": "开发工具",
+      "fingerprint": "48c41da172c3f2a0cd2e615cb3db9d21",
+      "zip": "zips/skills/k8s-openapi.zip",
+      "detail": "details/skills/k8s-openapi.json"
+    },
+    {
+      "id": "k8s-networking",
+      "name": "k8s-networking",
+      "category": "网络与安全",
+      "fingerprint": "12e8e64c2e2391af3c885102ca24b814",
+      "zip": "zips/skills/k8s-networking.zip",
+      "detail": "details/skills/k8s-networking.json"
+    },
+    {
+      "id": "k8s-multicluster",
+      "name": "k8s-multicluster",
+      "category": "Kubernetes",
+      "fingerprint": "d4aee01932f5cb3a399273d78262d122",
+      "zip": "zips/skills/k8s-multicluster.zip",
+      "detail": "details/skills/k8s-multicluster.json"
+    },
+    {
+      "id": "k8s-manifest-generator",
+      "name": "k8s-manifest-generator",
+      "category": "测试与安全",
+      "fingerprint": "71f3ebed675b86302b5e6909c99a52f0",
+      "zip": "zips/skills/k8s-manifest-generator.zip",
+      "detail": "details/skills/k8s-manifest-generator.json"
+    },
+    {
+      "id": "k8s-manage",
+      "name": "k8s-manage",
+      "category": "基础设施",
+      "fingerprint": "8de44ed1b345867b01d216a2dff58171",
+      "zip": "zips/skills/k8s-manage.zip",
+      "detail": "details/skills/k8s-manage.json"
+    },
+    {
+      "id": "k8s-kind",
+      "name": "k8s-kind",
+      "category": "开发工具",
+      "fingerprint": "4803302b414b42c64aaffa5232866c21",
+      "zip": "zips/skills/k8s-kind.zip",
+      "detail": "details/skills/k8s-kind.json"
+    },
+    {
+      "id": "k8s-helm",
+      "name": "k8s-helm",
+      "category": "Helm",
+      "fingerprint": "ddc546108c424b9c5573fadf0d5d5840",
+      "zip": "zips/skills/k8s-helm.zip",
+      "detail": "details/skills/k8s-helm.json"
+    },
+    {
+      "id": "k8s-gitops",
+      "name": "k8s-gitops",
+      "category": "Kubernetes",
+      "fingerprint": "95b6ddab85103c580f4bcaaebb436a32",
+      "zip": "zips/skills/k8s-gitops.zip",
+      "detail": "details/skills/k8s-gitops.json"
+    },
+    {
+      "id": "k8s-diagnostics",
+      "name": "k8s-diagnostics",
+      "category": "生活方式",
+      "fingerprint": "28dc49408fafbca075a79f6bd3ecc58f",
+      "zip": "zips/skills/k8s-diagnostics.zip",
+      "detail": "details/skills/k8s-diagnostics.json"
+    },
+    {
+      "id": "k8s-dev-deploy",
+      "name": "k8s-dev-deploy",
+      "category": "开发工具",
+      "fingerprint": "2535ba26f7f4f68a56c25e47c331ba30",
+      "zip": "zips/skills/k8s-dev-deploy.zip",
+      "detail": "details/skills/k8s-dev-deploy.json"
+    },
+    {
+      "id": "k8s-debug-pods",
+      "name": "k8s-debug-pods",
+      "category": "Kubernetes",
+      "fingerprint": "592194add8501d0cab59fcc5b384c4d7",
+      "zip": "zips/skills/k8s-debug-pods.zip",
+      "detail": "details/skills/k8s-debug-pods.json"
+    },
+    {
+      "id": "k8s-debug",
+      "name": "k8s-debug",
+      "category": "Kubernetes",
+      "fingerprint": "10f093c15958631dab3d104c98656cca",
+      "zip": "zips/skills/k8s-debug.zip",
+      "detail": "details/skills/k8s-debug.json"
+    },
+    {
+      "id": "k8s-core",
+      "name": "k8s-core",
+      "category": "Kubernetes",
+      "fingerprint": "570970866e6a3683da997a9e0aeefeb4",
+      "zip": "zips/skills/k8s-core.zip",
+      "detail": "details/skills/k8s-core.json"
+    },
+    {
+      "id": "k8s-cilium",
+      "name": "k8s-cilium",
+      "category": "监控与可观测性",
+      "fingerprint": "5bb3daf05531f407424788af76ff7b6f",
+      "zip": "zips/skills/k8s-cilium.zip",
+      "detail": "details/skills/k8s-cilium.json"
+    },
+    {
+      "id": "k8s-certs",
+      "name": "k8s-certs",
+      "category": "Kubernetes",
+      "fingerprint": "50f8f925a661b508b66642d9395d3c2e",
+      "zip": "zips/skills/k8s-certs.zip",
+      "detail": "details/skills/k8s-certs.json"
+    },
+    {
+      "id": "k8s-capi",
+      "name": "k8s-capi",
+      "category": "Kubernetes",
+      "fingerprint": "111c419700b56a4d1d64e03b71e93f36",
+      "zip": "zips/skills/k8s-capi.zip",
+      "detail": "details/skills/k8s-capi.json"
+    },
+    {
+      "id": "k8s-browser",
+      "name": "k8s-browser",
+      "category": "Kubernetes",
+      "fingerprint": "4f5e34d2dd3673e471ec3b6e8eaec4ca",
+      "zip": "zips/skills/k8s-browser.zip",
+      "detail": "details/skills/k8s-browser.json"
+    },
+    {
+      "id": "k8s-autoscaling",
+      "name": "k8s-autoscaling",
+      "category": "Kubernetes",
+      "fingerprint": "8f2b9514649d0dc28ee8387379e27374",
+      "zip": "zips/skills/k8s-autoscaling.zip",
+      "detail": "details/skills/k8s-autoscaling.json"
+    },
+    {
+      "id": "k8s-analyzer",
+      "name": "k8s-analyzer",
+      "category": "测试与安全",
+      "fingerprint": "4dc7a3a6adc8fc047e924392cb82d8d2",
+      "zip": "zips/skills/k8s-analyzer.zip",
+      "detail": "details/skills/k8s-analyzer.json"
+    },
+    {
+      "id": "jumpserver-skills",
+      "name": "jumpserver-skills",
+      "category": "Grafana",
+      "fingerprint": "6137cc1c5354b0d9b13e4b580ddcfdc0",
+      "zip": "zips/skills/jumpserver-skills.zip",
+      "detail": "details/skills/jumpserver-skills.json"
+    },
+    {
+      "id": "jenkins-ops",
+      "name": "jenkins-ops",
+      "category": "安全运维",
+      "fingerprint": "e171532ca4f854a3352b0e0fe62decc2",
+      "zip": "zips/skills/jenkins-ops.zip",
+      "detail": "details/skills/jenkins-ops.json"
+    },
+    {
+      "id": "java-development",
+      "name": "java-development",
+      "category": "开发工具",
+      "fingerprint": "79c07a5757adf62d4965502e8dfcef51",
+      "zip": "zips/skills/java-development.zip",
+      "detail": "details/skills/java-development.json"
+    },
+    {
+      "id": "istio-ops",
+      "name": "istio-ops",
+      "category": "测试与安全",
+      "fingerprint": "7191714ff1bd5f999400a196946ea813",
+      "zip": "zips/skills/istio-ops.zip",
+      "detail": "details/skills/istio-ops.json"
+    },
+    {
+      "id": "influxdb-ops",
+      "name": "influxdb-ops",
+      "category": "数据库",
+      "fingerprint": "d99c00219b4e55a2d9b71417eb1f607e",
+      "zip": "zips/skills/influxdb-ops.zip",
+      "detail": "details/skills/influxdb-ops.json"
+    },
+    {
+      "id": "hwc-infra",
+      "name": "hwc-infra",
+      "category": "基础设施",
+      "fingerprint": "5bd98e7a8869db93a4b00ed28550257b",
+      "zip": "zips/skills/hwc-infra.zip",
+      "detail": "details/skills/hwc-infra.json"
+    },
+    {
+      "id": "hidpi-mouse",
+      "name": "hidpi-mouse",
+      "category": "效率工具",
+      "fingerprint": "424ef94885e4ce8810c27d195515db55",
+      "zip": "zips/skills/hidpi-mouse.zip",
+      "detail": "details/skills/hidpi-mouse.json"
+    },
+    {
+      "id": "helm-ops",
+      "name": "helm-ops",
+      "category": "测试与安全",
+      "fingerprint": "d69257db7865baa918c09f663da23ece",
+      "zip": "zips/skills/helm-ops.zip",
+      "detail": "details/skills/helm-ops.json"
+    },
+    {
+      "id": "hefestoai-auditor",
+      "name": "hefestoai-auditor",
+      "category": "测试与安全",
+      "fingerprint": "e3eaf957e3352ccf26bbc5ffadeb689e",
+      "zip": "zips/skills/hefestoai-auditor.zip",
+      "detail": "details/skills/hefestoai-auditor.json"
+    },
+    {
+      "id": "harbor-ops",
+      "name": "harbor-ops",
+      "category": "测试与安全",
+      "fingerprint": "64ad844c67d8d7dbb920c14ad8fc74e7",
+      "zip": "zips/skills/harbor-ops.zip",
+      "detail": "details/skills/harbor-ops.json"
+    },
+    {
+      "id": "haproxy-ops",
+      "name": "haproxy-ops",
+      "category": "DevOps",
+      "fingerprint": "7079cac26b8f4acb137b12666eacc209",
+      "zip": "zips/skills/haproxy-ops.zip",
+      "detail": "details/skills/haproxy-ops.json"
+    },
+    {
+      "id": "grafana-tempo",
+      "name": "grafana-tempo",
+      "category": "Grafana",
+      "fingerprint": "0cedc1e59b0938d5dbd9a2b45943b963",
+      "zip": "zips/skills/grafana-tempo.zip",
+      "detail": "details/skills/grafana-tempo.json"
+    },
+    {
+      "id": "grafana-platform-dashboard",
+      "name": "grafana-platform-dashboard",
+      "category": "Grafana",
+      "fingerprint": "a763322f0aa6c4373db38c15515776c8",
+      "zip": "zips/skills/grafana-platform-dashboard.zip",
+      "detail": "details/skills/grafana-platform-dashboard.json"
+    },
+    {
+      "id": "grafana-ops",
+      "name": "grafana-ops",
+      "category": "Grafana",
+      "fingerprint": "8e7c9fba0ffe4c6e399d966f9dcc06f2",
+      "zip": "zips/skills/grafana-ops.zip",
+      "detail": "details/skills/grafana-ops.json"
+    },
+    {
+      "id": "grafana-oncall-ops",
+      "name": "grafana-oncall-ops",
+      "category": "Grafana",
+      "fingerprint": "7589442ea062747bf3b7046f469ec83d",
+      "zip": "zips/skills/grafana-oncall-ops.zip",
+      "detail": "details/skills/grafana-oncall-ops.json"
+    },
+    {
+      "id": "grafana-observability",
+      "name": "grafana-observability",
+      "category": "内容与媒体",
+      "fingerprint": "25cba8beb513c4c0b02612448e489fa8",
+      "zip": "zips/skills/grafana-observability.zip",
+      "detail": "details/skills/grafana-observability.json"
+    },
+    {
+      "id": "grafana-mimir-ops",
+      "name": "grafana-mimir-ops",
+      "category": "Grafana",
+      "fingerprint": "4cf3cf327a238d276d4a332421b20d5c",
+      "zip": "zips/skills/grafana-mimir-ops.zip",
+      "detail": "details/skills/grafana-mimir-ops.json"
+    },
+    {
+      "id": "grafana-lens",
+      "name": "grafana-lens",
+      "category": "监控与可观测性",
+      "fingerprint": "218286d3ab6183152571e2663a85abe8",
+      "zip": "zips/skills/grafana-lens.zip",
+      "detail": "details/skills/grafana-lens.json"
+    },
+    {
+      "id": "grafana-http-api",
+      "name": "grafana-http-api",
+      "category": "Grafana",
+      "fingerprint": "2f13d0f07239cc5a850b4139ff36478d",
+      "zip": "zips/skills/grafana-http-api.zip",
+      "detail": "details/skills/grafana-http-api.json"
+    },
+    {
+      "id": "grafana-dashboards",
+      "name": "grafana-dashboards",
+      "category": "Grafana",
+      "fingerprint": "4bed8b1ddad7e9b59a2484fe86ee6c99",
+      "zip": "zips/skills/grafana-dashboards.zip",
+      "detail": "details/skills/grafana-dashboards.json"
+    },
+    {
+      "id": "grafana-dashboard-creator",
+      "name": "grafana-dashboard-creator",
+      "category": "Grafana",
+      "fingerprint": "0e86cc2fab88e2e1b4bd829c304bf5a6",
+      "zip": "zips/skills/grafana-dashboard-creator.zip",
+      "detail": "details/skills/grafana-dashboard-creator.json"
+    },
+    {
+      "id": "goal-tracker",
+      "name": "goal-tracker",
+      "category": "Grafana",
+      "fingerprint": "ee77efe65ba91079b931ef5ae0cdcd2c",
+      "zip": "zips/skills/goal-tracker.zip",
+      "detail": "details/skills/goal-tracker.json"
+    },
+    {
+      "id": "go-linter-configuration",
+      "name": "go-linter-configuration",
+      "category": "CD",
+      "fingerprint": "551f570ed43bdc761c1cd3117bd6bee1",
+      "zip": "zips/skills/go-linter-configuration.zip",
+      "detail": "details/skills/go-linter-configuration.json"
+    },
+    {
+      "id": "gitlab-ops",
+      "name": "gitlab-ops",
+      "category": "基础设施",
+      "fingerprint": "2a237c1474888b1e8e466a57bc073b07",
+      "zip": "zips/skills/gitlab-ops.zip",
+      "detail": "details/skills/gitlab-ops.json"
+    },
+    {
+      "id": "gitlab-manager",
+      "name": "gitlab-manager",
+      "category": "开发工具",
+      "fingerprint": "d44416c0b6644a92990d280af6216d3d",
+      "zip": "zips/skills/gitlab-manager.zip",
+      "detail": "details/skills/gitlab-manager.json"
+    },
+    {
+      "id": "gitlab-ci-skills",
+      "name": "gitlab-ci-skills",
+      "category": "CD",
+      "fingerprint": "8479a7777cfcc3d8db0151e4f91ee203",
+      "zip": "zips/skills/gitlab-ci-skills.zip",
+      "detail": "details/skills/gitlab-ci-skills.json"
+    },
+    {
+      "id": "github-issue-creator",
+      "name": "github-issue-creator",
+      "category": "内容与媒体",
+      "fingerprint": "e62e28c4b15cf5b2068762d12d49e38f",
+      "zip": "zips/skills/github-issue-creator.zip",
+      "detail": "details/skills/github-issue-creator.json"
+    },
+    {
+      "id": "gitbackup",
+      "name": "gitbackup",
+      "category": "基础设施",
+      "fingerprint": "320fdbbc919a5d10f8bbd5379614ff64",
+      "zip": "zips/skills/gitbackup.zip",
+      "detail": "details/skills/gitbackup.json"
+    },
+    {
+      "id": "git-helper",
+      "name": "git-helper",
+      "category": "日志分析",
+      "fingerprint": "a45727870cf9925a9059ba8e4595b88f",
+      "zip": "zips/skills/git-helper.zip",
+      "detail": "details/skills/git-helper.json"
+    },
+    {
+      "id": "gemini-image-proxy",
+      "name": "gemini-image-proxy",
+      "category": "开发工具",
+      "fingerprint": "404cddda1a5763eb9bac4d62a0ce2af0",
+      "zip": "zips/skills/gemini-image-proxy.zip",
+      "detail": "details/skills/gemini-image-proxy.json"
+    },
+    {
+      "id": "fosmvvm-swiftui-app-setup",
+      "name": "fosmvvm-swiftui-app-setup",
+      "category": "DevOps",
+      "fingerprint": "a71b8ff9b572d0dbc21fb6db0fa030ee",
+      "zip": "zips/skills/fosmvvm-swiftui-app-setup.zip",
+      "detail": "details/skills/fosmvvm-swiftui-app-setup.json"
+    },
+    {
+      "id": "fluentd-ops",
+      "name": "fluentd-ops",
+      "category": "日志分析",
+      "fingerprint": "0b1d5a9bce3e99295d665ba78226441b",
+      "zip": "zips/skills/fluentd-ops.zip",
+      "detail": "details/skills/fluentd-ops.json"
+    },
+    {
+      "id": "flaresolverr",
+      "name": "flaresolverr",
+      "category": "基础设施",
+      "fingerprint": "2c4bcc10d44ada54350588eeb9f16d9d",
+      "zip": "zips/skills/flaresolverr.zip",
+      "detail": "details/skills/flaresolverr.json"
+    },
+    {
+      "id": "feishu-drive",
+      "name": "feishu-drive",
+      "category": "效率工具",
+      "fingerprint": "a36bb37cf484c1e82f8790e76a6a0db0",
+      "zip": "zips/skills/feishu-drive.zip",
+      "detail": "details/skills/feishu-drive.json"
+    },
+    {
+      "id": "feishu-doc-manager",
+      "name": "feishu-doc-manager",
+      "category": "内容与媒体",
+      "fingerprint": "02216adb1c1340f44c133f741a910758",
+      "zip": "zips/skills/feishu-doc-manager.zip",
+      "detail": "details/skills/feishu-doc-manager.json"
+    },
+    {
+      "id": "feishu-bridge",
+      "name": "feishu-bridge",
+      "category": "日志分析",
+      "fingerprint": "a847c070ae27b756a8afca642b410452",
+      "zip": "zips/skills/feishu-bridge.zip",
+      "detail": "details/skills/feishu-bridge.json"
+    },
+    {
+      "id": "fd-find",
+      "name": "fd-find",
+      "category": "效率工具",
+      "fingerprint": "649a9c323bcb4c19000331f47320b356",
+      "zip": "zips/skills/fd-find.zip",
+      "detail": "details/skills/fd-find.json"
+    },
+    {
+      "id": "expanso-secrets-scan",
+      "name": "expanso-secrets-scan",
+      "category": "开发工具",
+      "fingerprint": "3374642f2ee5360073cfc3729251a5ce",
+      "zip": "zips/skills/expanso-secrets-scan.zip",
+      "detail": "details/skills/expanso-secrets-scan.json"
+    },
+    {
+      "id": "expanso-json-validate",
+      "name": "expanso-json-validate",
+      "category": "基础设施",
+      "fingerprint": "6e2292d966cfb7606499c0c94edc7c70",
+      "zip": "zips/skills/expanso-json-validate.zip",
+      "detail": "details/skills/expanso-json-validate.json"
+    },
+    {
+      "id": "expanso-json-to-yaml",
+      "name": "expanso-json-to-yaml",
+      "category": "CD",
+      "fingerprint": "bf9b3b565368306b941ffaf57b166449",
+      "zip": "zips/skills/expanso-json-to-yaml.zip",
+      "detail": "details/skills/expanso-json-to-yaml.json"
+    },
+    {
+      "id": "eridian",
+      "name": "eridian",
+      "category": "测试与安全",
+      "fingerprint": "69fde98da82ee706ceaba93401894eee",
+      "zip": "zips/skills/eridian.zip",
+      "detail": "details/skills/eridian.json"
+    },
+    {
+      "id": "elk-ops",
+      "name": "elk-ops",
+      "category": "Kubernetes",
+      "fingerprint": "e72ad74975db180b5e4a4cef2ce3a5bd",
+      "zip": "zips/skills/elk-ops.zip",
+      "detail": "details/skills/elk-ops.json"
+    },
+    {
+      "id": "elizacloud",
+      "name": "elizacloud",
+      "category": "基础设施",
+      "fingerprint": "6e688eddbc8c9f79fddc7edda8d294f8",
+      "zip": "zips/skills/elizacloud.zip",
+      "detail": "details/skills/elizacloud.json"
+    },
+    {
+      "id": "elite-longterm-memory",
+      "name": "elite-longterm-memory",
+      "category": "数据与人工智能",
+      "fingerprint": "7ad1ec9c0afbb2dc21f23fb9a151c260",
+      "zip": "zips/skills/elite-longterm-memory.zip",
+      "detail": "details/skills/elite-longterm-memory.json"
+    },
+    {
+      "id": "elasticsearch-ops",
+      "name": "elasticsearch-ops",
+      "category": "Kubernetes",
+      "fingerprint": "a2d117aee5be75894151176fa39fccad",
+      "zip": "zips/skills/elasticsearch-ops.zip",
+      "detail": "details/skills/elasticsearch-ops.json"
+    },
+    {
+      "id": "ecap-security-auditor",
+      "name": "ecap-security-auditor",
+      "category": "数据与人工智能",
+      "fingerprint": "88372eafb61d5f52fe512c7b57a0eceb",
+      "zip": "zips/skills/ecap-security-auditor.zip",
+      "detail": "details/skills/ecap-security-auditor.json"
+    },
+    {
+      "id": "e2e-testing-patterns",
+      "name": "e2e-testing-patterns",
+      "category": "测试与安全",
+      "fingerprint": "f749a3c1c80b3b68521a64393f0275cb",
+      "zip": "zips/skills/e2e-testing-patterns.zip",
+      "detail": "details/skills/e2e-testing-patterns.json"
+    },
+    {
+      "id": "docker-sandbox",
+      "name": "docker-sandbox",
+      "category": "容器与编排",
+      "fingerprint": "26b8147aa04f61d214b1884b6c9ec178",
+      "zip": "zips/skills/docker-sandbox.zip",
+      "detail": "details/skills/docker-sandbox.json"
+    },
+    {
+      "id": "docker-ops",
+      "name": "docker-ops",
+      "category": "容器与编排",
+      "fingerprint": "e3a0b87d6d7b2bec6b7034e1915a702b",
+      "zip": "zips/skills/docker-ops.zip",
+      "detail": "details/skills/docker-ops.json"
+    },
+    {
+      "id": "dns-ops",
+      "name": "dns-ops",
+      "category": "DevOps",
+      "fingerprint": "b02bbdbe958e394d05ced60e341419ce",
+      "zip": "zips/skills/dns-ops.zip",
+      "detail": "details/skills/dns-ops.json"
+    },
+    {
+      "id": "dm-ops",
+      "name": "dm-ops",
+      "category": "基础设施",
+      "fingerprint": "5af0451ae6103e35df6561624d935788",
+      "zip": "zips/skills/dm-ops.zip",
+      "detail": "details/skills/dm-ops.json"
+    },
+    {
+      "id": "django-patterns",
+      "name": "django-patterns",
+      "category": "中间件",
+      "fingerprint": "775ef8e0c2e1bc76a58257161d68e90f",
+      "zip": "zips/skills/django-patterns.zip",
+      "detail": "details/skills/django-patterns.json"
+    },
+    {
+      "id": "devops-engineer",
+      "name": "devops-engineer",
+      "category": "CD",
+      "fingerprint": "a428d654d4bf2be686b80dafa97554fe",
+      "zip": "zips/skills/devops-engineer.zip",
+      "detail": "details/skills/devops-engineer.json"
+    },
+    {
+      "id": "devlog-agent-skill",
+      "name": "devlog-agent-skill",
+      "category": "数据与人工智能",
+      "fingerprint": "48f45d3c560ecfde03f989abf6284891",
+      "zip": "zips/skills/devlog-agent-skill.zip",
+      "detail": "details/skills/devlog-agent-skill.json"
+    },
+    {
+      "id": "deploying-monitoring-stacks",
+      "name": "deploying-monitoring-stacks",
+      "category": "容器与编排",
+      "fingerprint": "88d47a68787eae7ce2b204de6aa19e28",
+      "zip": "zips/skills/deploying-monitoring-stacks.zip",
+      "detail": "details/skills/deploying-monitoring-stacks.json"
+    },
+    {
+      "id": "deploy-on-render",
+      "name": "deploy-on-render",
+      "category": "Grafana",
+      "fingerprint": "4d04d0ec3ccc5c3eea705a946ada690e",
+      "zip": "zips/skills/deploy-on-render.zip",
+      "detail": "details/skills/deploy-on-render.json"
+    },
+    {
+      "id": "debugging-wizard",
+      "name": "debugging-wizard",
+      "category": "日志分析",
+      "fingerprint": "9c15450eef8a750b68f2ced5ef29c57f",
+      "zip": "zips/skills/debugging-wizard.zip",
+      "detail": "details/skills/debugging-wizard.json"
+    },
+    {
+      "id": "db-readonly",
+      "name": "db-readonly",
+      "category": "SkyWalking",
+      "fingerprint": "2ea01cf1da8529ee4a9a1e71a913dda8",
+      "zip": "zips/skills/db-readonly.zip",
+      "detail": "details/skills/db-readonly.json"
+    },
+    {
+      "id": "daily-report",
+      "name": "daily-report",
+      "category": "Prometheus",
+      "fingerprint": "ac7b36e84657720024572538f652f8f0",
+      "zip": "zips/skills/daily-report.zip",
+      "detail": "details/skills/daily-report.json"
+    },
+    {
+      "id": "cybersec-helper",
+      "name": "cybersec-helper",
+      "category": "测试与安全",
+      "fingerprint": "4aa95efec6b30f9206f6f17410fdd083",
+      "zip": "zips/skills/cybersec-helper.zip",
+      "detail": "details/skills/cybersec-helper.json"
+    },
+    {
+      "id": "customerio-observability",
+      "name": "customerio-observability",
+      "category": "监控与可观测性",
+      "fingerprint": "f7df5829dec0e018bd90debb4cfe62e6",
+      "zip": "zips/skills/customerio-observability.zip",
+      "detail": "details/skills/customerio-observability.json"
+    },
+    {
+      "id": "csv-pipeline",
+      "name": "csv-pipeline",
+      "category": "CD",
+      "fingerprint": "b7f7b620653442e21590bcbe38ed0617",
+      "zip": "zips/skills/csv-pipeline.zip",
+      "detail": "details/skills/csv-pipeline.json"
+    },
+    {
+      "id": "create-test-pool",
+      "name": "create-test-pool",
+      "category": "DevOps",
+      "fingerprint": "7f7d22262f17ef5dff1e961a87847892",
+      "zip": "zips/skills/create-test-pool.zip",
+      "detail": "details/skills/create-test-pool.json"
+    },
+    {
+      "id": "cost-aware-llm-pipeline",
+      "name": "cost-aware-llm-pipeline",
+      "category": "缓存",
+      "fingerprint": "f34de08c6e3047708f00007fd6574675",
+      "zip": "zips/skills/cost-aware-llm-pipeline.zip",
+      "detail": "details/skills/cost-aware-llm-pipeline.json"
+    },
+    {
+      "id": "cosmosdb-datamodeling",
+      "name": "cosmosdb-datamodeling",
+      "category": "数据库",
+      "fingerprint": "8798618e8860307b458d706e37189dd6",
+      "zip": "zips/skills/cosmosdb-datamodeling.zip",
+      "detail": "details/skills/cosmosdb-datamodeling.json"
+    },
+    {
+      "id": "coreweave-observability",
+      "name": "coreweave-observability",
+      "category": "监控与可观测性",
+      "fingerprint": "c75bc79df7752bfa8caea3020400bbfe",
+      "zip": "zips/skills/coreweave-observability.zip",
+      "detail": "details/skills/coreweave-observability.json"
+    },
+    {
+      "id": "consul-ops",
+      "name": "consul-ops",
+      "category": "生活方式",
+      "fingerprint": "a4adfa50009112089a37e310a3ed3620",
+      "zip": "zips/skills/consul-ops.zip",
+      "detail": "details/skills/consul-ops.json"
+    },
+    {
+      "id": "config-guardian",
+      "name": "config-guardian",
+      "category": "基础设施",
+      "fingerprint": "d92a7f8ae14792154dbc4b2751a74db0",
+      "zip": "zips/skills/config-guardian.zip",
+      "detail": "details/skills/config-guardian.json"
+    },
+    {
+      "id": "comanda",
+      "name": "comanda",
+      "category": "数据与人工智能",
+      "fingerprint": "daef715e420eb34a90df3815e27f947d",
+      "zip": "zips/skills/comanda.zip",
+      "detail": "details/skills/comanda.json"
+    },
+    {
+      "id": "codesession",
+      "name": "codesession",
+      "category": "数据与人工智能",
+      "fingerprint": "eb26f90f89933755345b9a805d90295c",
+      "zip": "zips/skills/codesession.zip",
+      "detail": "details/skills/codesession.json"
+    },
+    {
+      "id": "clscli",
+      "name": "clscli",
+      "category": "基础设施",
+      "fingerprint": "bf9e89dc4fb32490eecddfcf162d66ea",
+      "zip": "zips/skills/clscli.zip",
+      "detail": "details/skills/clscli.json"
+    },
+    {
+      "id": "cloudphone",
+      "name": "cloudphone",
+      "category": "数据与人工智能",
+      "fingerprint": "6cd5cb4061ec1b27e2a10d3c0fc068ff",
+      "zip": "zips/skills/cloudphone.zip",
+      "detail": "details/skills/cloudphone.json"
+    },
+    {
+      "id": "cloudflare-dns-updater",
+      "name": "cloudflare-dns-updater",
+      "category": "基础设施",
+      "fingerprint": "a322c916efd589162153cdaa0103bf6d",
+      "zip": "zips/skills/cloudflare-dns-updater.zip",
+      "detail": "details/skills/cloudflare-dns-updater.json"
+    },
+    {
+      "id": "cloud-architect",
+      "name": "cloud-architect",
+      "category": "测试与安全",
+      "fingerprint": "f9153af3432c8f354d87952a788f95d9",
+      "zip": "zips/skills/cloud-architect.zip",
+      "detail": "details/skills/cloud-architect.json"
+    },
+    {
+      "id": "clickup-observability",
+      "name": "clickup-observability",
+      "category": "监控与可观测性",
+      "fingerprint": "1c4888985d674a1579e7f36398edd4f5",
+      "zip": "zips/skills/clickup-observability.zip",
+      "detail": "details/skills/clickup-observability.json"
+    },
+    {
+      "id": "clickhouse-observability",
+      "name": "clickhouse-observability",
+      "category": "监控与可观测性",
+      "fingerprint": "1a66c837e05ccc8cec85dd1ceea034e9",
+      "zip": "zips/skills/clickhouse-observability.zip",
+      "detail": "details/skills/clickhouse-observability.json"
+    },
+    {
+      "id": "clawshield",
+      "name": "clawshield",
+      "category": "测试与安全",
+      "fingerprint": "9217bf81bd7718d3b65dfb94a1ddecd5",
+      "zip": "zips/skills/clawshield.zip",
+      "detail": "details/skills/clawshield.json"
+    },
+    {
+      "id": "clawdbot-backup",
+      "name": "clawdbot-backup",
+      "category": "效率工具",
+      "fingerprint": "64a5317a920836c453fe6d0bbde98920",
+      "zip": "zips/skills/clawdbot-backup.zip",
+      "detail": "details/skills/clawdbot-backup.json"
+    },
+    {
+      "id": "claude-code-supervisor",
+      "name": "claude-code-supervisor",
+      "category": "数据与人工智能",
+      "fingerprint": "d61d9c9ef5274a797565aefa2a49e23f",
+      "zip": "zips/skills/claude-code-supervisor.zip",
+      "detail": "details/skills/claude-code-supervisor.json"
+    },
+    {
+      "id": "claude-agent-sdk",
+      "name": "claude-agent-sdk",
+      "category": "测试与安全",
+      "fingerprint": "6309ec147b9465240c993466d2452380",
+      "zip": "zips/skills/claude-agent-sdk.zip",
+      "detail": "details/skills/claude-agent-sdk.json"
+    },
+    {
+      "id": "cinience-alicloud-database-rds-supabase",
+      "name": "cinience-alicloud-database-rds-supabase",
+      "category": "数据库",
+      "fingerprint": "2b47ec400af8ed6ba024f587b52c8bd2",
+      "zip": "zips/skills/cinience-alicloud-database-rds-supabase.zip",
+      "detail": "details/skills/cinience-alicloud-database-rds-supabase.json"
+    },
+    {
+      "id": "cicd-pipeline-generator",
+      "name": "cicd-pipeline-generator",
+      "category": "CD",
+      "fingerprint": "8b3f404a49c1e0ab67428711e6eea97a",
+      "zip": "zips/skills/cicd-pipeline-generator.zip",
+      "detail": "details/skills/cicd-pipeline-generator.json"
+    },
+    {
+      "id": "chart-image",
+      "name": "chart-image",
+      "category": "配置管理",
+      "fingerprint": "de5b2b5a877e81c91d2c82498c51a481",
+      "zip": "zips/skills/chart-image.zip",
+      "detail": "details/skills/chart-image.json"
+    },
+    {
+      "id": "ceph-health-monitor",
+      "name": "ceph-health-monitor",
+      "category": "生活方式",
+      "fingerprint": "6db2df4184400c1e836dc1a0b0c92630",
+      "zip": "zips/skills/ceph-health-monitor.zip",
+      "detail": "details/skills/ceph-health-monitor.json"
+    },
+    {
+      "id": "cc-godmode",
+      "name": "cc-godmode",
+      "category": "开发工具",
+      "fingerprint": "3d2d8f295fe28f2a2ece7743facee321",
+      "zip": "zips/skills/cc-godmode.zip",
+      "detail": "details/skills/cc-godmode.json"
+    },
+    {
+      "id": "camoufox-stealth-browser",
+      "name": "camoufox-stealth-browser",
+      "category": "基础设施",
+      "fingerprint": "7271c523489e93403c726c70203b29ec",
+      "zip": "zips/skills/camoufox-stealth-browser.zip",
+      "detail": "details/skills/camoufox-stealth-browser.json"
+    },
+    {
+      "id": "browser-use-local",
+      "name": "browser-use-local",
+      "category": "数据与人工智能",
+      "fingerprint": "435b2b2ac1d8304175e185176a8b582a",
+      "zip": "zips/skills/browser-use-local.zip",
+      "detail": "details/skills/browser-use-local.json"
+    },
+    {
+      "id": "browser-automation-stealth",
+      "name": "browser-automation-stealth",
+      "category": "效率工具",
+      "fingerprint": "85bfd5d1f5ada0a2f55e6cfe3ffb3628",
+      "zip": "zips/skills/browser-automation-stealth.zip",
+      "detail": "details/skills/browser-automation-stealth.json"
+    },
+    {
+      "id": "browser-auto-download",
+      "name": "browser-auto-download",
+      "category": "效率工具",
+      "fingerprint": "41b6631f3b26f1ca1b0d9ee5d2d08d7c",
+      "zip": "zips/skills/browser-auto-download.zip",
+      "detail": "details/skills/browser-auto-download.json"
+    },
+    {
+      "id": "bot-status-api",
+      "name": "bot-status-api",
+      "category": "生活方式",
+      "fingerprint": "771f4793d5f9a7c9d931f57b7d5284cf",
+      "zip": "zips/skills/bot-status-api.zip",
+      "detail": "details/skills/bot-status-api.json"
+    },
+    {
+      "id": "bobagent-senior-devops",
+      "name": "bobagent-senior-devops",
+      "category": "CD",
+      "fingerprint": "ddd8b17acbec20843160af9d90415956",
+      "zip": "zips/skills/bobagent-senior-devops.zip",
+      "detail": "details/skills/bobagent-senior-devops.json"
+    },
+    {
+      "id": "bobagent-conventional-commits",
+      "name": "bobagent-conventional-commits",
+      "category": "数据与人工智能",
+      "fingerprint": "5764a47d837cdf2a14b284471ce903da",
+      "zip": "zips/skills/bobagent-conventional-commits.zip",
+      "detail": "details/skills/bobagent-conventional-commits.json"
+    },
+    {
+      "id": "bobagent-clawlist",
+      "name": "bobagent-clawlist",
+      "category": "数据与人工智能",
+      "fingerprint": "4f51de9a0879f5489bc4f7ed9c057ebe",
+      "zip": "zips/skills/bobagent-clawlist.zip",
+      "detail": "details/skills/bobagent-clawlist.json"
+    },
+    {
+      "id": "azure-storage-blob-py",
+      "name": "azure-storage-blob-py",
+      "category": "容器与编排",
+      "fingerprint": "088152539742ca57d359691530de60b6",
+      "zip": "zips/skills/azure-storage-blob-py.zip",
+      "detail": "details/skills/azure-storage-blob-py.json"
+    },
+    {
+      "id": "azure-resource-manager-redis-dotnet",
+      "name": "azure-resource-manager-redis-dotnet",
+      "category": "云厂商服务",
+      "fingerprint": "c5373704ef297a488d62f656870a6439",
+      "zip": "zips/skills/azure-resource-manager-redis-dotnet.zip",
+      "detail": "details/skills/azure-resource-manager-redis-dotnet.json"
+    },
+    {
+      "id": "azure-oracle",
+      "name": "azure-oracle",
+      "category": "云厂商服务",
+      "fingerprint": "5733db74ddef90ff47e04aff33d94313",
+      "zip": "zips/skills/azure-oracle.zip",
+      "detail": "details/skills/azure-oracle.json"
+    },
+    {
+      "id": "azure-devops",
+      "name": "azure-devops",
+      "category": "效率工具",
+      "fingerprint": "4aae2f378f68ba4710994622688dc3c5",
+      "zip": "zips/skills/azure-devops.zip",
+      "detail": "details/skills/azure-devops.json"
+    },
+    {
+      "id": "azure-cosmos-py",
+      "name": "azure-cosmos-py",
+      "category": "容器与编排",
+      "fingerprint": "620b98ac223918b8795a65e5e651b371",
+      "zip": "zips/skills/azure-cosmos-py.zip",
+      "detail": "details/skills/azure-cosmos-py.json"
+    },
+    {
+      "id": "azure-ai-agents-py",
+      "name": "azure-ai-agents-py",
+      "category": "开发工具",
+      "fingerprint": "5b1aec027c9f812eabeaed4fb3a8c8d9",
+      "zip": "zips/skills/azure-ai-agents-py.zip",
+      "detail": "details/skills/azure-ai-agents-py.json"
+    },
+    {
+      "id": "awscli",
+      "name": "awscli",
+      "category": "云厂商服务",
+      "fingerprint": "d5aec9245ac9ae7feb3f1a97818701ee",
+      "zip": "zips/skills/awscli.zip",
+      "detail": "details/skills/awscli.json"
+    },
+    {
+      "id": "aws-ops",
+      "name": "aws-ops",
+      "category": "云厂商服务",
+      "fingerprint": "54fff59245fbfe0b5c76a539cd1eed55",
+      "zip": "zips/skills/aws-ops.zip",
+      "detail": "details/skills/aws-ops.json"
+    },
+    {
+      "id": "argocd-ops",
+      "name": "argocd-ops",
+      "category": "ArgoCD",
+      "fingerprint": "1090b08052be009f609f18cca0a48063",
+      "zip": "zips/skills/argocd-ops.zip",
+      "detail": "details/skills/argocd-ops.json"
+    },
+    {
+      "id": "app-store-changelog",
+      "name": "app-store-changelog",
+      "category": "日志分析",
+      "fingerprint": "73564acca9127052fdc6a208aab0e98c",
+      "zip": "zips/skills/app-store-changelog.zip",
+      "detail": "details/skills/app-store-changelog.json"
+    },
+    {
+      "id": "apify-ultimate-scraper",
+      "name": "apify-ultimate-scraper",
+      "category": "内容与媒体",
+      "fingerprint": "5c56955cae18e4ac5213259e96c990ae",
+      "zip": "zips/skills/apify-ultimate-scraper.zip",
+      "detail": "details/skills/apify-ultimate-scraper.json"
+    },
+    {
+      "id": "api-development",
+      "name": "api-development",
+      "category": "开发工具",
+      "fingerprint": "2a717b95c79129f9042e858385ce9b53",
+      "zip": "zips/skills/api-development.zip",
+      "detail": "details/skills/api-development.json"
+    },
+    {
+      "id": "ansible-ops",
+      "name": "ansible-ops",
+      "category": "效率工具",
+      "fingerprint": "610ae137d726cf8f684580e040df99c5",
+      "zip": "zips/skills/ansible-ops.zip",
+      "detail": "details/skills/ansible-ops.json"
+    },
+    {
+      "id": "analyzing-kubernetes-audit-logs",
+      "name": "analyzing-kubernetes-audit-logs",
+      "category": "Kubernetes",
+      "fingerprint": "c3427597d7e38890f35e276cf6b85c79",
+      "zip": "zips/skills/analyzing-kubernetes-audit-logs.zip",
+      "detail": "details/skills/analyzing-kubernetes-audit-logs.json"
+    },
+    {
+      "id": "amber-voice-assistant",
+      "name": "amber-voice-assistant",
+      "category": "DevOps",
+      "fingerprint": "69f2dde258f7eec80119811c009871dd",
+      "zip": "zips/skills/amber-voice-assistant.zip",
+      "detail": "details/skills/amber-voice-assistant.json"
+    },
+    {
+      "id": "amazon-aurora-dsql",
+      "name": "amazon-aurora-dsql",
+      "category": "数据库",
+      "fingerprint": "a4bbbd686cbd5043f212f68bda230874",
+      "zip": "zips/skills/amazon-aurora-dsql.zip",
+      "detail": "details/skills/amazon-aurora-dsql.json"
+    },
+    {
+      "id": "aliyun-oss-upload",
+      "name": "aliyun-oss-upload",
+      "category": "监控与可观测性",
+      "fingerprint": "465a80a08aaa2336c77c4e677e66d966",
+      "zip": "zips/skills/aliyun-oss-upload.zip",
+      "detail": "details/skills/aliyun-oss-upload.json"
+    },
+    {
+      "id": "aliyun-mail",
+      "name": "aliyun-mail",
+      "category": "开发工具",
+      "fingerprint": "3e94573512f4959e7511c770138890ee",
+      "zip": "zips/skills/aliyun-mail.zip",
+      "detail": "details/skills/aliyun-mail.json"
+    },
+    {
+      "id": "alicloud-storage-oss-ossutil",
+      "name": "alicloud-storage-oss-ossutil",
+      "category": "基础设施",
+      "fingerprint": "867d9119cd8936e47b281774b79b19b9",
+      "zip": "zips/skills/alicloud-storage-oss-ossutil.zip",
+      "detail": "details/skills/alicloud-storage-oss-ossutil.json"
+    },
+    {
+      "id": "alicloud-security-kms",
+      "name": "alicloud-security-kms",
+      "category": "基础设施",
+      "fingerprint": "d80cc63914cecfe9034410ae43f96e5f",
+      "zip": "zips/skills/alicloud-security-kms.zip",
+      "detail": "details/skills/alicloud-security-kms.json"
+    },
+    {
+      "id": "alicloud-security-cloudfw",
+      "name": "alicloud-security-cloudfw",
+      "category": "开发工具",
+      "fingerprint": "981b895caab240db21a39fa218cf7c38",
+      "zip": "zips/skills/alicloud-security-cloudfw.zip",
+      "detail": "details/skills/alicloud-security-cloudfw.json"
+    },
+    {
+      "id": "alicloud-security-center-sas",
+      "name": "alicloud-security-center-sas",
+      "category": "基础设施",
+      "fingerprint": "dea12d692dd7bab6d4a75df578a871cf",
+      "zip": "zips/skills/alicloud-security-center-sas.zip",
+      "detail": "details/skills/alicloud-security-center-sas.json"
+    },
+    {
+      "id": "alicloud-platform-multicloud-docs-api-benchmark",
+      "name": "alicloud-platform-multicloud-docs-api-benchmark",
+      "category": "测试与安全",
+      "fingerprint": "3a11b15f44289f14a8584d8053d29c18",
+      "zip": "zips/skills/alicloud-platform-multicloud-docs-api-benchmark.zip",
+      "detail": "details/skills/alicloud-platform-multicloud-docs-api-benchmark.json"
+    },
+    {
+      "id": "alicloud-platform-docs-api-review",
+      "name": "alicloud-platform-docs-api-review",
+      "category": "基础设施",
+      "fingerprint": "b3f9f45bddc06e2972bd31ac4e991027",
+      "zip": "zips/skills/alicloud-platform-docs-api-review.zip",
+      "detail": "details/skills/alicloud-platform-docs-api-review.json"
+    },
+    {
+      "id": "alicloud-ops",
+      "name": "alicloud-ops",
+      "category": "监控与可观测性",
+      "fingerprint": "87b711e1ef1249c45a2f87c6164c626f",
+      "zip": "zips/skills/alicloud-ops.zip",
+      "detail": "details/skills/alicloud-ops.json"
+    },
+    {
+      "id": "alicloud-observability-sls-log-query",
+      "name": "alicloud-observability-sls-log-query",
+      "category": "基础设施",
+      "fingerprint": "2396f9c70a7075be1593eb134b9d0f42",
+      "zip": "zips/skills/alicloud-observability-sls-log-query.zip",
+      "detail": "details/skills/alicloud-observability-sls-log-query.json"
+    },
+    {
+      "id": "alicloud-network-dns-cli",
+      "name": "alicloud-network-dns-cli",
+      "category": "基础设施",
+      "fingerprint": "4b8329fcbe35cb14dffd51c40422919b",
+      "zip": "zips/skills/alicloud-network-dns-cli.zip",
+      "detail": "details/skills/alicloud-network-dns-cli.json"
+    },
+    {
+      "id": "alicloud-database-analyticdb-mysql",
+      "name": "alicloud-database-analyticdb-mysql",
+      "category": "云厂商服务",
+      "fingerprint": "1c73fb74e84bb6fe080830a1d862e938",
+      "zip": "zips/skills/alicloud-database-analyticdb-mysql.zip",
+      "detail": "details/skills/alicloud-database-analyticdb-mysql.json"
+    },
+    {
+      "id": "alicloud-data-lake-dlf",
+      "name": "alicloud-data-lake-dlf",
+      "category": "开发工具",
+      "fingerprint": "ff75349ab01f910efbee861966ed7b66",
+      "zip": "zips/skills/alicloud-data-lake-dlf.zip",
+      "detail": "details/skills/alicloud-data-lake-dlf.json"
+    },
+    {
+      "id": "alicloud-compute-swas-open",
+      "name": "alicloud-compute-swas-open",
+      "category": "基础设施",
+      "fingerprint": "9e35fe1e6c5a86d2fb7810eb26bed295",
+      "zip": "zips/skills/alicloud-compute-swas-open.zip",
+      "detail": "details/skills/alicloud-compute-swas-open.json"
+    },
+    {
+      "id": "alicloud-compute-fc-agentrun",
+      "name": "alicloud-compute-fc-agentrun",
+      "category": "数据与人工智能",
+      "fingerprint": "d0d7d9de07c075623e974ea68dd3edab",
+      "zip": "zips/skills/alicloud-compute-fc-agentrun.zip",
+      "detail": "details/skills/alicloud-compute-fc-agentrun.json"
+    },
+    {
+      "id": "alicloud-backup-bdrc",
+      "name": "alicloud-backup-bdrc",
+      "category": "基础设施",
+      "fingerprint": "7805cf2819b9f58cd7a8b32b0ddbb654",
+      "zip": "zips/skills/alicloud-backup-bdrc.zip",
+      "detail": "details/skills/alicloud-backup-bdrc.json"
+    },
+    {
+      "id": "alicloud-ai-video-wan-r2v",
+      "name": "alicloud-ai-video-wan-r2v",
+      "category": "数据与人工智能",
+      "fingerprint": "4b591018004eaca03786391effdb4d81",
+      "zip": "zips/skills/alicloud-ai-video-wan-r2v.zip",
+      "detail": "details/skills/alicloud-ai-video-wan-r2v.json"
+    },
+    {
+      "id": "alicloud-ai-search-dashvector",
+      "name": "alicloud-ai-search-dashvector",
+      "category": "内容与媒体",
+      "fingerprint": "e0c5e0709f1240ad1d1c954f3de8c527",
+      "zip": "zips/skills/alicloud-ai-search-dashvector.zip",
+      "detail": "details/skills/alicloud-ai-search-dashvector.json"
+    },
+    {
+      "id": "alicloud-ai-recommend-airec",
+      "name": "alicloud-ai-recommend-airec",
+      "category": "开发工具",
+      "fingerprint": "f0c3638ab75241e1e1b93b16069ab747",
+      "zip": "zips/skills/alicloud-ai-recommend-airec.zip",
+      "detail": "details/skills/alicloud-ai-recommend-airec.json"
+    },
+    {
+      "id": "alicloud-ai-image-zimage-turbo",
+      "name": "alicloud-ai-image-zimage-turbo",
+      "category": "数据与人工智能",
+      "fingerprint": "21ed348984d1bf4a8e5f205d31f88db8",
+      "zip": "zips/skills/alicloud-ai-image-zimage-turbo.zip",
+      "detail": "details/skills/alicloud-ai-image-zimage-turbo.json"
+    },
+    {
+      "id": "alicloud-ai-image-qwen-image-edit",
+      "name": "alicloud-ai-image-qwen-image-edit",
+      "category": "数据与人工智能",
+      "fingerprint": "47e09d7e74bc65fe4d896048ff2ac2ae",
+      "zip": "zips/skills/alicloud-ai-image-qwen-image-edit.zip",
+      "detail": "details/skills/alicloud-ai-image-qwen-image-edit.json"
+    },
+    {
+      "id": "alicloud-ai-entry-modelstudio-test",
+      "name": "alicloud-ai-entry-modelstudio-test",
+      "category": "测试与安全",
+      "fingerprint": "b7c82217e383869cc56b4614cb8202e7",
+      "zip": "zips/skills/alicloud-ai-entry-modelstudio-test.zip",
+      "detail": "details/skills/alicloud-ai-entry-modelstudio-test.json"
+    },
+    {
+      "id": "alicloud-ai-content-aicontent",
+      "name": "alicloud-ai-content-aicontent",
+      "category": "基础设施",
+      "fingerprint": "f54da918cdc726ffa53eb8a826be626e",
+      "zip": "zips/skills/alicloud-ai-content-aicontent.zip",
+      "detail": "details/skills/alicloud-ai-content-aicontent.json"
+    },
+    {
+      "id": "alicloud-ai-contactcenter-ai",
+      "name": "alicloud-ai-contactcenter-ai",
+      "category": "基础设施",
+      "fingerprint": "95a76ec89eac9526aea5f27695a2f3e8",
+      "zip": "zips/skills/alicloud-ai-contactcenter-ai.zip",
+      "detail": "details/skills/alicloud-ai-contactcenter-ai.json"
+    },
+    {
+      "id": "algolia-observability",
+      "name": "algolia-observability",
+      "category": "内容与媒体",
+      "fingerprint": "9f4141ef09128ee61df3345a9a942538",
+      "zip": "zips/skills/algolia-observability.zip",
+      "detail": "details/skills/algolia-observability.json"
+    },
+    {
+      "id": "agentos-sdk",
+      "name": "agentos-sdk",
+      "category": "数据与人工智能",
+      "fingerprint": "0267881a27626abfe493e3a57ed2b3ee",
+      "zip": "zips/skills/agentos-sdk.zip",
+      "detail": "details/skills/agentos-sdk.json"
+    },
+    {
+      "id": "agent-ui",
+      "name": "agent-ui",
+      "category": "数据与人工智能",
+      "fingerprint": "519751e4dfd3ea90940adb341d2a5771",
+      "zip": "zips/skills/agent-ui.zip",
+      "detail": "details/skills/agent-ui.json"
+    },
+    {
+      "id": "agent-team-orchestration",
+      "name": "agent-team-orchestration",
+      "category": "数据与人工智能",
+      "fingerprint": "d509ad6c1f69a0c4fafc914f31a70d80",
+      "zip": "zips/skills/agent-team-orchestration.zip",
+      "detail": "details/skills/agent-team-orchestration.json"
+    },
+    {
+      "id": "agent-skills-tools",
+      "name": "agent-skills-tools",
+      "category": "测试与安全",
+      "fingerprint": "70275c56af673263733f0d7cc6a6166a",
+      "zip": "zips/skills/agent-skills-tools.zip",
+      "detail": "details/skills/agent-skills-tools.json"
+    },
+    {
+      "id": "agent-context-system",
+      "name": "agent-context-system",
+      "category": "DevOps",
+      "fingerprint": "5604d88a2ffaff52780f8d7980fc66ea",
+      "zip": "zips/skills/agent-context-system.zip",
+      "detail": "details/skills/agent-context-system.json"
+    },
+    {
+      "id": "agent-context",
+      "name": "agent-context",
+      "category": "DevOps",
+      "fingerprint": "27e68c59b7f3e3d711879d412e513dd2",
+      "zip": "zips/skills/agent-context.zip",
+      "detail": "details/skills/agent-context.json"
+    },
+    {
+      "id": "afrexai-kpi-tracker",
+      "name": "afrexai-kpi-tracker",
+      "category": "业务应用",
+      "fingerprint": "60e4aa5e0a0af2feb133e6be2b31b4da",
+      "zip": "zips/skills/afrexai-kpi-tracker.zip",
+      "detail": "details/skills/afrexai-kpi-tracker.json"
+    },
+    {
+      "id": "afrexai-business-automation",
+      "name": "afrexai-business-automation",
+      "category": "业务应用",
+      "fingerprint": "54b598c5982416efb1ecf709460edfa8",
+      "zip": "zips/skills/afrexai-business-automation.zip",
+      "detail": "details/skills/afrexai-business-automation.json"
+    },
+    {
+      "id": "aegis-audit",
+      "name": "aegis-audit",
+      "category": "测试与安全",
+      "fingerprint": "04339c2b4305e4a99315b1d0ea478bd2",
+      "zip": "zips/skills/aegis-audit.zip",
+      "detail": "details/skills/aegis-audit.json"
+    },
+    {
+      "id": "actionbook",
+      "name": "actionbook",
+      "category": "数据与人工智能",
+      "fingerprint": "33deb7d44d4c4acb870b5eceb78a5000",
+      "zip": "zips/skills/actionbook.zip",
+      "detail": "details/skills/actionbook.json"
+    },
+    {
+      "id": "a7-plugin-skywalking",
+      "name": "a7-plugin-skywalking",
+      "category": "API 网关",
+      "fingerprint": "c769ea8cdc566c4b0b30700a45ae3b36",
+      "zip": "zips/skills/a7-plugin-skywalking.zip",
+      "detail": "details/skills/a7-plugin-skywalking.json"
+    },
+    {
+      "id": "a6-plugin-skywalking",
+      "name": "a6-plugin-skywalking",
+      "category": "API 网关",
+      "fingerprint": "157eb1d18073290ba2f001fd4e308e29",
+      "zip": "zips/skills/a6-plugin-skywalking.zip",
+      "detail": "details/skills/a6-plugin-skywalking.json"
+    }
+  ],
+  "source": "openocta"
+}

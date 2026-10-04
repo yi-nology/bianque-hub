@@ -1,0 +1,36 @@
+slug: imports/librarian-data
+name: 数据技术员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - amazon-aurora-dsql
+    - bobagent-conventional-commits
+    - influxdb-ops
+    - n9e-host-health-diagnose
+    - oceanbase-design-usage
+    - oceanbase-ops
+    - opengauss-ops
+    - opentelemetry-ops
+    - spark-engineer
+    - sql-server
+    - tidb-ops
+    - volcengine-database-rds
+    - wireshark-analysis
+    - wireshark-network-traffic-analysis
+tools:
+    - server: ask-ops
+      allow: []
+dispatch_allow: []
+route_priority: ""
+route_group: ""
+domain:
+    - 数据技术
+route_keywords:
+    - 数据技术技能
+    - 数据库选型
+route_desc: 数据技术技能管家：按需加载本领域技能库给出方法与口径（14 项技能）

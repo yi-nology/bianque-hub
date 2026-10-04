@@ -1,0 +1,34 @@
+slug: imports/argocd-employee
+name: ArgoCD GitOps 员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - argocd-ops
+    - k8s-gitops
+    - helm-ops
+    - grafana-platform-dashboard
+    - kubernetes-architect
+tools:
+    - server: ask-ops
+      allow: []
+    - server: script-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: tooling
+domain:
+    - ArgoCD GitOps
+route_keywords:
+    - argocd同步
+    - gitops发布
+    - ArgoCD GitOps 员工
+    - ArgoCD GitOps
+    - argocd gitops
+symptoms:
+    - argocd应用失步
+route_desc: ArgoCD GitOps 持续交付员工，支持应用同步、回滚管理、多集群部署、 Helm 集成

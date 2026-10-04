@@ -1,0 +1,32 @@
+slug: imports/terraform-employee
+name: Terraform IaC 员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - terraform-ops
+    - terraform-engineer
+    - cloud-architect
+tools:
+    - server: ask-ops
+      allow: []
+    - server: script-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: infra
+domain:
+    - Terraform IaC
+route_keywords:
+    - terraform状态
+    - terraform变更
+    - Terraform IaC 员工
+    - Terraform IaC
+    - terraform iac
+symptoms:
+    - terraform drift
+route_desc: Terraform 基础设施即代码员工，支持资源配置、状态管理、多云编排、模块开发

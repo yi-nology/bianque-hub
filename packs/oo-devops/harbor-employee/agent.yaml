@@ -1,0 +1,32 @@
+slug: imports/harbor-employee
+name: Harbor 镜像仓库员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - harbor-ops
+    - docker-ops
+    - security-reviewer
+tools:
+    - server: ask-ops
+      allow: []
+    - server: terminal-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: kubernetes
+domain:
+    - Harbor 镜像仓库
+route_keywords:
+    - harbor镜像仓库
+    - harbor扫描
+    - Harbor 镜像仓库员工
+    - Harbor 镜像仓库
+    - harbor 镜像仓库
+symptoms:
+    - 镜像拉取失败
+route_desc: Harbor 容器镜像仓库运维员工，支持镜像管理、安全扫描、复制策略、项目管理

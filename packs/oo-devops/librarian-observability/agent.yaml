@@ -1,0 +1,37 @@
+slug: imports/librarian-observability
+name: 可观测员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - algolia-observability
+    - ceph-health-monitor
+    - clickhouse-observability
+    - grafana-dashboard-creator
+    - grafana-dashboards
+    - grafana-http-api
+    - grafana-oncall-ops
+    - grafana-tempo
+    - jumpserver-skills
+    - logging-observability
+    - n9e-create-dashboard
+    - n9e-doc-qa
+    - perses-grafana-migrate
+    - rpe-grafana
+    - tempo-ops
+tools:
+    - server: ask-ops
+      allow: []
+dispatch_allow: []
+route_priority: ""
+route_group: ""
+domain:
+    - 可观测
+route_keywords:
+    - 可观测技能
+    - 监控告警技能
+route_desc: 可观测技能管家：按需加载本领域技能库给出方法与口径（15 项技能）

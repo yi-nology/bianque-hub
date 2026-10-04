@@ -1,0 +1,44 @@
+slug: imports/gitlab-employee
+name: GitLab DevOps 员工
+layer: expert
+kind: llm
+temperature: 0.3
+max_iterations: 12
+prompt_file: prompt.md
+prompt_includes:
+    - _shared/prompts/platform-matrix.md
+skills:
+    - gitlab-cli-skills
+    - gitlab-ops
+    - devops-engineer
+    - gitlab-manager
+    - haproxy-ops
+    - kubernetes-devops
+    - release-engineering
+    - redis-ops
+    - cicd-pipeline-generator
+    - azure-devops
+    - sre-fundamentals
+    - vmware-vsphere-ops
+    - sre-engineer
+    - minio-ops
+    - dns-ops
+tools:
+    - server: ask-ops
+      allow: []
+    - server: script-assistant
+      allow: []
+dispatch_allow: []
+route_priority: P6
+route_group: tooling
+domain:
+    - GitLab DevOps
+route_keywords:
+    - gitlab流水线
+    - gitlab-ci
+    - GitLab DevOps 员工
+    - GitLab DevOps
+    - gitlab devops
+symptoms:
+    - gitlab-runner掉线
+route_desc: GitLab 全流程 DevOps 员工，支持代码审查、CI/CD 配置、版本管理、容器镜像构建
