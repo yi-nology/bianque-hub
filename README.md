@@ -44,6 +44,20 @@ curl -X POST http://127.0.0.1:8900/api/v1/plugins/install \
   -d '{"path": "/path/to/bianque-hub/packs/os-basics", "operator": "you"}'
 ```
 
+只装某个专家（专家级子集安装）：
+
+```bash
+go run ./cmd/bq-markettool install \
+  --url https://github.com/yi-nology/bianque-hub \
+  --pack k8s-ops --expert k8s-workload-analyst \
+  --api http://127.0.0.1:8900
+```
+
+`--expert` 可重复；每个专家安装为**独立插件**（`<包>.<专家>`，如
+`k8s-ops.k8s-workload-analyst`），独立升级/卸载/启停。口径：与整包安装**互斥**
+（同 slug 撞车，安装器预检拒绝——已装整包时如只需某专家，用插件页专家级启停，
+或先卸整包）；链（chain.yaml）与跨专家消歧是包级资产，不随专家级安装落位。
+
 ## 给其他智能体用
 
 - `packs/*/skills/*/SKILL.md` 遵循开放技能格式（`name`+`description` 标准字段；

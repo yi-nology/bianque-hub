@@ -141,6 +141,12 @@ steps:
    节点，`requires_approval`/`decision` 协议语义不许自创的约定延伸到 `change_ref`；
    技能/专家 prompt 引导处方优先编目（`recommendation.change_ref` + `change_params`），
    自由 steps 兜底语义保持。契约全貌见主仓 docs/PACK_GUIDE.md §4.2.5。
+11. **专家独立安装性**：专家默认须可独立安装（`bq-markettool install --expert`
+    按闭包合成迷你包）——`agent.yaml` 的 `skills:` 引用必须在本包（跨包=CI 拦，
+    派生无法携带）；`tools[].server` 须有包内 `mcp/<server>.yaml` 契约或属宿主面
+    白名单（ask-ops / security-assistant / datasources，缺席 WARN——契约是事实
+    记录，平台对缺席容忍，但站点须确认 server 已挂载）。链/消歧是包级资产，
+    不进专家闭包。
 
 ## review 约定
 
