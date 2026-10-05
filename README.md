@@ -22,7 +22,9 @@
 
 ## 装进扁鹊
 
-扁鹊侧自带导入工具（`bq-markettool install`），两种模式：
+扁鹊侧自带导入工具（`bq-markettool install`），两种模式；工具同时随扁鹊二进制
+分发（部署机无 Go 工具链时直接 `bianque markettool <子命令> …`，配合 `--upload`
+免拷文件）：
 
 ```bash
 # 推荐：经本机扁鹊实例的插件 API 安装（原子校验、失败回滚、插件页可管理）
