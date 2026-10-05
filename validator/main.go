@@ -274,6 +274,8 @@ func run(dirs []string) ([]finding, int, int) {
 		}
 		if !found {
 			v.add("ERROR", filepath.Base(root), "目录 %s 下未发现任何包（校验单个包请指向含 pack.yaml 的目录）", root)
+		} else {
+			v.checkIndex(root)
 		}
 	}
 	v.checkCrossRefs()
@@ -820,6 +822,73 @@ func (v *validator) checkReadme() {
 		}
 		if rv != ver {
 			v.add("ERROR", name, "README 包清单版本 %s 与 pack.yaml %s 不一致（发版须同步 README 表）", rv, ver)
+		}
+	}
+}
+
+// checkIndex index.json 对账（批次一百三十九）：索引是 bq-markettool search/info 的
+// 机器可读事实源（Claude Code marketplace.json 同构物）。缺失=WARN（渐进采用，检索
+// 侧自动降级现场扫描）；在而漂移=ERROR——多录/漏包/版本不符逼 CI 重新
+// `bq-markettool index-gen` 后入库，安装正确性不依赖索引（install 仍现扫目录）。
+// 包清单自本容器目录现扫（不依赖跨根累积的 packVersions——多根调用互不污染）。
+func (v *validator) checkIndex(packsRoot string) {
+	raw, err := os.ReadFile(filepath.Join(filepath.Dir(packsRoot), "index.json"))
+	if err != nil {
+		if os.IsNotExist(err) {
+			v.add("WARN", "index", "index.json 缺失（仓根）——跑 `bq-markettool index-gen -hub <本仓>` 生成并提交（检索面走索引，缺省降级现场扫描）")
+			return
+		}
+		v.add("ERROR", "index", "读取 index.json: %v", err)
+		return
+	}
+	var idx struct {
+		Packs []struct {
+			Name    string `json:"name"`
+			Version string `json:"version"`
+		} `json:"packs"`
+	}
+	if err := json.Unmarshal(raw, &idx); err != nil {
+		v.add("ERROR", "index", "index.json 解析失败: %v", err)
+		return
+	}
+	onDisk := map[string]string{}
+	entries, err := os.ReadDir(packsRoot)
+	if err != nil {
+		return // run 的容器发现已报，此处不双报
+	}
+	for _, e := range entries {
+		if !e.IsDir() || strings.HasPrefix(e.Name(), ".") || strings.HasPrefix(e.Name(), "_") {
+			continue
+		}
+		rawManifest, err := os.ReadFile(filepath.Join(packsRoot, e.Name(), "pack.yaml"))
+		if err != nil {
+			continue // 非包目录不校验（与 run 同口径）
+		}
+		var m packManifest
+		if yaml.Unmarshal(rawManifest, &m) != nil || m.Name == "" {
+			continue
+		}
+		onDisk[m.Name] = m.Version
+	}
+	seen := map[string]bool{}
+	for _, p := range idx.Packs {
+		if seen[p.Name] {
+			v.add("ERROR", "index", "index.json 重复条目 %s", p.Name)
+			continue
+		}
+		seen[p.Name] = true
+		ver, ok := onDisk[p.Name]
+		if !ok {
+			v.add("ERROR", "index", "index.json 多录 %s（packs/ 无此包——重跑 index-gen 刷新）", p.Name)
+			continue
+		}
+		if ver != "" && ver != p.Version {
+			v.add("ERROR", p.Name, "index.json 版本漂移：索引 %s / pack.yaml %s（重跑 index-gen 刷新）", p.Version, ver)
+		}
+	}
+	for name := range onDisk {
+		if !seen[name] {
+			v.add("ERROR", "index", "index.json 漏包 %s（重跑 index-gen 刷新）", name)
 		}
 	}
 }

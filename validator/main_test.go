@@ -320,3 +320,44 @@ func TestCheckExpertInstall(t *testing.T) {
 		t.Fatalf("宿主面 server 不应报错: %s", wjoined)
 	}
 }
+
+// TestRunIndexConsistency index.json 对账门（批次一百三十九）：缺=WARN、漂移/多录/
+// 漏包=ERROR。索引放 packs 容器的父目录（=真实 hub 仓根位置）。
+func TestRunIndexConsistency(t *testing.T) {
+	hub := t.TempDir()
+	packs := filepath.Join(hub, "packs")
+	writeMinimalPack(t, filepath.Join(packs, "demo"))
+	indexPath := filepath.Join(hub, "index.json")
+	writeIndex := func(entries string) {
+		writeFileT(t, indexPath, `{"generated_at":"2026-10-05","packs":[`+entries+`]}`)
+	}
+
+	// 缺索引：WARN 不 ERROR（渐进采用；检索侧自动降级现场扫描）。
+	// 断言只看 index 维度 findings——run 末尾的 scanSensitive(".") 依赖测试进程
+	// cwd，环境告警不归本测试管。
+	findings, errN, _ := run([]string{packs})
+	if errN != 0 || !hasMsg(findings, "index.json 缺失") {
+		t.Fatalf("缺索引应 WARN 提示且无 ERROR：%v", errorMessages(findings))
+	}
+
+	// 一致索引：index 维度全静默
+	writeIndex(`{"name":"demo","version":"1.0.0"}`)
+	findings, errN, _ = run([]string{packs})
+	if errN != 0 || hasMsg(findings, "index") {
+		t.Fatalf("一致索引应全静默：errN=%d %v", errN, errorMessages(findings))
+	}
+
+	// 版本漂移：ERROR
+	writeIndex(`{"name":"demo","version":"9.9.9"}`)
+	findings, errN, _ = run([]string{packs})
+	if errN == 0 || !hasMsg(findings, "版本漂移") {
+		t.Fatalf("版本漂移应 ERROR：%v", errorMessages(findings))
+	}
+
+	// 多录 + 漏包：双 ERROR
+	writeIndex(`{"name":"ghost","version":"1.0.0"}`)
+	findings, errN, _ = run([]string{packs})
+	if errN < 2 || !hasMsg(findings, "多录") || !hasMsg(findings, "漏包") {
+		t.Fatalf("多录与漏包应双 ERROR：%v", errorMessages(findings))
+	}
+}

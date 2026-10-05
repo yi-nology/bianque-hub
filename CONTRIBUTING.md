@@ -18,6 +18,11 @@
 go run ./validator ./packs        # CI 同款；校验单个包可直达包目录：./packs/你的包名
 ```
 
+6. 若 PR 变更了包的**版本号或包名**，同步改仓根 `index.json` 里对应条目的
+   `version`/`name` 一行（validator 对账门禁：漏包/多录/版本漂移=ERROR）。
+   全量刷新（experts/计数等字段）由维护者跑 `bq-markettool index-gen` 收口，
+   贡献者不必安装扁鹊工具链。
+
 ## 契约速查
 
 ### pack.yaml（包清单）
