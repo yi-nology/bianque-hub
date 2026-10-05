@@ -124,7 +124,7 @@ README 改造说明）。该域能力的后续维护只在对应领域包进行�
 ## 本地校验
 
 ```bash
-go run ./validator ./packs   # CI 同款：结构契约 + 跨包唯一性 + 工具面覆盖 + 版本同步 + index.json 对账 + 脱敏扫描（自动覆盖仓库根）
+go run ./validator ./packs   # CI 同款：结构契约 + 跨包唯一性 + 工具面覆盖 + 版本同步 + index.json 对账 + 危险内容扫描 + 脱敏扫描（自动覆盖仓库根）
 ```
 
 校验单个包可直达包目录：`go run ./validator ./packs/chain-starter`。

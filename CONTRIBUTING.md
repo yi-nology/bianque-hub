@@ -152,6 +152,11 @@ steps:
     白名单（ask-ops / security-assistant / datasources，缺席 WARN——契约是事实
     记录，平台对缺席容忍，但站点须确认 server 已挂载）。链/消歧是包级资产，
     不进专家闭包。
+12. **危险内容扫描（ClawHub「SKILL.md 变安装器」投毒案对标）**：`changes/` 变更块
+    是受审执行通道的实际执行面——pipe-to-shell（`curl|sh`）、`rm -rf /` 等命中
+    **ERROR**；技能/专家正文命中（安装指引、注入短语、凭证文件直读）为 **WARN**
+    供复核（正文指引有合法形态，不硬拦）。启发式只拦明文，变形载荷靠平台执行面
+    治理兜底。
 
 ## review 约定
 

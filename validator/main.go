@@ -287,6 +287,7 @@ func run(dirs []string) ([]finding, int, int) {
 	roots := slices.Clone(dirs)
 	roots = append(roots, ".")
 	v.findings = append(v.findings, scanSensitive(roots...)...)
+	v.findings = append(v.findings, scanDangerous(roots...)...)
 
 	errN, warnN := 0, 0
 	for _, f := range v.findings {
@@ -891,6 +892,71 @@ func (v *validator) checkIndex(packsRoot string) {
 			v.add("ERROR", "index", "index.json 漏包 %s（重跑 index-gen 刷新）", name)
 		}
 	}
+}
+
+// dangerousPatterns 发布侧内容扫描（批次一百四十，G4b；ClawHub「SKILL.md 变安装器」
+// 投毒案对标）：技能/专家正文是喂给 LLM 的执行面指令。分档依据实弹校准——
+// `curl|sh` 在运维指引正文有合法形态（helm/tidb 等工具安装，oo-devops 现存 4 处）
+// → 正文 WARN；**changes/ 变更块是受审执行通道的实际执行面 → 任何命中升 ERROR**
+// （声明层零容忍）。启发式有边界：只拦明文形态，变形/编码载荷靠平台执行面治理
+// （受审命令+审批门）兜底——扫描是内容审的第一道网，不是替代执行面治理。
+var dangerousPatterns = []struct {
+	re    *regexp.Regexp
+	level string
+	why   string
+}{
+	{regexp.MustCompile(`(?i)(curl|wget)\b[^|\n]{0,200}\|\s*(sudo\s+)?(ba|z|da|k)?sh\b`), "WARN", "pipe-to-shell 安装形态（curl|sh——投毒标准载荷；正文指引供复核）"},
+	{regexp.MustCompile(`(?im)^\s*rm\s+-rf\s+/(?:\s|$|\*)`), "WARN", "根目录递归删除形态（rm -rf /；示例/反例文档供复核）"},
+	{regexp.MustCompile(`(?i)(ignore|disregard|override)\s+(all\s+|any\s+)?(previous|prior|above)\s+(instructions|rules|prompts?)`), "WARN", "英文提示注入短语（ignore previous instructions 形态）"},
+	{regexp.MustCompile(`忽略(之前|上面|以上|先前)(的)?(所有)?(系统|历史)?指令|无视(之前|系统|上面)(的)?指令`), "WARN", "中文提示注入短语（忽略之前指令形态）"},
+	{regexp.MustCompile(`(?i)(cat|less|more|head|tail)\s+[^|\n;]*(id_rsa|\.aws/credentials|\.kube/config|/etc/shadow|\.ssh/)`), "WARN", "凭证文件直读建议（应走平台凭证面 requires_credentials）"},
+}
+
+// scanDangerous 对 packs 文本做危险内容扫描（walk 与 scanSensitive 同口径：跳过
+// ./_ 前缀目录、scanExts 文件类型、跨根去重）。changes/ 目录命中一律升 ERROR。
+func scanDangerous(roots ...string) []finding {
+	var out []finding
+	seen := map[string]bool{}
+	for _, root := range roots {
+		abs, err := filepath.Abs(root)
+		if err != nil {
+			continue
+		}
+		filepath.WalkDir(abs, func(p string, d os.DirEntry, err error) error {
+			if err != nil {
+				return nil
+			}
+			if d.IsDir() {
+				if p != abs && (strings.HasPrefix(d.Name(), ".") || strings.HasPrefix(d.Name(), "_")) {
+					return filepath.SkipDir
+				}
+				return nil
+			}
+			if seen[p] {
+				return nil
+			}
+			seen[p] = true
+			if !scanExts[strings.ToLower(filepath.Ext(p))] {
+				return nil
+			}
+			raw, _ := os.ReadFile(p)
+			rel, _ := filepath.Rel(abs, p)
+			rel = filepath.ToSlash(rel)
+			executable := strings.HasPrefix(rel, "changes/")
+			for _, pat := range dangerousPatterns {
+				if pat.re.Match(raw) {
+					level := pat.level
+					if executable {
+						level = "ERROR" // 受审执行通道的实际执行面，声明层零容忍
+					}
+					out = append(out, finding{level, rel, "内容扫描：" + pat.why})
+				}
+			}
+			return nil
+		})
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].pack < out[j].pack })
+	return out
 }
 
 func skillRefName(v any) string {
