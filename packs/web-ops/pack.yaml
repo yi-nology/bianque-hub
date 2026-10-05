@@ -1,0 +1,11 @@
+api_version: 1
+name: web-ops
+version: 0.1.0
+description: 网页巡检取证包：无头 Chromium 渲染采集（SPA 正文/截图/白屏判读）——依赖 browser-ops 工具面（bianque-tools ≥ 含 browser-ops 的版本，conf mcp.servers 启用）。
+provides:
+  experts:
+    - specialists/web-inspector
+  skills:
+    - web-console-screenshot
+    - spa-render-diagnosis
+changelog: CHANGELOG.md

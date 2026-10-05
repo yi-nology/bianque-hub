@@ -156,6 +156,19 @@
       "skills": 5,
       "changes": 1,
       "chain": true
+    },
+    {
+      "name": "web-ops",
+      "version": "0.1.0",
+      "api_version": 1,
+      "description": "网页巡检取证包：无头 Chromium 渲染采集（SPA 正文/截图/白屏判读）——依赖 browser-ops 工具面（bianque-tools ≥ 含 browser-ops 的版本，conf mcp.servers 启用）。",
+      "path": "packs/web-ops",
+      "experts": [
+        "web-inspector"
+      ],
+      "skills": 2,
+      "changes": 0,
+      "chain": false
     }
   ]
 }

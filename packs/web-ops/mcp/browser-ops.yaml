@@ -1,0 +1,24 @@
+# browser-ops MCP 契约清单（工具面事实记录；web-ops 包声明）。
+# 版本基线 0.1.0（bianque-tools 批次一百四十八起随工具面分发；chromedp 无头 Chromium）。
+# 服务形态：stdio（conf mcp.servers 挂载，缺省关——显式启用才挂）。
+# 工具分档：readonly 五件为采集面；click/type/eval 为执行档（平台审批/policy 闸覆盖）。
+name: browser-ops
+version: 0.1.0
+description: 无头 Chromium 浏览器自动化（SPA 渲染采集/截图取证/受审交互）
+tools:
+  - name: browser_open
+    desc: 开新 tab 导航并等待渲染（readonly；返回 tab_id/最终 URL/标题）
+  - name: browser_content
+    desc: 抽取渲染后正文（readonly；SPA 安全的正文面）
+  - name: browser_screenshot
+    desc: 截图（readonly；全页 JPEG/视口 PNG，base64 返回）
+  - name: browser_tabs
+    desc: 列出在册 tab（readonly）
+  - name: browser_close
+    desc: 关闭 tab 回收资源（readonly）
+  - name: browser_click
+    desc: 点击元素（执行档；CSS selector）
+  - name: browser_type
+    desc: 输入文本（执行档；可 submit 回车提交）
+  - name: browser_eval
+    desc: 执行 JS 表达式（执行档最高危；结果 JSON.stringify 返回）

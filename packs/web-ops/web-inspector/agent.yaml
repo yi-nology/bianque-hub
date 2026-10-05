@@ -1,0 +1,20 @@
+slug: specialists/web-inspector
+name: 网页巡检取证专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 10
+prompt_file: prompt.md
+skills:
+  - web-console-screenshot
+  - spa-render-diagnosis
+tools:
+  - server: browser-ops
+    allow: []
+dispatch_allow: []
+route_priority: P4
+route_group: tooling
+route_keywords: [网页巡检, 页面取证, 网页取证, 网站截图诊断, spa白屏, 页面渲染异常]
+symptoms: [网页打不开, 页面白屏, 网页内容异常, 截图取证]
+route_desc: 网页巡检取证专家：无头 Chromium 渲染采集（正文/截图/控制台态）与 SPA 白屏判读——browser-ops 只读档优先，交互动作仅受审使用
+pluggable: true
