@@ -808,14 +808,14 @@ docker network create --driver overlay my-overlay-network
 
 # 创建 Macvlan 网络
 docker network create -d macvlan \
-  --subnet=192.168.1.0/24 \
-  --gateway=192.168.1.1 \
+  --subnet=198.51.100.0/24 \
+  --gateway=198.51.100.1 \
   -o parent=eth0 my-macvlan-network
 
 # 创建 IPvlan 网络
 docker network create -d ipvlan \
-  --subnet=192.168.1.0/24 \
-  --gateway=192.168.1.1 \
+  --subnet=198.51.100.0/24 \
+  --gateway=198.51.100.1 \
   -o parent=eth0 my-ipvlan-network
 ```
 

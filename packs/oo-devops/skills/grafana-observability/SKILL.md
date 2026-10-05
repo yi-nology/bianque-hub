@@ -133,7 +133,7 @@ uvx mcp-grafana --disable-write
 2. **仪表板概览**: `get_dashboard_summary` 用于面板列表，无需完整 JSON
 3. **查询指标**: `query_prometheus` 使用 PromQL 查询特定指标:
    - 接口流量: `rate(ifHCInOctets{instance="router1"}[5m]) * 8`
-   - BGP 对等状态: `bgp_peer_state{peer="10.1.1.2"}`
+   - BGP 对等状态: `bgp_peer_state{peer="198.51.100.2"}`
    - CPU 利用率: `device_cpu_utilization{device="core-rtr-01"}`
    - 接口错误: `increase(ifInErrors{device=~".*"}[1h])`
 4. **检查告警**: `list_alert_rules` 查看活动告警阈值

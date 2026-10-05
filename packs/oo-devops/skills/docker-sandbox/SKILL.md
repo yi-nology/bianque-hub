@@ -103,7 +103,7 @@ docker sandbox network proxy <sandbox> --allow-host api.github.com
 docker sandbox network proxy <sandbox> --block-host malicious.com
 
 # 拦截 IP 范围
-docker sandbox network proxy <sandbox> --block-cidr 10.0.0.0/8
+docker sandbox network proxy <sandbox> --block-cidr 198.51.100.0/8
 
 # 为特定主机绕过代理 (直接连接)
 docker sandbox network proxy <sandbox> --bypass-host localhost

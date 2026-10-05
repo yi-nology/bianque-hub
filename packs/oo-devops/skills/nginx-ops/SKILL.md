@@ -397,8 +397,8 @@ http {
     # 上游连接池
     upstream backend {
         least_conn;
-        server 10.0.0.1:8080 weight=5 max_fails=3 fail_timeout=30s;
-        server 10.0.0.2:8080 weight=5 max_fails=3 fail_timeout=30s;
+        server 198.51.100.1:8080 weight=5 max_fails=3 fail_timeout=30s;
+        server 198.51.100.2:8080 weight=5 max_fails=3 fail_timeout=30s;
         keepalive 300;
         keepalive_requests 1000;
         keepalive_timeout 60s;
@@ -449,8 +449,8 @@ keepalive_disable msie6;
 
 # 与后端的长连接
 upstream backend {
-    server 10.0.0.1:8080;
-    server 10.0.0.2:8080;
+    server 198.51.100.1:8080;
+    server 198.51.100.2:8080;
     keepalive 300;  # 保持300个空闲连接
 }
 
@@ -746,9 +746,9 @@ http {
 ```nginx
 upstream backend {
     least_conn;                    # 最少连接算法
-    server 192.168.1.10:8080 weight=5 max_fails=3 fail_timeout=30s;
-    server 192.168.1.11:8080 weight=5 max_fails=3 fail_timeout=30s;
-    server 192.168.1.12:8080 backup;  # 备用服务器
+    server 198.51.100.10:8080 weight=5 max_fails=3 fail_timeout=30s;
+    server 198.51.100.11:8080 weight=5 max_fails=3 fail_timeout=30s;
+    server 198.51.100.12:8080 backup;  # 备用服务器
     keepalive 32;                  # 长连接池
 }
 
@@ -798,8 +798,8 @@ server {
     }
 
     # IP 黑名单
-    deny 192.168.1.100;
-    allow 192.168.1.0/24;
+    deny 198.51.100.100;
+    allow 198.51.100.0/24;
     deny all;
 
     # 防止点击劫持
@@ -948,9 +948,9 @@ http {
     # 上游服务器
     upstream backend {
         least_conn;
-        server 10.0.0.1:8080 weight=5 max_fails=3 fail_timeout=30s;
-        server 10.0.0.2:8080 weight=5 max_fails=3 fail_timeout=30s;
-        server 10.0.0.3:8080 backup;
+        server 198.51.100.1:8080 weight=5 max_fails=3 fail_timeout=30s;
+        server 198.51.100.2:8080 weight=5 max_fails=3 fail_timeout=30s;
+        server 198.51.100.3:8080 backup;
         keepalive 32;
     }
 

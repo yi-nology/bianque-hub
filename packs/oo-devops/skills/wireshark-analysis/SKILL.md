@@ -68,19 +68,19 @@ Apply filters before capture to limit data collection:
 
 ```
 # Capture only specific host
-host 192.168.1.100
+host 198.51.100.100
 
 # Capture specific port
 port 80
 
 # Capture specific network
-net 192.168.1.0/24
+net 198.51.100.0/24
 
 # Exclude specific traffic
 not arp
 
 # Combine filters
-host 192.168.1.100 and port 443
+host 198.51.100.100 and port 443
 ```
 
 ### Phase 2: Display Filters
@@ -90,9 +90,9 @@ Filter captured packets for analysis:
 
 ```
 # IP address filters
-ip.addr == 192.168.1.1              # All traffic to/from IP
-ip.src == 192.168.1.1               # Source IP only
-ip.dst == 192.168.1.1               # Destination IP only
+ip.addr == 198.51.100.1              # All traffic to/from IP
+ip.src == 198.51.100.1               # Source IP only
+ip.dst == 198.51.100.1               # Destination IP only
 
 # Port filters
 tcp.port == 80                       # TCP port 80
@@ -153,7 +153,7 @@ Use logical operators for complex queries:
 
 ```
 # AND operator
-ip.addr == 192.168.1.1 && tcp.port == 80
+ip.addr == 198.51.100.1 && tcp.port == 80
 
 # OR operator
 dns || http
@@ -162,7 +162,7 @@ dns || http
 !(arp || icmp)
 
 # Complex combinations
-(ip.src == 192.168.1.1 || ip.src == 192.168.1.2) && tcp.port == 443
+(ip.src == 198.51.100.1 || ip.src == 198.51.100.2) && tcp.port == 443
 ```
 
 ### Phase 3: Following Streams
@@ -278,7 +278,7 @@ Filter for anomalies:
 tcp.dstport > 1024 && tcp.dstport < 49152
 
 # Traffic outside trusted network
-!(ip.addr == 192.168.1.0/24)
+!(ip.addr == 198.51.100.0/24)
 
 # Unusual DNS queries
 dns.qry.name contains "suspicious-domain"

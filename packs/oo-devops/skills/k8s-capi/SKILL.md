@@ -131,10 +131,10 @@ spec:
   clusterNetwork:
     pods:
       cidrBlocks:
-      - 192.168.0.0/16
+      - 198.51.100.0/16
     services:
       cidrBlocks:
-      - 10.96.0.0/12
+      - 198.51.100.0/12
   controlPlaneRef:
     apiVersion: controlplane.cluster.x-k8s.io/v1beta1
     kind: KubeadmControlPlane

@@ -68,7 +68,7 @@ aws_secret_access_key = ...
         "state": "running",
         "type": "t3.medium",
         "public_ip": "52.1.2.3",
-        "private_ip": "10.0.1.5",
+        "private_ip": "198.51.100.5",
         "launch_time": "2024-01-15T10:00:00Z",
         "tags": {"Name": "web-server-01", "Environment": "production"}
       }

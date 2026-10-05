@@ -45,11 +45,11 @@ user:
 oceanbase-ce:
   servers:
     - name: server1
-      ip: 192.168.1.10
+      ip: 198.51.100.10
     - name: server2
-      ip: 192.168.1.11
+      ip: 198.51.100.11
     - name: server3
-      ip: 192.168.1.12
+      ip: 198.51.100.12
   global:
     devname: eth0
     mysql_port: 2881
@@ -339,7 +339,7 @@ SELECT * FROM oceanbase.DBA_OB_SERVERS;
 SELECT * FROM oceanbase.DBA_OB_TABLE_LOCATIONS WHERE replica_type = 'FULL';
 
 -- 手动切换 Leader
-ALTER SYSTEM SWITCH REPLICA LEADER ls = 1001 SERVER = '192.168.1.10:2882';
+ALTER SYSTEM SWITCH REPLICA LEADER ls = 1001 SERVER = '198.51.100.10:2882';
 ```
 
 ### 性能问题排查

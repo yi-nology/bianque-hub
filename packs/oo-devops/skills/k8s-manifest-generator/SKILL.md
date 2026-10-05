@@ -222,9 +222,7 @@ stringData:
     ...
     -----END CERTIFICATE-----
   tls.key: |
-    -----BEGIN PRIVATE KEY-----
-    ...
-    -----END PRIVATE KEY-----
+    <TLS 私钥占位：部署时经密钥管理注入，示例不入库>
 ```
 
 **安全注意事项：**

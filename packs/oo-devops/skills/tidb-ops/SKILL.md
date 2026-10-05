@@ -47,27 +47,27 @@ server_configs:
     replication.location-labels: ["zone", "dc", "rack", "host"]
 
 pd_servers:
-  - host: 10.0.1.1
-  - host: 10.0.1.2
-  - host: 10.0.1.3
+  - host: 198.51.100.1
+  - host: 198.51.100.2
+  - host: 198.51.100.3
 
 tidb_servers:
-  - host: 10.0.1.1
-  - host: 10.0.1.2
+  - host: 198.51.100.1
+  - host: 198.51.100.2
 
 tikv_servers:
-  - host: 10.0.1.4
-  - host: 10.0.1.5
-  - host: 10.0.1.6
+  - host: 198.51.100.4
+  - host: 198.51.100.5
+  - host: 198.51.100.6
 
 monitoring_servers:
-  - host: 10.0.1.7
+  - host: 198.51.100.7
 
 grafana_servers:
-  - host: 10.0.1.7
+  - host: 198.51.100.7
 
 alertmanager_servers:
-  - host: 10.0.1.7
+  - host: 198.51.100.7
 ```
 
 #### 部署集群
@@ -167,8 +167,8 @@ vi scale-out.yaml
 
 ```yaml
 tikv_servers:
-  - host: 10.0.1.8
-  - host: 10.0.1.9
+  - host: 198.51.100.8
+  - host: 198.51.100.9
 ```
 
 ```bash
@@ -182,16 +182,16 @@ tiup cluster display tidb-cluster
 #### 缩容 TiKV
 ```bash
 # 缩容前确保数据已迁移完毕
-tiup cluster scale-in tidb-cluster -N 10.0.1.8
+tiup cluster scale-in tidb-cluster -N 198.51.100.8
 
 # 强制缩容（慎用）
-tiup cluster scale-in tidb-cluster -N 10.0.1.8 --force
+tiup cluster scale-in tidb-cluster -N 198.51.100.8 --force
 ```
 
 #### 扩容 TiDB
 ```yaml
 tidb_servers:
-  - host: 10.0.1.10
+  - host: 198.51.100.10
 ```
 
 ```bash
@@ -224,7 +224,7 @@ kubectl get pods -n tidb-cluster -w
 ```bash
 # 执行备份
 tiup br backup full \
-  --pd "10.0.1.1:2379" \
+  --pd "198.51.100.1:2379" \
   --storage "s3://tidb-backup/full" \
   --s3.region "cn-north-1" \
   --ratelimit 120 \
@@ -232,7 +232,7 @@ tiup br backup full \
 
 # 本地存储备份
 tiup br backup full \
-  --pd "10.0.1.1:2379" \
+  --pd "198.51.100.1:2379" \
   --storage "local:///backup/tidb/full" \
   --ratelimit 120
 ```
@@ -240,7 +240,7 @@ tiup br backup full \
 #### 增量备份
 ```bash
 tiup br backup incremental \
-  --pd "10.0.1.1:2379" \
+  --pd "198.51.100.1:2379" \
   --storage "s3://tidb-backup/incr" \
   --lastbackupts $(cat backupts.txt) \
   --ratelimit 120
@@ -250,13 +250,13 @@ tiup br backup incremental \
 ```bash
 # 全量恢复
 tiup br restore full \
-  --pd "10.0.1.1:2379" \
+  --pd "198.51.100.1:2379" \
   --storage "s3://tidb-backup/full" \
   --ratelimit 128
 
 # 指定库表恢复
 tiup br restore db \
-  --pd "10.0.1.1:2379" \
+  --pd "198.51.100.1:2379" \
   --db "testdb" \
   --storage "s3://tidb-backup/full"
 ```
@@ -309,12 +309,12 @@ sorted-kv-dir = "/mnt/ssd/sorted-kv-dir"
 data-source-dir = "/data/export"
 
 [tidb]
-host = "10.0.1.1"
+host = "198.51.100.1"
 port = 4000
 user = "root"
 password = ""
 status-port = 10080
-pd-addr = "10.0.1.1:2379"
+pd-addr = "198.51.100.1:2379"
 ```
 
 ```bash
@@ -338,14 +338,14 @@ global:
   data_dir: "/dm-data"
 
 master_servers:
-  - host: 10.0.1.11
+  - host: 198.51.100.11
 
 worker_servers:
-  - host: 10.0.1.12
-  - host: 10.0.1.13
+  - host: 198.51.100.12
+  - host: 198.51.100.13
 
 monitoring_servers:
-  - host: 10.0.1.14
+  - host: 198.51.100.14
 ```
 
 ```bash
@@ -369,7 +369,7 @@ black-white-list:
     do-dbs: ["db1", "db2"]
 
 target-database:
-  host: "10.0.1.1"
+  host: "198.51.100.1"
   port: 4000
   user: "root"
   password: ""
@@ -377,10 +377,10 @@ target-database:
 
 ```bash
 # 启动迁移任务
-tiup dmctl --master-addr 10.0.1.11:8261 start-task task.yaml
+tiup dmctl --master-addr 198.51.100.11:8261 start-task task.yaml
 
 # 查看任务状态
-tiup dmctl --master-addr 10.0.1.11:8261 query-status
+tiup dmctl --master-addr 198.51.100.11:8261 query-status
 ```
 
 ---
@@ -391,7 +391,7 @@ tiup dmctl --master-addr 10.0.1.11:8261 query-status
 
 ```bash
 # 访问 Grafana
-curl http://10.0.1.7:3000
+curl http://198.51.100.7:3000
 # 默认账号: admin / admin
 ```
 
@@ -443,7 +443,7 @@ LIMIT 10;
 tiup cluster audit log tidb-cluster
 
 # 查看指定节点日志
-tiup cluster log tidb-cluster -N 10.0.1.1
+tiup cluster log tidb-cluster -N 198.51.100.1
 
 # TiKV 日志
 tail -f /tidb-deploy/tikv-20160/log/tikv.log
@@ -454,17 +454,17 @@ tail -f /tidb-deploy/tikv-20160/log/tikv.log
 #### Region 不平衡
 ```bash
 # 查看 Store 分布
-tiup ctl:v8.0.0 pd -u http://10.0.1.1:2379 store
+tiup ctl:v8.0.0 pd -u http://198.51.100.1:2379 store
 
 # 手动调度
 # 将 Region 1 的 Leader 迁移到 Store 2
-tiup ctl:v8.0.0 pd -u http://10.0.1.1:2379 operator add transfer-leader 1 2
+tiup ctl:v8.0.0 pd -u http://198.51.100.1:2379 operator add transfer-leader 1 2
 ```
 
 #### TiKV 节点故障
 ```bash
 # 下线故障节点
-tiup cluster scale-in tidb-cluster -N 10.0.1.4
+tiup cluster scale-in tidb-cluster -N 198.51.100.4
 
 # 等待数据迁移完成
 tiup cluster display tidb-cluster

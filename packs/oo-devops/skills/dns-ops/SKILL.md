@@ -240,7 +240,7 @@ dnsperf -s 127.0.0.1 -d queryfile.txt -c 10 -Q 1000
 ```bash
 # /etc/named.conf
 options {
-    listen-on port 53 { 127.0.0.1; 192.168.1.1; };
+    listen-on port 53 { 127.0.0.1; 198.51.100.1; };
     directory "/var/named";
     dump-file "/var/named/data/cache_dump.db";
     statistics-file "/var/named/data/named_stats.txt";
@@ -261,7 +261,7 @@ zone "example.com" IN {
     type master;
     file "example.com.zone";
     allow-update { none; };
-    allow-transfer { 192.168.1.2; };
+    allow-transfer { 198.51.100.2; };
 };
 
 zone "1.168.192.in-addr.arpa" IN {
@@ -283,13 +283,13 @@ $TTL 86400
         IN      NS      ns1.example.com.
         IN      NS      ns2.example.com.
 
-ns1     IN      A       192.168.1.1
-ns2     IN      A       192.168.1.2
+ns1     IN      A       198.51.100.1
+ns2     IN      A       198.51.100.2
 
-@       IN      A       192.168.1.10
-www     IN      A       192.168.1.10
-api     IN      A       192.168.1.11
-mail    IN      MX 10   192.168.1.20
+@       IN      A       198.51.100.10
+www     IN      A       198.51.100.10
+api     IN      A       198.51.100.11
+mail    IN      MX 10   198.51.100.20
 ```
 
 ## CoreDNS 配置示例

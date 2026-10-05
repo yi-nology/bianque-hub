@@ -60,7 +60,7 @@ export CONSUL_CLIENT_KEY="/etc/consul/client.key"
     "instances": [
       {
         "id": "web-api-01",
-        "address": "10.0.1.10",
+        "address": "198.51.100.10",
         "port": 8080,
         "status": "passing",
         "tags": ["v1", "production"],
@@ -68,7 +68,7 @@ export CONSUL_CLIENT_KEY="/etc/consul/client.key"
       },
       {
         "id": "web-api-02",
-        "address": "10.0.1.11",
+        "address": "198.51.100.11",
         "port": 8080,
         "status": "passing",
         "tags": ["v1", "production"],

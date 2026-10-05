@@ -1428,7 +1428,7 @@ redis-cli config set rename-command SHUTDOWN "SHUTDOWN_$(openssl rand -hex 8)"
 
 # 3. 绑定特定网卡
 # redis.conf
-bind 127.0.0.1 10.0.0.1
+bind 127.0.0.1 198.51.100.1
 protected-mode yes
 
 # 4. 使用 TLS（Redis 6.0+）

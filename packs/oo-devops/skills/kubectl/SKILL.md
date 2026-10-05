@@ -20,7 +20,7 @@ Three cluster/namespace combinations are pre-configured:
 |-------|---------|-----------|---------|
 | `k1` | AWS EKS Production | `production` | 生产环境 |
 | `k2` | AWS EKS Production | `staging` | 预发布环境 |
-| `k` | K3s (192.168.10.117) | `simplex` | 本地开发环境 |
+| `k` | K3s (198.51.100.117) | `simplex` | 本地开发环境 |
 
 **Usage:**
 ```bash

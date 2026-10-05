@@ -26,7 +26,7 @@ tools:
     - server: ask-ops
       allow: []
 dispatch_allow: []
-route_priority: ""
+route_priority: P5
 route_group: ""
 domain:
     - 云平台

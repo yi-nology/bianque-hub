@@ -678,7 +678,7 @@ SECURITY_GROUP_IDS=("sg-bp1xxxxxxxxx1" "sg-bp1xxxxxxxxx2")
 # 新规则参数
 IP_PROTOCOL="tcp"
 PORT_RANGE="8080/8080"
-SOURCE_CIDR="10.0.0.0/8"  # 仅允许内网访问
+SOURCE_CIDR="198.51.100.0/8"  # 仅允许内网访问
 POLICY="accept"
 PRIORITY=1
 DESCRIPTION="Internal API Access"

@@ -169,9 +169,9 @@ tshark -r capture.pcap -q -z io,stat,1,"tcp.analysis.rtt"
 
 ```
 # IP 地址过滤
-ip.addr == 192.168.1.1
-ip.src == 192.168.1.1
-ip.dst == 192.168.1.1
+ip.addr == 198.51.100.1
+ip.src == 198.51.100.1
+ip.dst == 198.51.100.1
 
 # 端口过滤
 tcp.port == 80

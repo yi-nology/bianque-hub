@@ -239,18 +239,18 @@ frontend web
 backend app
     balance roundrobin
     option httpchk GET /health
-    server app1 10.0.0.1:8080 check weight 100
-    server app2 10.0.0.2:8080 check weight 100 backup
+    server app1 198.51.100.1:8080 check weight 100
+    server app2 198.51.100.2:8080 check weight 100 backup
 
 backend api
     balance leastconn
     option httpchk GET /api/health
-    server api1 10.0.0.3:8080 check
-    server api2 10.0.0.4:8080 check
+    server api1 198.51.100.3:8080 check
+    server api2 198.51.100.4:8080 check
 
 backend static
     balance roundrobin
-    server static1 10.0.0.5:8080 check
+    server static1 198.51.100.5:8080 check
 
 # Stats 页面
 listen stats
