@@ -1,0 +1,22 @@
+slug: imports/nginx-platform-analyst
+name: Nginx 平台诊断专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 24
+prompt_file: prompt.md
+skills:
+  - nginx-availability-triage
+  - nginx-route-triage
+  - nginx-tls-triage
+  - nginx-lifecycle-ops
+tools:
+  - server: ask-ops
+    allow: []
+dispatch_allow: []
+route_priority: P3
+route_group: tooling
+route_keywords: [nginx 502, nginx 504, nginx打不开, 网站打不开nginx, nginx 404, 重定向循环, location不生效, rewrite异常, nginx证书, https握手失败, 证书链异常, nginx reload失败, nginx -t失败, worker_connections, nginx限流, 429限流, 反向代理异常, upstream超时]
+symptoms: [nginx打不开, 网站502, nginx超时, nginx报错]
+route_desc: Nginx 自托管平台深诊专家：可用性面（502/504/upstream 连接拒/worker 打满）、路由重写面（404/重定向循环/location 与 try_files 匹配）、TLS 面（证书链/握手/SNI/混合内容）、生命周期面（-t 校验失败/reload vs restart 语义/平滑升级/日志轮转）四面分诊判读（ask-ops 只读采集面：nginx -t/-T、curl 本地端点、ss/lsof、error/access log tail）；K8s Ingress 形态与 openresty/lua 扩展面不在本包范围
+pluggable: true

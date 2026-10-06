@@ -1,0 +1,13 @@
+api_version: 1
+name: nginx-ops
+version: 0.1.0
+description: Nginx 自托管运维包（社区版）：可用性面（502/504/连接拒/worker 打满）、路由重写面（404/重定向循环/location/try_files）、TLS 面（证书链/握手/混合内容）、生命周期面（-t 校验/reload vs restart/平滑升级/日志轮转）四技能 + 平台诊断专家。方法论基于 Nginx 官方文档与社区共识原生编写；统一 ask-ops 只读采集面（curl 本地端点、systemctl/journalctl、nginx -t/-T、ss/lsof、tail 日志）；reload/restart 类变更动作一律审批后宿主侧执行（不在只读白名单）。纯宿主形态不依赖凭证平面；K8s Ingress 形态与 openresty/lua 扩展面不在本包范围。
+provides:
+  experts:
+    - imports/nginx-platform-analyst
+  skills:
+    - nginx-availability-triage
+    - nginx-route-triage
+    - nginx-tls-triage
+    - nginx-lifecycle-ops
+changelog: CHANGELOG.md

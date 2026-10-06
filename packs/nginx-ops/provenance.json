@@ -1,0 +1,7 @@
+{
+  "base_url": "https://github.com/yi-nology/bianque-hub",
+  "pack": "nginx-ops",
+  "edition": "community",
+  "generated_at": "2026-10-07",
+  "origin_note": "原生编写（非 oo-devops 血缘）：方法论基于 Nginx 官方文档（nginx.org/en/docs：http upstream/proxy 语义、ssl 模块、进程模型与信号控制、logrotate 配合）与社区共识排障流程整理重写。命令形态按 ask-ops 只读白名单校形（nginx -t/-T、curl 本地端点、ss/lsof、systemctl/journalctl、tail）；reload/restart/证书替换类变更动作恒审批后宿主侧执行。范围边界：K8s Ingress、openresty/lua、其他反代（HAProxy/Traefik/Caddy）不在本包；纯宿主形态不依赖凭证平面。"
+}
