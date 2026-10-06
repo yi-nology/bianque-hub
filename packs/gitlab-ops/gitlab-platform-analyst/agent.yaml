@@ -1,0 +1,22 @@
+slug: imports/gitlab-platform-analyst
+name: GitLab 平台诊断专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 24
+prompt_file: prompt.md
+skills:
+  - gitlab-instance-triage
+  - gitlab-repo-triage
+  - gitlab-auth-triage
+  - gitlab-lifecycle-ops
+tools:
+  - server: ask-ops
+    allow: []
+dispatch_allow: []
+route_priority: P3
+route_group: tooling
+route_keywords: [gitlab实例故障, gitlab平台排障, gitlab 502, gitlab运维, gitlab推代码失败, git push失败, gitlab克隆失败, gitaly异常, gitlab备份恢复, gitlab升级失败, gitlab登录不上, gitlab LDAP排障, gitlab密钥丢失]
+symptoms: [gitlab打不开, push被拒, 仓库打不开, gitlab登录异常, gitlab超时]
+route_desc: GitLab 自托管平台深诊专家：实例本体（502/打不开/readiness 分项）、仓库推拉面（push/clone 失败/gitaly/盘满）、认证权限面（登录/LDAP/token/封禁）、生命周期（备份/升级/secrets/license）四面分诊判读（ask-ops 只读采集面）；CI 流水线与 runner 作业面走 cicd-ops，bundled PostgreSQL/Redis 本体深挖走 db-ops/mw-ops
+pluggable: true

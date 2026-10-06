@@ -1,0 +1,7 @@
+{
+  "base_url": "https://github.com/yi-nology/bianque-hub",
+  "pack": "gitlab-ops",
+  "edition": "community",
+  "generated_at": "2026-10-06",
+  "origin_note": "原生编写（非 oo-devops 血缘整搬）：方法论基于 GitLab 官方自托管文档（docs.gitlab.com：omnibus/Docker 安装形态、健康端点 /-/health /-/readiness /-/liveness 分项语义、备份与恢复、升级路径停靠点、gitlab-secrets.json 管理纪律、LDAP 配置面）整理重写。oo-devops 参考库（packs/oo-devops）gitlab-employee 与 gitlab-ops/gitlab-cli-skills 技能仅作采集清单素材对账，其 env 变量注入与 Node 脚本工具耦合未搬运。CI 流水线与 runner 作业面归 cicd-ops（gitlab-ci-triage 已覆盖），本包不做二义入口；bundled PostgreSQL/Redis 本体归 db-ops/mw-ops。统一 ask-ops 只读采集面与扁鹊输出协议；gitlab-ctl/gitlab-rake/gitlab-rails/gitlab-psql/docker exec 不在 ask-ops 只读白名单，相关核验与处置一律审批后宿主侧动作。未搬运清单（按需后续 minor 承接）：Geo 多站点、Gitaly Cluster（Praefect）、对象存储归置面、Helm Chart（K8s）形态、container registry 内置镜像仓库面。"
+}
