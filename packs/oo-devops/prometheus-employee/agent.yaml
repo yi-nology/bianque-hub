@@ -24,8 +24,6 @@ skills:
 tools:
     - server: ask-ops
       allow: []
-    - server: sysprobe
-      allow: []
     - server: datasources
       allow: []
 dispatch_allow: []

@@ -2,11 +2,11 @@
 name: k8s-workload-triage
 description: K8s 工作负载异常分诊方法论：CrashLoopBackOff / OOMKilled / Pending / ImagePullBackOff / Evicted 五类异常的定位路径与判读基准（k8sgpt 工具面映射）。
 mode: on_demand
-version: 0.1.1
+version: 0.1.2
 maturity: experimental
 requires_mcp:
   - server: k8sgpt
-    tools: [get-resource, get-logs, list-events, list-namespaces]
+    tools: [analyze, get-resource, get-logs, list-events, list-namespaces]
 provides_changes:        # 编目变更块（批次九十四「受审执行」）：本技能方法论覆盖的处方编目
   - k8s-rollout-restart  # 工作负载滚动重启（params: resource/namespace）——处方优先引用编目而非自由 steps
 ---

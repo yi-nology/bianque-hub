@@ -2,7 +2,7 @@
 name: terraform-ops
 description: Terraform 运维专家 - 基础设施即代码、状态管理、多环境部署、故障恢复
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -116,22 +116,16 @@ terraform show -json | ConvertFrom-Json | Select-Object -ExpandProperty values
 
 #### Linux/macOS
 ```bash
-# 查看锁定
-terraform force-unlock -dry-run <LOCK_ID>
+# 确认锁信息（force-unlock 无 -dry-run flag——先看锁持有者再决定）
+terraform state pull > state-backup.json   # 解锁前先备份 state
 
-# 强制解锁（谨慎）
+# 强制解锁（谨慎：仅确认无其他进程真正持锁——误解锁会双写 state）
 terraform force-unlock <LOCK_ID>
-
-# 查看后端状态
-terraform state pull > state-backup.json
 ```
 
 #### Windows (PowerShell)
 ```powershell
-# 查看锁定
-terraform force-unlock -dry-run <LOCK_ID>
-
-# 强制解锁（谨慎）
+# 确认锁信息后强制解锁（同上：先备份 state、确认锁非活动进程持有）
 terraform force-unlock <LOCK_ID>
 
 # 查看后端状态
@@ -152,8 +146,8 @@ $state.resources | Format-Table type, name
 
 #### Linux/macOS
 ```bash
-# 刷新状态
-terraform refresh
+# 刷新状态（refresh 独立命令已弃用，2.x 起用 apply -refresh-only）
+terraform apply -refresh-only
 
 # 查看差异
 terraform plan -detailed-exitcode
@@ -164,8 +158,8 @@ terraform import aws_instance.myserver i-12345678
 
 #### Windows (PowerShell)
 ```powershell
-# 刷新状态
-terraform refresh
+# 刷新状态（refresh 独立命令已弃用，2.x 起用 apply -refresh-only）
+terraform apply -refresh-only
 
 # 查看差异
 terraform plan -detailed-exitcode
@@ -199,11 +193,13 @@ terraform init -upgrade
 rm -rf .terraform/
 terraform init
 
-# 锁定 Provider 版本
-required_providers {
-  aws = {
-    source  = "hashicorp/aws"
-    version = "~> 5.0"
+# 锁定 Provider 版本（required_providers 必须嵌在 terraform {} 块内）
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
 }
 ```
@@ -217,12 +213,14 @@ terraform init -upgrade
 Remove-Item -Path .terraform -Recurse -Force
 terraform init
 
-# 锁定 Provider 版本
+# 锁定 Provider 版本（required_providers 必须嵌在 terraform {} 块内）
 # 在 .tf 文件中：
-required_providers {
-  aws = {
-    source  = "hashicorp/aws"
-    version = "~> 5.0"
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
 }
 
@@ -232,9 +230,9 @@ terraform providers
 # 查看 Provider 锁定文件
 Get-Content .terraform.lock.hcl | Select-String "provider|version" -Context 0,1
 
-# 使用 PowerShell 清理并重新初始化
+# 使用 PowerShell 清理并重新初始化（.terraform.lock.hcl 是依赖锁定文件，
+# 删除它=放弃版本锁定，重新 init 可能拉到不兼容新 provider——保留）
 Remove-Item -Path .terraform -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item -Path .terraform.lock.hcl -Force -ErrorAction SilentlyContinue
 terraform init
 ```
 

@@ -2,6 +2,9 @@
 # 引用员工: aliyun-dataworks-employee
 # ⚠ 放行前必须处理: env DATAWORKS_AK_ID 值像占位符（示例文档非真实凭证）；env DATAWORKS_AK_SECRET 键名疑似密钥 → 建议改凭证平面 credential_ref
 # 激活: etc/config-<env>.yaml mcp.servers 加同名条目（enabled: true + 覆盖定义）。
+# 激活对账提示：本契约是工具面事实记录，server 激活（conf mcp.servers 加同名条目）后，
+# 须同步给引用员工 agent.yaml 的 tools 增加同名 server 授权——契约在而授权缺=拉起了
+# server 专家却用不了（hub 契约模型：tools[].server 是授权面）。
 definition:
     command:
         - npx

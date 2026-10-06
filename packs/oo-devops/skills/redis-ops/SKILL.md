@@ -2,7 +2,7 @@
 name: redis-ops
 description: Redis 运维专家 - 性能优化、故障排查、高可用架构、数据治理
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -1420,11 +1420,14 @@ find /backup/redis -name "*.tar.gz" -mtime +7 -delete
 # 1. 启用认证
 redis-cli config set requirepass "YourStrongPassword123!"
 
-# 2. 禁用危险命令
-redis-cli config set rename-command FLUSHDB ""
-redis-cli config set rename-command FLUSHALL ""
-redis-cli config set rename-command CONFIG "CONFIG_$(openssl rand -hex 8)"
-redis-cli config set rename-command SHUTDOWN "SHUTDOWN_$(openssl rand -hex 8)"
+# 2. 禁用危险命令——rename-command 不支持运行时 CONFIG SET（Redis 报
+#    Unsupported CONFIG parameter，静默失败会让人误以为已封禁）。必须写入
+#    redis.conf 并重启生效：
+#    rename-command FLUSHDB ""
+#    rename-command FLUSHALL ""
+#    rename-command CONFIG "CONFIG_<随机后缀>"
+#    rename-command SHUTDOWN "SHUTDOWN_<随机后缀>"
+#    重启属变更动作：进建议面走审批，不在采集轮执行。
 
 # 3. 绑定特定网卡
 # redis.conf
@@ -1492,7 +1495,12 @@ echo "Performing backup..."
 redis-cli -h $REDIS_HOST -p $REDIS_PORT bgsave
 sleep 5
 
-# 3. 模拟数据丢失
+# 3. 模拟数据丢失——演练纪律（硬守卫）：本脚本只允许在专用演练环境执行，
+#    运行前必须显式确认 REDIS_HOST 指向演练实例（set -e 前校验 $DRILL_CONFIRMED=yes
+#    且 REDIS_HOST 含 drill/test 关键字，否则拒绝执行）；FLUSHDB 在生产实例上
+#    执行即清库事故。
+[ "$DRILL_CONFIRMED" = "yes" ] || { echo "需显式 DRILL_CONFIRMED=yes 且确认目标为演练实例"; exit 1; }
+case "$REDIS_HOST" in *drill*|*test*) ;; *) echo "REDIS_HOST 非演练实例，拒绝执行"; exit 1;; esac
 echo "Simulating data loss..."
 redis-cli -h $REDIS_HOST -p $REDIS_PORT FLUSHDB
 

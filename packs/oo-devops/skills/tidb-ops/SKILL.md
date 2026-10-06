@@ -2,7 +2,7 @@
 name: tidb-ops
 description: TiDB 分布式数据库运维指南 - TiUP/TiDB Operator 集群部署、扩缩容、备份恢复、数据迁移、日常监控、故障定位。用于 TiDB 数据库的日常运维管理。
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -18,7 +18,10 @@ maturity: experimental
 #### 安装 TiUP
 ```bash
 # 安装 TiUP
-curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh
+# 供应链纪律：不直灌管道安装。两步式：下载 install.sh 后人工过目/checksum 再执行。
+curl --proto '=https' --tlsv1.2 -sSf -o /tmp/tiup-install.sh https://tiup-mirrors.pingcap.com/install.sh
+less /tmp/tiup-install.sh        # 过目脚本内容（或 sha256sum 与镜像站公布的对照）
+bash /tmp/tiup-install.sh
 
 # 配置环境变量
 source ~/.bashrc

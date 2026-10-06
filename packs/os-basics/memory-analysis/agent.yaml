@@ -14,6 +14,7 @@ tools:
 dispatch_allow: []
 route_priority: P6
 route_group: system
+route_desc: 主机内存分析专家：可用内存/泄漏/交换面定位与判读（os-basics 六域之内存域）
 domain:
 - 内存
 route_keywords:

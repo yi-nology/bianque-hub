@@ -2,7 +2,7 @@
 name: postgres-ops
 description: PostgreSQL 运维专家 - 性能调优、高可用架构、备份恢复、故障诊断
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -128,10 +128,13 @@ FROM pg_stat_activity
 WHERE state != 'idle'
 ORDER BY query_start;
 
--- 终止长时间运行的查询
+-- 终止长时间运行的查询（加防护：排除自身会话与后台进程——无过滤会误杀
+-- autovacuum worker，膨胀反而恶化）
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
 WHERE state != 'idle'
+AND pid <> pg_backend_pid()
+AND backend_type = 'client backend'
 AND query_start < NOW() - INTERVAL '1 hour';
 ```
 
@@ -392,9 +395,10 @@ import subprocess
 
 app = Server("postgres-ops")
 
-def build_psql_cmd(host, port, user, password, database, query):
-    env = f"PGPASSWORD='{password}' " if password else ""
-    return f"{env}psql -h {host} -p {port} -U {user} -d {database} -c \"{query}\""
+def build_psql_cmd(host, port, user, database, query):
+    # 参数数组 + env 传凭证（密码/查询不进 shell 字符串——拼接 + shell=True 是
+    # 注入反模式）；生产凭证优先走 ~/.pgpass。
+    return ["psql", "-h", host, "-p", str(port), "-U", user, "-d", database, "-c", query]
 
 @app.call_tool()
 def call_tool(name: str, arguments: dict):
@@ -406,8 +410,8 @@ def call_tool(name: str, arguments: dict):
 
     if name == "pg_check_connection":
         query = "SELECT version(), now(), pg_database_size(current_database());"
-        cmd = build_psql_cmd(host, port, user, password, database, query)
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        cmd = build_psql_cmd(host, port, user, database, query)
+        result = subprocess.run(cmd, capture_output=True, text=True)  # 凭证经 env/.pgpass，不走命令行
         return [TextContent(type="text", text=result.stdout or result.stderr)]
 
     elif name == "pg_get_activity":

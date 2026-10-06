@@ -15,8 +15,6 @@ skills:
 tools:
     - server: ask-ops
       allow: []
-    - server: script-assistant
-      allow: []
 dispatch_allow: []
 route_priority: P6
 route_group: tooling

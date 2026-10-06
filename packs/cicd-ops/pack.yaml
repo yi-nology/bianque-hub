@@ -1,6 +1,6 @@
 api_version: 1
 name: cicd-ops
-version: 0.2.2
+version: 0.2.3
 description: 交付链诊断包（社区版首批）：Jenkins / GitLab CI / Harbor / ArgoCD 四技能 + 流水线分析专家，覆盖构建失败、runner 掉线、制品库异常、GitOps 同步失败分诊。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面；编目变更块两件（argocd sync/rollback）接「诊断+处方+受审执行」范式。
 provides:
   experts:

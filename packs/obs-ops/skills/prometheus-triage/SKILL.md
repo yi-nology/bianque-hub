@@ -2,7 +2,7 @@
 name: prometheus-triage
 description: Prometheus 自诊方法论：target 掉线与采集断点、scrape 超时与乱序、规则与告警失效、TSDB 存储与 remote write 积压四面板——固定顺序定位与判读基准（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
@@ -16,9 +16,9 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 
 ## 数据来源（ask-ops 只读面）
 
-- Prometheus 自身 API（GET）：`/-/healthy`、`/api/v1/targets?state=active`（每 target 的 health/lastError/lastScrape）、`/api/v1/rules`（规则评估状态与最近错误）；
-- 查询面（GET）：`/api/v1/query?query=up`、`scrape_duration_seconds`、`prometheus_tsdb_head_series`、remote write 队列指标（`prometheus_remote_storage_samples_pending` 族）；
-- 主机侧：prometheus 进程（内存/CPU/Goroutine 面可用 `curl <prom>/metrics | grep go_goroutines`）、数据目录 df/du、日志尾部；
+- Prometheus 自身 API（GET；URL 含 `?` 查询串一律整体单引号包裹，防 shell 解析）：`/-/healthy`、`'/api/v1/targets?state=active'`（每 target 的 health/lastError/lastScrape）、`/api/v1/rules`（规则评估状态与最近错误）；
+- 查询面（GET）：`'/api/v1/query?query=up'`、`scrape_duration_seconds`、`prometheus_tsdb_head_series`、remote write 队列指标（`prometheus_remote_storage_samples_pending` 族）；
+- 主机侧：prometheus 进程（内存/CPU/Goroutine 面可用 `curl -s <prom>/metrics | head` 或 `| tail` 控量看——grep 管段是否在白名单未经背书，被拒不绕过）、数据目录 df/du、日志尾部；
 - 凭证由主机侧已配置环境注入，对话不回显。
 
 ## 分诊路径（按面板定位，固定顺序）

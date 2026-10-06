@@ -2,7 +2,7 @@
 name: security-root-login-detection
 description: 检测 Linux 服务器（CentOS/Ubuntu/麒麟 V10/openEuler 等）中Root账户登录行为，识别Root远程登录、异常时间登录、未知来源IP登录及违反安全策略的登录风险，并提供风险分析与处置建议。
 mode: on_demand
-version: 1.0.0
+version: 1.0.1
 maturity: stable
 requires_mcp:
   - server: security-assistant
@@ -13,6 +13,7 @@ requires_mcp:
       - collect_filesystem
       - collect_service_info
       - collect_system_info
+      - list_directory
 ---
 
 
@@ -22,7 +23,7 @@ requires_mcp:
 ## 触发条件
 
 - 症状关键词：Root 登录、远程登录、异常时间登录、未知来源 IP 登录、违反安全策略登录
-- 组合场景：与 security-ssh-attack / security-account-permission 联动核查登录链；等保身份鉴别项必查
+- 组合场景：与 security-ssh-attack / security-sudo-detection 联动核查登录链；等保身份鉴别项必查
 
 ## 技能描述
 
@@ -165,4 +166,4 @@ requires_mcp:
 
 ## 输出要求
 
-最终输出遵循 `AGENTS.md「报告协议」` 纯 JSON schema（`requires_approval` 恒 false）；内容要素（安全事件/检测结果/异常分析/风险等级/风险依据/影响范围/整改建议/是否建议处置/处置结果/验证结果）映射至对应 JSON 字段，不作为独立输出格式。
+最终输出遵循平台统一报告 schema（纯 JSON，字段语义见专家 prompt 的输出协议段）；内容要素（安全事件/检测结果/异常分析/风险等级/风险依据/影响范围/整改建议/是否建议处置/处置结果/验证结果）映射至对应 JSON 字段，不作为独立输出格式。

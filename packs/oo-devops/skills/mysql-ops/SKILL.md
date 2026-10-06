@@ -2,7 +2,7 @@
 name: mysql-ops
 description: MySQL 运维专家 - 性能优化、主从复制、备份恢复、故障诊断
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -285,8 +285,9 @@ mysql -e "STOP SLAVE; SET GTID_NEXT='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx:1'; BE
 # 方法2：跳过当前错误（传统复制）
 mysql -e "STOP SLAVE; SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1; START SLAVE;"
 
-# 方法3：设置跳过特定错误码
-mysql -e "STOP SLAVE; SET GLOBAL slave_skip_errors = '1062,1032'; START SLAVE;"
+# 注意：slave_skip_errors 是只读全局变量（仅能以启动参数 --slave-skip-errors
+# 设置，运行时 SET 必报错），且无差别跳过 1062/1032 会让主从静默数据分叉——
+# 不建议采用；需要长期跳过特定错误时先做数据一致性评估再评估启动参数方案。
 ```
 
 ### 4. 锁等待和死锁深度分析
@@ -773,8 +774,11 @@ skip-name-resolve
 # mysql_backup.sh
 
 BACKUP_DIR="/backup/mysql/$(date +%Y%m%d)"
-MYSQL_USER="backup"
-MYSQL_PASS="password"
+# 凭证走 defaults-extra-file（root:600 的独立 cnf）——禁 -p 明文形态：
+# "-p $PASS"（空格分隔）会把密码当库名、CLI 挂起等交互；"-p$PASS" 连写会进 ps 泄漏。
+MYSQL_CNF="/root/.mytool.cnf"   # 内容：[client]
+user=backup
+password=***（部署时注入）
 RETENTION_DAYS=7
 
 mkdir -p $BACKUP_DIR
@@ -809,8 +813,7 @@ echo "备份完成: $BACKUP_DIR"
 #!/bin/bash
 # mysql_monitor.sh
 
-MYSQL_USER="monitor"
-MYSQL_PASS="password"
+MYSQL_CNF="/root/.mytool.cnf"   # 同备份脚本：凭证走 defaults-extra-file，不落明文变量
 HOST="localhost"
 
 # 获取状态
@@ -1668,7 +1671,7 @@ mkdir -p $BACKUP_DIR/{full,incremental,schema}
 # 1. 逻辑备份（使用 mydumper 并行备份）
 if command -v mydumper &> /dev/null; then
     echo "Using mydumper for parallel backup..."
-    mydumper -u $MYSQL_USER -p $MYSQL_PASS \
+    mydumper --defaults-extra-file=$MYSQL_CNF \
         --outputdir=$BACKUP_DIR/full/$DATE \
         --threads=4 \
         --compress \
@@ -1676,7 +1679,7 @@ if command -v mydumper &> /dev/null; then
         --regex '^(?!(mysql|information_schema|performance_schema|sys)\.)'
 else
     echo "Using mysqldump..."
-    mysqldump -u $MYSQL_USER -p $MYSQL_PASS \
+    mysqldump --defaults-extra-file=$MYSQL_CNF \
         --all-databases \
         --single-transaction \
         --routines \
@@ -1687,7 +1690,7 @@ else
 fi
 
 # 2. 备份表结构
-mysqldump -u $MYSQL_USER -p $MYSQL_PASS \
+mysqldump --defaults-extra-file=$MYSQL_CNF \
     --all-databases \
     --no-data \
     --routines \
@@ -1700,7 +1703,7 @@ FROM mysql.user WHERE user NOT IN ('root', 'mysql.session', 'mysql.sys', 'debian
 UNION ALL
 SELECT CONCAT('SHOW GRANTS FOR ''', user, '''@''', host, ''';') as sql
 FROM mysql.user WHERE user NOT IN ('root', 'mysql.session', 'mysql.sys', 'debian-sys-maint');
-" | grep -v sql | xargs -I {} mysql -u $MYSQL_USER -p $MYSQL_PASS -e "{}" > $BACKUP_DIR/schema/users_$DATE.sql
+" | grep -v sql | xargs -I {} mysql --defaults-extra-file=$MYSQL_CNF -e "{}" > $BACKUP_DIR/schema/users_$DATE.sql
 
 # 4. 清理旧备份
 echo "Cleaning up old backups..."
@@ -1709,7 +1712,7 @@ find $BACKUP_DIR/schema -name "*.sql" -mtime +$RETENTION_DAYS -delete
 
 # 5. 备份验证
 echo "Verifying backup..."
-if [ -f "$BACKUP_DIR/full/$DATE/metadata" ] || [ -f "$BACKUP_DIR/full/full_backup_$DATE.sql.gz" ]; then
+if [ -s "$BACKUP_DIR/full/full_backup_$DATE.sql.gz" ] || [ -d "$BACKUP_DIR/full/$DATE" ]; then
     echo "Backup completed successfully: $DATE"
     # 发送成功通知（可配置 webhook 或邮件）
 else
@@ -1724,8 +1727,7 @@ fi
 #!/bin/bash
 # mysql_health_check.sh
 
-MYSQL_USER="monitor"
-MYSQL_PASS="password"
+MYSQL_CNF="/root/.mytool.cnf"   # 同备份脚本：凭证走 defaults-extra-file，不落明文变量
 HOST="localhost"
 PORT="3306"
 

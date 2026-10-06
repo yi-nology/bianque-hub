@@ -2,7 +2,7 @@
 name: ansible-ops
 description: Ansible 运维专家 - 自动化部署、配置管理、Playbook 优化、故障排查
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -13,7 +13,7 @@ maturity: experimental
 # Ansible 配置
 export ANSIBLE_CONFIG="/etc/ansible/ansible.cfg"
 export ANSIBLE_INVENTORY="/etc/ansible/hosts"
-export ANSIBLE_HOST_KEY_CHECKING="False"
+export ANSIBLE_HOST_KEY_CHECKING="False"   # ⚠ 关闭主机指纹校验=接受 MITM 风险：仅限一次性/隔离环境，生产 inventory 保持 True
 export ANSIBLE_SSH_ARGS="-o ControlMaster=auto -o ControlPersist=60s"
 export ANSIBLE_FORKS="10"
 export ANSIBLE_TIMEOUT="30"
@@ -210,7 +210,7 @@ Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
 #### Linux/macOS
 ```bash
 # 分析执行时间
-ANSIBLE_CALLBACK_WHITELIST=profile_tasks ansible-playbook site.yml
+ANSIBLE_CALLBACKS_ENABLED=profile_tasks ansible-playbook site.yml
 
 # 启用 Facts 缓存
 # ansible.cfg
@@ -227,7 +227,7 @@ forks = 50
 #### Windows (PowerShell)
 ```powershell
 # 分析执行时间
-$env:ANSIBLE_CALLBACK_WHITELIST="profile_tasks"
+$env:ANSIBLE_CALLBACKS_ENABLED="profile_tasks"
 ansible-playbook site.yml
 
 # 启用 Facts 缓存
@@ -245,7 +245,7 @@ forks = 50
 New-Item -ItemType Directory -Path C:\temp\ansible_facts_cache -Force
 
 # 使用 WSL 运行并分析
-wsl ANSIBLE_CALLBACK_WHITELIST=profile_tasks ansible-playbook site.yml
+wsl ANSIBLE_CALLBACKS_ENABLED=profile_tasks ansible-playbook site.yml
 
 # 检查执行时间输出
 ansible-playbook site.yml | Select-String "PLAY|TASK|ok|changed|failed"
@@ -295,8 +295,8 @@ ansible-vault view group_vars\all\vault.yml
 [defaults]
 forks = 50
 gathering = smart
-host_key_checking = False
-callback_whitelist = profile_tasks
+host_key_checking = False   # ⚠ 仅限一次性/隔离环境，生产保持 True（MITM 风险）
+callbacks_enabled = profile_tasks   # ansible-core 2.15+ 新名（旧名 callback_whitelist 已弃用）
 
 [ssh_connection]
 pipelining = True

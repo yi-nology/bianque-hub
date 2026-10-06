@@ -2,7 +2,7 @@
 name: k8s-helm-ops
 description: Helm release 排查方法论：release 状态判读（deployed/failed/pending-*）、升级回滚决策、values 漂移核对。宿主侧只读 CLI 采集（ask-ops 受审通道），诊断只读优先。
 mode: on_demand
-version: 0.1.2
+version: 0.1.3
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
@@ -30,7 +30,7 @@ provides_changes:        # 编目变更块（批次九十四「受审执行」�
 
 1. **状态盘点**：`helm list -A -a`——状态四态判读：deployed=正常；failed=上次操作失败但历史版本可用；pending-install/pending-upgrade/pending-rollback=操作中断（helm 2 兼容锁残留，`helm rollback` 或解除 secret 锁）；
 2. **历史核对**：`helm history <release> -n <ns>`——看 revision 链：最近一次 revision 的状态与描述；failed 后 chart 往往停在倒数第二个可用 revision；
-3. **回滚决策**：应急优先 `helm rollback <release> <n> -n <ns>`（回到最后 deployed 的 revision）；回滚≠修复——回滚后必须查失败原因再决定是否重试升级；
+3. **回滚决策**：应急回滚走编目变更块 `k8s-helm-rollback`（release/namespace/revision 三参；revision 取 history 链上最后 deployed 的 revision）；回滚≠修复——回滚后必须查失败原因再决定是否重试升级；
 4. **values 漂移**：`helm get values <release> -n <ns> --all` 与期望值比对；注意 `--reuse-values` 陷阱：升级未显式传值时沿用旧值，chart 新参数缺省不生效；
 5. **渲染比对**：`helm template` + `kubectl diff`（或 get manifest 比对）定位「chart 变了什么」——比读 chart 源码快。
 

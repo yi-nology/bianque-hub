@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 0.2.3 (2026-10-06)
+
+- 深审修复批：mw-quick-audit 链第二步 instruction 改「按部署形态分面板」（原钉扎 kafka-triage
+  却让 RabbitMQ 环境也收到 Kafka 分诊路径——方法论错配）；mw-redis-unlink-key 编目补
+  REDISCLI_AUTH 执行侧凭证载体约定（requirepass 实例原模板 NOAUTH 失败；禁 -a 裸密码）；
+  kafka-triage 两处错字（症状/目录）并升 0.1.2；redis-triage 版本补账 0.1.1（requires_mcp
+  系 0.2.0 批次补录未升版）。
+- 215 实弹修复：cache-analyst/mq-analyst 输出铁律补「steps 每条=单条可执行 shell 命令」
+  纪律（实测 mq-analyst 报告 steps 带中文说明被平台 schema 拒收，好诊断被兜底成失败报告；
+  说明性内容归 needs_followup——对齐 n8n-ops 0.2.1 实弹教训口径）。
+- 215 实弹修复：cache-analyst/mq-analyst max_iterations 12→24（实测多面板采集+委派
+  路径把 12 轮预算打爆，agentrun exceeds max iterations → 整会话失败兜底；上限只在
+  需要时消耗，不影响短会话）。
+
+
+
 ## 0.2.2 (2026-10-03)
 
 - 批次九十四「诊断+处方+受审执行」接入：新增编目变更块三件——`mw-redis-unlink-key`

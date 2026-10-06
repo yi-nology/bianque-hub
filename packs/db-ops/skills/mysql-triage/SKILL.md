@@ -2,7 +2,7 @@
 name: mysql-triage
 description: MySQL 五类故障分诊方法论：连接打满、锁与事务堵塞、慢查询定位、容量与 binlog 增长、缓冲池与抖动判读——固定顺序定位路径与判读基准（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
@@ -19,7 +19,7 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 - `SHOW GLOBAL STATUS LIKE '<pattern>'`（Threads_%、Aborted_%、Innodb_%、Slow_queries）、`SHOW VARIABLES`（max_connections、innodb_buffer_pool_size、long_query_time）；
 - `SHOW PROCESSLIST`（完整态用 `SELECT ... FROM information_schema.PROCESSLIST` 限行）、`SHOW ENGINE INNODB STATUS`；
 - `performance_schema.events_statements_summary_by_digest`（Top SQL 面）、`information_schema.INNODB_TRX` / `data_lock_waits`（8.0；5.7 用 information_schema.innodb_lock_waits）；
-- 容量面：`du` 数据目录/bdir 段、`SHOW BINARY LOGS` 总量；凭证由主机侧已配置客户端注入，对话不回显。
+- 容量面：`du` 数据目录与 binlog 目录段（datadir/binlog_do_db 对应的 log_bin 路径）、`SHOW BINARY LOGS` 总量；凭证由主机侧已配置客户端注入，对话不回显。
 
 ## 分诊路径（按症状类定位，固定顺序）
 

@@ -2,7 +2,7 @@
 name: grafana-ops
 description: Grafana 运维专家 - 仪表盘管理、数据源配置、告警规则、可视化优化
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -55,13 +55,13 @@ export GRAFANA_PASSWORD="admin"
 ### Linux/macOS
 ```bash
 # 1. 检查 Grafana 状态
-curl -s http://localhost:3000/api/health
+curl -s -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/health
 
 # 2. 查看数据源列表
-curl -s http://admin:admin@localhost:3000/api/datasources | jq '.[].name'
+curl -s -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/datasources | jq '.[].name'
 
 # 3. 查看仪表盘列表
-curl -s http://admin:admin@localhost:3000/api/search | jq '.[].title'
+curl -s -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/search | jq '.[].title'
 
 # 4. 查看日志
 tail -f /var/log/grafana/grafana.log
@@ -79,7 +79,7 @@ systemctl status grafana-server
 Invoke-RestMethod -Uri "http://localhost:3000/api/health"
 
 # 2. 查看数据源列表
-$auth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("admin:admin"))
+$token = $env:GRAFANA_TOKEN   # service account token；Basic auth 形态已废弃示例——URL/变量内嵌明文凭据会进 history 与审计面
 Invoke-RestMethod -Uri "http://localhost:3000/api/datasources" -Headers @{Authorization="Basic $auth"} |
     Select-Object -ExpandProperty name
 
@@ -117,7 +117,7 @@ curl.exe -s http://localhost:3000/api/health
 #### Linux/macOS
 ```bash
 # 检查数据源健康状态
-curl -s http://admin:admin@localhost:3000/api/datasources/uid/<uid>/health
+curl -s -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/datasources/uid/<uid>/health
 
 # 测试 Prometheus 连接
 curl -s http://prometheus:9090/api/v1/status/targets
@@ -132,7 +132,7 @@ grep "datasource" /var/log/grafana/grafana.log | tail -20
 #### Windows (PowerShell)
 ```powershell
 # 检查数据源健康状态
-$auth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("admin:admin"))
+$token = $env:GRAFANA_TOKEN   # service account token；Basic auth 形态已废弃示例——URL/变量内嵌明文凭据会进 history 与审计面
 Invoke-RestMethod -Uri "http://localhost:3000/api/datasources/uid/<uid>/health" -Headers @{Authorization="Basic $auth"}
 
 # 测试 Prometheus 连接
@@ -199,16 +199,16 @@ Get-ChildItem "C:\Program Files\GrafanaLabs\grafana\data\grafana.db" |
 #### Linux/macOS
 ```bash
 # 检查告警规则状态
-curl -s http://admin:admin@localhost:3000/api/alert-rules | jq '.[] | {title: .title, state: .state}'
+curl -s -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/alert-rules | jq '.[] | {title: .title, state: .state}'
 
 # 检查通知渠道
-curl -s http://admin:admin@localhost:3000/api/alert-notifications
+curl -s -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/alert-notifications
 
 # 检查告警日志
 grep "alert" /var/log/grafana/grafana.log | tail -50
 
 # 测试告警通知
-curl -X POST http://admin:admin@localhost:3000/api/alert-notifications/test \
+curl -X POST -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/alert-notifications/test \
   -H "Content-Type: application/json" \
   -d '{"name": "slack"}'
 ```
@@ -216,7 +216,7 @@ curl -X POST http://admin:admin@localhost:3000/api/alert-notifications/test \
 #### Windows (PowerShell)
 ```powershell
 # 检查告警规则状态
-$auth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("admin:admin"))
+$token = $env:GRAFANA_TOKEN   # service account token；Basic auth 形态已废弃示例——URL/变量内嵌明文凭据会进 history 与审计面
 $alerts = Invoke-RestMethod -Uri "http://localhost:3000/api/alert-rules" -Headers @{Authorization="Basic $auth"}
 $alerts | Select-Object title, state
 
@@ -289,7 +289,7 @@ callback_url = http://localhost:3000/
 
 ```bash
 # 创建数据源
-curl -X POST http://admin:admin@localhost:3000/api/datasources \
+curl -X POST -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/datasources \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Prometheus",
@@ -300,7 +300,7 @@ curl -X POST http://admin:admin@localhost:3000/api/datasources \
   }'
 
 # 导入仪表盘
-curl -X POST http://admin:admin@localhost:3000/api/dashboards/db \
+curl -X POST -H "Authorization: Bearer $GRAFANA_TOKEN" http://localhost:3000/api/dashboards/db \
   -H "Content-Type: application/json" \
   -d '{
     "dashboard": {
@@ -312,7 +312,7 @@ curl -X POST http://admin:admin@localhost:3000/api/dashboards/db \
   }'
 
 # 搜索仪表盘
-curl -s "http://admin:admin@localhost:3000/api/search?query=node&limit=10"
+curl -s -H "Authorization: Bearer $GRAFANA_TOKEN" "http://localhost:3000/api/search?query=node&limit=10"
 ```
 
 ## 输出规范

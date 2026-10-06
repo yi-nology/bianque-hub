@@ -2,7 +2,7 @@
 name: zabbix
 description: Zabbix 运维专家 - 监控配置、告警管理、模板定制、性能优化、分布式部署
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -24,6 +24,7 @@ maturity: experimental
 **初始化代码（所有操作前直接使用）**：
 
 ```python
+import os
 from zabbix_utils import ZabbixAPI
 import os
 
@@ -59,6 +60,7 @@ pip install zabbix-utils --break-system-packages
 ### 认证
 
 ```python
+import os
 from zabbix_utils import ZabbixAPI
 import os
 
@@ -83,6 +85,7 @@ print(api.api_version())
 ### 环境变量模式（推荐用于生产环境）
 
 ```python
+import os
 import os
 from zabbix_utils import ZabbixAPI
 
@@ -288,6 +291,7 @@ print(response.value)
 ```python
 import csv
 import os
+import os
 from zabbix_utils import ZabbixAPI
 
 # 从环境变量读取配置
@@ -376,6 +380,7 @@ for t in triggers:
 ## 错误处理
 
 ```python
+import os
 from zabbix_utils import ZabbixAPI
 from zabbix_utils.exceptions import APIRequestError
 
@@ -423,6 +428,7 @@ logging.basicConfig(level=logging.DEBUG)
 **实现代码**：
 
 ```python
+import os
 from zabbix_utils import ZabbixAPI
 from datetime import datetime, timedelta
 import time
@@ -564,6 +570,7 @@ hostname
 **实现代码**：
 
 ```python
+import os
 from zabbix_utils import ZabbixAPI
 import os
 
@@ -762,6 +769,7 @@ available] |
 **实现代码**：
 
 ```python
+import os
 from zabbix_utils import ZabbixAPI
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -997,10 +1005,11 @@ report = generate_alert_report(24)
 **实现代码**：
 
 ```python
+import os
 from zabbix_utils import ZabbixAPI
 
 api = ZabbixAPI(url="ZABBIX_URL")
-api.login(user="Admin", password="zabbix")
+api.login(user=os.environ["ZABBIX_USER"], password=os.environ["ZABBIX_PASSWORD"])   # 禁硬编码默认口令（Admin/zabbix 是出厂默认，示例照抄=弱凭证）
 
 def list_all_triggers(hostgroup_name=None, hostname=None, severity=None, status=None):
     """

@@ -2,7 +2,7 @@
 name: security-process-detection
 description: 检测 Linux 服务器（CentOS/Ubuntu/麒麟 V10/openEuler 等）中的疑似恶意进程、异常运行行为、疑似挖矿程序及后门行为，并提供风险分析与处置建议。
 mode: on_demand
-version: 1.0.0
+version: 1.0.1
 maturity: stable
 requires_mcp:
   - server: security-assistant
@@ -23,7 +23,7 @@ requires_mcp:
 ## 触发条件
 
 - 症状关键词：恶意进程、挖矿程序、异常进程、僵尸进程、可疑可执行路径、父子进程攻击链
-- 组合场景：与 security-c2-detection 联动核查进程外联；入侵响应时配合 security-linux-persistence-detection 查驻留
+- 组合场景：与 security-ssh-attack 联动核查攻击来源；入侵响应时配合 security-root-login-detection / security-sudo-detection 查权限滥用链
 
 ## Skill职责
 
@@ -146,7 +146,7 @@ executable 显示 (deleted) 属于高风险行为。
 
 ### Step5：输出报告
 
-最终输出遵循 `AGENTS.md「报告协议」` 纯 JSON schema（`requires_approval` 恒 false）；下述内容要素映射至对应 JSON 字段，不作为独立输出格式。
+最终输出遵循平台统一报告 schema（纯 JSON，字段语义见专家 prompt 的输出协议段）；下述内容要素映射至对应 JSON 字段，不作为独立输出格式。
 
 输出：
 

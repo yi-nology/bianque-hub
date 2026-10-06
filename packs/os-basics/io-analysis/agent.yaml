@@ -14,6 +14,7 @@ tools:
 dispatch_allow: []
 route_priority: P6
 route_group: storage
+route_desc: 主机 IO 栈分析专家：磁盘/iostat/压力面读写瓶颈定位（os-basics 六域之 IO 域）
 domain:
 - IO
 - 存储

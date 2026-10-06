@@ -1,14 +1,15 @@
 # obs-ops：可观测自诊包（社区版）
 
 「监控系统的监控」——当监控/日志/看板栈自己病了（监控失明），本包接管诊断。
-三技能 + 一专家，全部只读采集。
+四技能 + 一专家，全部只读采集。
 
 | 资产 | 说明 |
 |---|---|
 | `skills/prometheus-triage` | target 掉线三分、采集质量（超时/乱序）、规则与告警失效、TSDB 基数与 remote write 积压四面板（oo-devops prometheus/prometheus-alerts 合并重写） |
 | `skills/grafana-triage` | 面板无数据三层反推（数据源→查询→时间范围）、插件面、查询性能面（oo-devops grafana-ops 面重写） |
 | `skills/es-triage` | 集群红黄定性、allocation explain 五类归因、磁盘水位三级保护（flood_stage 只读锁）、压力面（oo-devops elasticsearch-ops/elk-ops 合并重写） |
-| `obs-analyst/` | 可观测自诊专家（ask-ops 只读面） |
+| `skills/loki-triage` | 日志查询面（Loki）三段排障：datasources 查询工具面 → 采集端（promtail/alloy 系）→ 存储端（ingester/compactor）归属定位（oo-devops loki 系收割重写） |
+| `obs-analyst/` | 可观测自诊专家（ask-ops 只读面 + datasources 查询面） |
 
 ## 路由错位（重要）
 
@@ -35,5 +36,5 @@ go run ./cmd/bq-markettool install --url <本仓> --pack obs-ops --api <扁鹊�
 
 源自 openocta 收割的 oo-devops 市场包。原版技能假定 PROMETHEUS_URL /
 REDIS_EXPORTER_URL 等环境变量注入与未供给的 MCP 工具面——本版全部剥离，改为
-ask-ops 只读采集 + 明确的 API 面口径。loki/skywalking/zabbix 等技能族暂未搬运，
+ask-ops 只读采集 + 明确的 API 面口径。skywalking/zabbix 等技能族暂未搬运（loki 已于 0.3.0 收入），
 按需在后续版本承接。

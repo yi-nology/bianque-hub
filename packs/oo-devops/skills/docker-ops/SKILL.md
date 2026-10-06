@@ -2,7 +2,7 @@
 name: docker-ops
 description: Docker 运维专家 - 容器管理、镜像优化、网络排查、集群运维
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -227,8 +227,9 @@ docker system prune -a  # 清理所有未使用
 docker volume prune      # 清理未使用卷
 docker image prune       # 清理未使用镜像
 
-# 清理特定资源
-docker rm $(docker ps -aq)  # 删除所有容器
+# 清理特定资源（只清已停止容器——删运行中容器=停服事故；先看清单再删）
+docker ps -aq --filter status=exited          # 先列清单人工确认
+docker rm $(docker ps -aq --filter status=exited)
 docker rmi $(docker images -q -f dangling=true)  # 删除悬空镜像
 
 # 查看容器层大小

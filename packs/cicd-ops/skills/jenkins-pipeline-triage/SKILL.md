@@ -16,7 +16,7 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 
 ## 数据来源（ask-ops 只读面）
 
-- REST GET：`<jenkins-url>/computer/api/json`（各 agent offline/idle/executors 状态）、`/queue/api/json`（排队项与阻塞原因）、`/api/json?tree=jobs[color]`（job 健康色板）；
+- REST GET（URL 含 `?`/`[]` 特殊字符一律整体单引号包裹，防 shell glob/解析）：`<jenkins-url>/computer/api/json`（各 agent offline/idle/executors 状态）、`<jenkins-url>/queue/api/json`（排队项与阻塞原因）、`'<jenkins-url>/api/json?tree=jobs[color]'`（job 健康色板）；
 - 失败上下文：具体 job 的 `lastFailedBuild` 控制台日志尾部（GET）；
 - 主机侧：控制器进程（java）CPU/内存、JENKINS_HOME 磁盘水位（du/df）、日志尾部（jenkins.log）；
 - 凭证由主机侧已配置环境注入（API token），对话不回显。

@@ -2,11 +2,13 @@
 name: loki-triage
 description: Loki 日志分诊方法论：标签面断流归因、查询空结果三分型、429 限频与语法错判读、store/ingester 后端压力——固定顺序定位与判读基准（datasources Loki 查询面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: datasources
     tools: [loki_query_range, loki_labels]
+  - server: ask-ops      # 主机侧补充采集（采集器进程/配置、存储端指标 curl 补采）；obs-analyst 已授权
+    tools: [run_readonly_command, run_readonly_commands]
 ---
 
 ## 触发条件
@@ -28,7 +30,7 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 ## 分诊路径（固定顺序，先标签后查询再后端）
 
 1. **标签面**：`loki_labels` 返回空或缺预期标签（如 job/app）→ 日志**根本没进来**：
-   采集端（promtail/alloy/promtail 系）没在送——转主机面查采集器进程与配置（ask-ops），
+   采集端（promtail/alloy/otel-collector 系）没在送——转主机面查采集器进程与配置（ask-ops），
    本技能止步于「标签缺失=采集断」，不猜采集端原因。
 2. **查询空结果三分型**：标签在但 `query_range` 空结果，按序排查——
    **选择器写错**（用了不存在的标签/值；对照 labels 输出修正）→ **时间窗错**（`since`

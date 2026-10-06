@@ -2,7 +2,7 @@
 name: rabbitmq-ops
 description: RabbitMQ 运维专家 - 集群管理、消息治理、性能优化、故障恢复
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -178,7 +178,9 @@ rabbitmqctl.bat list_connections peer_host peer_port state | Select-String "bloc
 # 检查分区
 rabbitmqctl cluster_status | grep partitions
 
-# 手动恢复（选择一个节点）
+# 手动恢复（选择一个节点）——⚠ reset 会清空该节点全部消息/元数据：
+# 执行前确认该节点不是唯一持有目标队列权威副本的节点（镜像/仲裁队列
+# 在其他节点有副本才安全）；数据无副本时先备份 mnesia 再动。
 rabbitmqctl stop_app
 rabbitmqctl reset
 rabbitmqctl join_cluster rabbit@node1
@@ -221,7 +223,7 @@ max_connections = 10000
 max_channels = 10000
 
 # 队列和消息
-queue_master_locator = min-masters
+queue_leader_locator = min-masters   # 3.10+ 新名（旧名 queue_master_locator 已弃用，旧版本回读仍兼容）
 lazy_queue_explicit_gc_run_operation_threshold = 1000
 ```
 

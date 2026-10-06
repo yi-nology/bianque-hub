@@ -2,17 +2,27 @@
 name: k8s-events-timeline
 description: K8s 事件时间线分析方法论：从 list-events 输出构建事件链、识别因果起点、区分噪音信号（Normal 级）与故障信号（Warning 级）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:
   - server: k8sgpt
     tools: [list-events, list-namespaces]
+  - server: ask-ops        # 宿主侧补充采集（节点 dmesg 等）；只读受审面，被拒不绕过
+    tools: [run_readonly_command]
 ---
+
+## 触发条件
 
 ## 触发条件
 
 - 症状关键词：集群日志、事件排查、k8s 日志、事件时间线、「为什么 pod 被删/驱逐/重启」
 - 组合场景：任何工作负载异常的佐证环节（k8s-workload-triage 第 3/5 步深化）
+
+## 数据来源
+
+- k8sgpt 两工具（list-events/list-namespaces）为本技能主面；事件超出 1 小时保留
+  期需宿主侧佐证时，经 ask-ops `run_readonly_command` 受审执行只读命令
+  （如节点 `dmesg -T | tail`——流式跟随形态会被守卫拒绝，不绕过）。
 
 ## 方法论（固定顺序）
 
@@ -26,7 +36,7 @@ requires_mcp:
 
 - `BackOff` 事件跟着 `Pulled` 失败 → 镜像/凭证面；`FailedScheduling` → 资源/亲和面；`Evicted` → 节点压力面；
 - `Killing` 的 reason/消息字段指出发起者（liveness probe / preemption / eviction / OOM）——这是「谁杀的 pod」的直接答案；
-- events 只有 1 小时保留期（缺省 etcd ttl）：查不到历史事件≠没发生过，改查 workload 的 lastState 与节点 dmesg。
+- events 只有 1 小时保留期（缺省 etcd ttl）：查不到历史事件≠没发生过，改查 workload 的 lastState；节点内核侧佐证（dmesg OOM/网络错误）经 ask-ops 只读面补采或标注需人工执行。
 
 ## 输出要求
 

@@ -2,7 +2,7 @@
 name: vault-ops
 description: Vault 运维专家 - 密钥管理、访问控制、高可用架构、安全审计
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -134,7 +134,9 @@ vault operator raft autopilot state
 # 快照备份
 vault operator raft snapshot save backup.snap
 
-# 快照恢复
+# 快照恢复——灾难级操作（会用快照内容覆盖集群全部现有数据）：
+# 仅在集群数据已判定不可用/需回滚到快照点时执行，执行前集群须停写隔离，
+# 并按官方灾难恢复流程（多数节点同批恢复）。不要与日常查询命令并列照抄。
 vault operator raft snapshot restore backup.snap
 ```
 

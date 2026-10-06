@@ -16,13 +16,13 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 
 ## 数据来源（ask-ops 只读面）
 
-- GitLab REST GET（凭证走已配置 token）：`/api/v4/runners?scope=online|offline`、`/api/v4/projects/<id>/pipelines`、`/api/v4/projects/<id>/jobs`（status 分布）、job 日志尾部；
+- GitLab REST GET（凭证走已配置 token；URL 含 `?`/`|` 特殊字符一律整体单引号包裹，防 shell 解析）：`'/api/v4/runners?scope=online'`、`'/api/v4/runners?scope=offline'`、`/api/v4/projects/<id>/pipelines`、`/api/v4/projects/<id>/jobs`（status 分布）、job 日志尾部；
 - runner 主机侧：`gitlab-runner list` / `gitlab-runner status`、config.toml 的 concurrent 限制、runner 进程与宿主资源；
 - GitLab 侧健康：`/api/v4/version`（版本面）、sidekiq 队列延迟证据（管理面，通常只有平台侧可见，无证据时标注）。
 
 ## 分诊路径（按症状类定位，固定顺序）
 
-1. **job 卡 created/pending**：`/runners?scope=online` 确认可用 runner → 三分：**无匹配 runner**（job tag 与 runner tags 不交，或 runner 未分配到该项目/组）、**并发饱和**（runner 全忙，concurrent 配置口径）、**runner 下线**（offline 清单，去第 2 步）。tag 不匹配是最常见的「pending 永动机」根因。
+1. **job 卡 created/pending**：`'/api/v4/runners?scope=online'` 确认可用 runner → 三分：**无匹配 runner**（job tag 与 runner tags 不交，或 runner 未分配到该项目/组）、**并发饱和**（runner 全忙，concurrent 配置口径）、**runner 下线**（offline 清单，去第 2 步）。tag 不匹配是最常见的「pending 永动机」根因。
 2. **runner 掉线**：runner 主机 `gitlab-runner status` + 进程/容器状态 → 归因三分：进程死（重启是变更建议）、认证失效（注册令牌被轮换/解除注册，重新注册是变更）、宿主资源不足（联动 os-basics）。批量 runner 同时掉线优先查共同上游（网络/注册中心/GitLab 侧变更）。
 3. **流水线级失败分类**：失败 job 日志尾部三分——**环境面**（clone 失败：Git 通道/网络；依赖拉取失败）、**真失败**（测试/编译断言，交业务修复）、**资源面**（runner 磁盘满、job 超时 trace 被截断标志）。
 4. **配额与令牌面**：项目 CI 分钟数/配额耗尽时 job 直接失败（错误文案证据）；共享 runner vs 自建 runner 归属核对（配额只影响共享面）。

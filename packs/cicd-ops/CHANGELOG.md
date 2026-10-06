@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 0.2.3 (2026-10-06)
+
+- 深审修复批：argocd-sync-triage 杜撰配置名 `selfIgnoreConfig` 修正为真实机制
+  `ignoreDifferences`（应用级）/`resource.customizations`（argocd-cm 级）豁免口径
+  （0.1.1→0.1.2）；gitlab-ci-triage/jenkins-pipeline-triage REST URL 特殊字符
+  （`?`/`|`/`[]`）整体单引号包裹示范（0.1.1→0.1.2）；CHANGELOG 0.1.2 旧条目串包
+  引用（es-triage 属 obs-ops）按包内实情改写。
+- 215 实弹口径前移：pipeline-analyst 输出铁律补「steps 每条=单条可执行 shell 命令」纪律
+  （说明性内容归 needs_followup）。
+- 215 实弹口径前移：pipeline-analyst max_iterations 12→24（三段定位采集同型预算风险）。
+
+
+
 ## 0.2.2 (2026-10-03)
 
 - 批次九十四「诊断+处方+受审执行」接入：新增编目变更块两件——`cicd-argocd-app-sync`
@@ -29,7 +42,7 @@
 ## 0.1.2 (2026-10-02)
 
 - 处方修正（对齐 run_readonly_command 引号感知守卫）：harbor-triage 证书探测去
-  `2>/dev/null`（stderr 本就不采集，重定向会被拒）；es-triage `_cat` URL 带 `&`
+  `2>/dev/null`（stderr 本就不采集，重定向会被拒），`_cat`/查询类 URL 带 `&`
   查询参数时给引号形态示范。
 
 ## 0.1.1 (2026-10-02)

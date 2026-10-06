@@ -2,7 +2,7 @@
 name: web-console-screenshot
 description: 页面/控制台截图取证方法论：无头 Chromium 打开目标、确认渲染、全页与视口双档截图、tab 回收——取证三件套（截图+正文摘录+最终 URL）的固定产出形态（browser-ops 只读档）。
 mode: on_demand
-version: 0.1.0
+version: 0.2.0
 maturity: experimental
 requires_mcp:
   - server: browser-ops
@@ -17,7 +17,9 @@ requires_mcp:
 ## 数据来源
 
 `requires_mcp` 声明 browser-ops 只读档五工具；本技能不使用执行档（click/type/eval
-不进本技能步骤）。
+不进本技能步骤）。**前提**：browser-ops 是站点 conf `mcp.servers` 显式启用面
+（缺省硬关）——工具不在场时不空转重试，输出启用指引（conf 增加 browser-ops
+server 并重启）并如实报告不可用。
 
 ## 方法论（固定顺序）
 

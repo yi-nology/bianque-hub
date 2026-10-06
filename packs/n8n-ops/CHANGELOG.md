@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.2.3 (2026-10-06)
+
+- 深审修复批：n8n-container-restart 编目 title 错字（task biner→task runner）；
+  n8n-execution-triage「running 不结束」补 queue 模式关键口径（超时由 worker 进程
+  执行，env 只配 main 不配 worker 是「超时不生效」高频根因，0.1.1→0.2.1）。
+
 ## 0.2.2 (2026-10-03)
 
 - 批次九十四「诊断+处方+受审执行」接入：新增编目变更块 `n8n-container-restart`（实例/worker

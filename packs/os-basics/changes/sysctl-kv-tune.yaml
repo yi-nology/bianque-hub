@@ -8,7 +8,7 @@ slug: sysctl-kv-tune
 title: sysctl 内核参数调优（运行时 + 持久化）
 request_type: tune
 risk: 2
-rollback: "sysctl -w <key>=<旧值>（变更前基线由平台执行前只读快照留痕）；删除 /etc/sysctl.d/99-bq-tune.conf 对应行"
+rollback: "sysctl -w <key>=<旧值>（变更前基线由平台执行前只读快照留痕）；从 /etc/sysctl.d/99-bq-tune.conf 删除该 key 的持久化行（按行首 key= 匹配 sed 删除）"
 verify_readonly:
   - "sysctl -n {{key}}"
 params:
@@ -19,5 +19,7 @@ params:
     kind: string
     required: true
 commands:
+  # 持久化为按 key 幂等 upsert：已存在该行则原位改写，不存在才追加——
+  # 整文件覆盖形态会在同站点第二次调参时抹掉首次参数（重启后回退），已废弃。
   - "sysctl -w {{key}}={{value}}"
-  - "echo '{{key}} = {{value}}' > /etc/sysctl.d/99-bq-tune.conf"
+  - "grep -qE '^{{key}}[[:space:]]*=' /etc/sysctl.d/99-bq-tune.conf && sed -i 's#^{{key}}[[:space:]]*=.*#{{key}} = {{value}}#' /etc/sysctl.d/99-bq-tune.conf || echo '{{key}} = {{value}}' >> /etc/sysctl.d/99-bq-tune.conf"

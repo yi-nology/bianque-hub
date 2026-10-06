@@ -2,7 +2,7 @@
 name: kafka-triage
 description: Kafka 故障分诊方法论：消费组积压三因子（消费慢/分区不均/生产激增）、分区 Leader 与 ISR 健康、存储水位、消息丢失/重复成因链——固定顺序定位与判读基准（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.1
+version: 0.1.2
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops
@@ -13,14 +13,14 @@ provides_changes:        # 编目变更块（批次九十四「受审执行」�
 
 ## 触发条件
 
-- 痪状关键词：消息积压、lag增长、消费不动、消费者掉线、isr收缩、分区不可用、发布超时、消息丢失、消息重复
+- 症状关键词：消息积压、lag增长、消费不动、消费者掉线、isr收缩、分区不可用、发布超时、消息丢失、消息重复
 - 组合场景：broker 进程/宿主异常先经 os-basics 或 k8s-ops 排除底层；rebalance 反复与消费逻辑超时强相关（需应用侧日志佐证）
 
 ## 数据来源（ask-ops 只读面）
 
 - `kafka-consumer-groups.sh --bootstrap-server <bs> --describe --group <g>`：CURRENT-OFFSET / LOG-END-OFFSET / LAG / CONSUMER-ID；
 - `kafka-topics.sh --bootstrap-server <bs> --describe --topic <t>`（Leader/Replicas/Isr；全量体检加 `--unavailable-partitions`）；
-- `kafka-log-dirs.sh --bootstrap-server <bs> --describe --topic-list <t>`：各 broker 日录容量；
+- `kafka-log-dirs.sh --bootstrap-server <bs> --describe --topic-list <t>`：各 broker 目录容量；
 - 以上 CLI 从目标集群运维主机执行，凭证走已配置环境，不在对话回显。
 
 ## 分诊路径（固定顺序）

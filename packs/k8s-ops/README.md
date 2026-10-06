@@ -22,6 +22,10 @@
 
 ## 前置（与 os-basics K8s 域一致）
 
+> 链 `workflow/k8s-cluster-audit` 第一步引用跨包专家 `specialists/k8s-health`
+> （平台内置或 os-basics 镜像）做全景采集——单装本包的站点须确认该专家在场，
+> 否则链入口不可用（专家路由不受影响）。
+
 1. k8sgpt 0.4.39 sidecar 挂目标集群 kubeconfig（见 os-basics README「K8s 集群诊断域」）；
 2. 扁鹊 `mcp.servers.k8sgpt` url 模式指向 sidecar MCP 口；
 3. 安装本包：`bq-markettool install --url <本仓> --pack k8s-ops --api <实例>`。

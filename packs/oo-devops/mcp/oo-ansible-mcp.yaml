@@ -1,6 +1,9 @@
 # 由 bq-markettool convert 生成（员工 MCP 包声明；禁手改，改 curation/patches）。
 # 引用员工: ansible-employee
 # 激活: etc/config-<env>.yaml mcp.servers 加同名条目（enabled: true + 覆盖定义）。
+# 激活对账提示：本契约是工具面事实记录，server 激活（conf mcp.servers 加同名条目）后，
+# 须同步给引用员工 agent.yaml 的 tools 增加同名 server 授权——契约在而授权缺=拉起了
+# server 专家却用不了（hub 契约模型：tools[].server 是授权面）。
 definition:
     command:
         - npx

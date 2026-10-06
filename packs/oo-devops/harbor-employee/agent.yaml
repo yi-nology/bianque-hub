@@ -14,8 +14,6 @@ skills:
 tools:
     - server: ask-ops
       allow: []
-    - server: terminal-assistant
-      allow: []
 dispatch_allow: []
 route_priority: P6
 route_group: kubernetes
@@ -28,5 +26,5 @@ route_keywords:
     - Harbor 镜像仓库
     - harbor 镜像仓库
 symptoms:
-    - 镜像拉取失败
+    - harbor镜像拉取失败
 route_desc: Harbor 容器镜像仓库运维员工，支持镜像管理、安全扫描、复制策略、项目管理

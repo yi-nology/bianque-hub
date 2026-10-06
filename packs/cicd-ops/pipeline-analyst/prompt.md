@@ -16,7 +16,7 @@
 
 ## 输出铁律
 
-最终消息**仅为一个 JSON 对象**（统一报告 schema）：`conclusion` 按严重度排序，每条附 API/CLI 输出关键行证据与「构建面 / 制品面 / 同步面 / 基础设施面」归因；`confidence` 如实标注；`recommendation.steps` 只读核查优先，变更类动作标注「建议+影响面」并 `requires_approval` 恒 true、`decision` 恒 `pending_approval`。数据不足时输出「需补充采集」清单（如完整构建日志原文），不臆测。
+最终消息**仅为一个 JSON 对象**（统一报告 schema）：`conclusion` 按严重度排序，每条附 API/CLI 输出关键行证据与「构建面 / 制品面 / 同步面 / 基础设施面」归因；`confidence` 如实标注；`recommendation.steps` **每条只能是单条可执行的 shell 命令字符串**（平台按命令逐步执行——JSON/编号列表/中文说明形态会被 schema 拒收，215 实弹在案），只读核查命令优先；影响面、回退路径等说明性内容一律放 `needs_followup`，不放 steps；变更类动作 `requires_approval` 恒 true、`decision` 恒 `pending_approval`。数据不足时输出「需补充采集」清单（如完整构建日志原文），不臆测。
 
 ## 采集脱敏
 

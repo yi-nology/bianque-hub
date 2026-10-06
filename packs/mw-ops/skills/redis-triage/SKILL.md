@@ -2,7 +2,7 @@
 name: redis-triage
 description: Redis 五类故障分诊方法论：内存满/驱逐风暴、延迟毛刺、缓存雪崩击穿穿透、主从复制中断、连接打满——固定顺序定位路径与判读基准（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops

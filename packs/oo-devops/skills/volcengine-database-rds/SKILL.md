@@ -2,7 +2,7 @@
 name: volcengine-database-rds
 description: 操作 Volcengine RDS 实例和数据库工作流。当用户需要配置指导、连接检查、性能故障排除或备份/恢复流程时使用。
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -26,3 +26,7 @@ maturity: experimental
 ## 参考
 
 - `references/sources.md`
+
+
+> ⚠️ **收割占位（stub）**：本技能收割时仅落了元信息，正文方法论待补全；
+> 使用前以下游官方文档为准，勿按此空壳行事。同类完整件见同域技能（如 loki-ops）。

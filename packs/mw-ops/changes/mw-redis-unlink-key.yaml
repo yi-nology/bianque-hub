@@ -22,4 +22,6 @@ params:
     kind: string
     required: true
 commands:
+  # 认证载体：requirepass 实例由执行侧环境注入 REDISCLI_AUTH（redis-cli 自动读取），
+  # 禁 -a 裸密码上命令行（ps/history 泄漏面）；无认证实例本模板原样可用。
   - "redis-cli -h {{host}} -p {{port}} UNLINK {{key}}"

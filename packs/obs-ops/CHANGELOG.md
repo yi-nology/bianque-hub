@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 0.3.3 (2026-10-06)
+
+- 深审修复批：README 与包体脱节收口（「三技能」→四技能、资产表补 loki-triage 行、
+  「暂未搬运」清单移除 loki）；loki-triage requires_mcp 补钉 ask-ops 面（正文
+  `curl <loki>/metrics` 补采口径在用而声明账缺失——0.3.0 loki 事故同族残留，
+  0.1.0→0.1.1）+ 采集端枚举修正（promtail/alloy/otel-collector 系）；prometheus-triage
+  URL 引号示范 + grep 管段改 head/tail 口径（0.1.0→0.1.1）；CHANGELOG 0.1.2 旧条目
+  串包引用（harbor-triage 属 cicd-ops）按包内实情改写。
+- 215 实弹口径前移：obs-analyst 输出铁律补「steps 每条=单条可执行 shell 命令」纪律
+  （说明性内容归 needs_followup）。
+- 215 实弹口径前移：obs-analyst max_iterations 12→24（四面板采集同型预算风险）。
+
+
+
 ## 0.3.2 (2026-10-03)
 
 - 批次九十四「诊断+处方+受审执行」接入：新增编目变更块两件——`obs-es-index-unblock-readonly`
@@ -38,9 +52,9 @@
 
 ## 0.1.2 (2026-10-02)
 
-- 处方修正（对齐 run_readonly_command 引号感知守卫）：harbor-triage 证书探测去
-  `2>/dev/null`（stderr 本就不采集，重定向会被拒）；es-triage `_cat` URL 带 `&`
-  查询参数时给引号形态示范。
+- 处方修正（对齐 run_readonly_command 引号感知守卫）：es-triage `_cat` URL 带
+  `&` 查询参数时给引号形态示范；证书探测类 curl 去 `2>/dev/null`（stderr 本就
+  不采集，重定向会被拒）。
 
 ## 0.1.1 (2026-10-02)
 

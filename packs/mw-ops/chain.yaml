@@ -14,4 +14,4 @@ steps:
     instruction: "第一步——缓存域例检（内存与驱逐/命中率/主从/连接四面板快速采集判读，异常项标记供第二步参考）：{{input}}"
   - agent: imports/mq-analyst
     skill: kafka-triage
-    instruction: "第二步——消息队列域例检（消费组积压/分区 ISR/水位告警面板，Kafka 与 RabbitMQ 按环境实际部署取舍）：{{input}}"
+    instruction: "第二步——消息队列域例检（按环境实际部署取舍：Kafka 环境按本步钉扎的 kafka-triage 分诊路径执行消费组积压/分区 ISR/水位告警面板；RabbitMQ 环境按 mq-analyst 挂载的 rabbitmq 面板执行队列积压/连接/内存告警面板，两者只跑在场者）：{{input}}"

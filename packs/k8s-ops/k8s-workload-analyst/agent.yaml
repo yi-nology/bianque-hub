@@ -3,7 +3,7 @@ name: K8s 工作负载分析专家
 layer: expert
 kind: llm
 temperature: 0.2
-max_iterations: 14
+max_iterations: 28
 prompt_file: prompt.md
 skills:
   - k8s-workload-triage

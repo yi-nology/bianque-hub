@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.4.0 (2026-10-06)
+
+- 深审修复批：`k8s-node-diagnosis` 按仓内五段式补齐（数据来源/判读基准/输出要求，
+  0.2.0→0.3.0）并去掉未知 frontmatter 键 `provides`、补 `maturity`；安全四技能
+  收割残留清理——悬空互引（security-c2-detection/linux-persistence/account-permission
+  → 包内真实技能）、`AGENTS.md「报告协议」`死指针→平台统一报告 schema、自创
+  「用户确认后执行处置」审批语义→平台审批口径、requires_mcp 补声明正文实际
+  使用的 collect_network_status/list_directory/read_file；`changes/sysctl-kv-tune`
+  持久化改按 key 幂等 upsert（整文件覆盖会抹掉同站点首次调参）；四专家补
+  route_desc；k8s-health prompt 显式钉 requires_approval/decision 语义、agent 注释
+  指针更新。（注：曾试随包带 mcp/k8sgpt.yaml 契约，215 实测 reload 报「tool_manifest
+  同名冲突」——k8s-ops 已带同名契约，平台按包名字典序取 k8s-ops，双份纯噪音，故撤出；
+  hub 侧对应 WARN 由「契约单源在 k8s-ops」口径收口。）
+
 ## 1.3.3 (2026-10-03)
 
 - verify_readonly 接入平台自动执行（批次九十五二阶段）：sysctl-kv-tune 补 `sysctl -n {{key}}` 变更后验证命令（RenderVerify 参数代换与 commands 同口径）——首个带自动验证的编目变更块。

@@ -20,7 +20,7 @@
 
 ## 输出铁律
 
-最终消息**仅为一个 JSON 对象**（统一报告 schema）：`conclusion`=按严重度排序的结论列表；每个结论区分「工作负载层 / 节点层 / 集群面」归因并附 events/logs 关键行证据；`confidence` 如实标注；`recommendation.steps` 只读核查优先；变更处方优先 `recommendation.change_ref` 引用编目变更块（k8s-helm-rollback / k8s-kubeadm-certs-renew / k8s-rollout-restart——命令本体由编目模板固定，`change_params` 按技能输出要求给参），未编目的变更动作标注「建议+影响面」并 `requires_approval` 恒 true、`decision` 恒 `pending_approval`。数据不足时输出「需补充采集」清单，不臆测。
+最终消息**仅为一个 JSON 对象**（统一报告 schema）：`conclusion`=按严重度排序的结论列表；每个结论区分「工作负载层 / 节点层 / 集群面」归因并附 events/logs 关键行证据；`confidence` 如实标注；`recommendation.steps` **每条只能是单条可执行的 shell 命令字符串**（平台按命令逐步执行——JSON/编号列表/中文说明形态会被 schema 拒收，215 实弹在案），只读核查命令优先；影响面、回退路径等说明性内容一律放 `needs_followup`，不放 steps；变更处方优先 `recommendation.change_ref` 引用编目变更块（k8s-helm-rollback / k8s-kubeadm-certs-renew / k8s-rollout-restart——命令本体由编目模板固定，`change_params` 按技能输出要求给参），未编目的变更动作 `requires_approval` 恒 true、`decision` 恒 `pending_approval`。数据不足时输出「需补充采集」清单，不臆测。
 
 ## 采集脱敏
 

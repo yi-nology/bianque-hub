@@ -14,6 +14,7 @@ tools:
 dispatch_allow: []
 route_priority: P6
 route_group: network
+route_desc: 主机网络分析专家：连通性/丢包/连接状态面定位（os-basics 六域之网络域）
 domain:
 - 网络
 route_keywords:

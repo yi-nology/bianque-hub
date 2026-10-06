@@ -2,7 +2,7 @@
 name: gitlab-ops
 description: GitLab 运维专家 - CI/CD 管理、性能优化、高可用架构、备份恢复
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -160,9 +160,9 @@ gitlab-ctl restart
 # 检查端口监听
 ss -tunpl | grep 8080
 
-# 检查内存使用
+# 检查内存使用（gitlab-ctl 无 memory 子命令——组件内存用 status + 系统面组合看）
 free -h
-gitlab-ctl memory
+gitlab-ctl status
 
 # 增加 worker 数量
 # /etc/gitlab/gitlab.rb
@@ -211,9 +211,10 @@ sudo tail -f /var/log/gitlab-runner.log
 # 检查 Executor 配置
 sudo cat /etc/gitlab-runner/config.toml
 
-# 清理缓存和镜像
+# 清理缓存和镜像——只清 Runner 缓存；docker 层清理须限幅（无差别
+# system prune -a 会删掉同机其他服务的镜像，影响面远超 Runner）
 sudo gitlab-runner clear-cache
-sudo docker system prune -a
+sudo docker image prune -a --filter "until=168h"   # 只清 7 天未使用的镜像
 ```
 
 #### Windows (PowerShell)
@@ -249,8 +250,11 @@ gitlab-runner.exe register --non-interactive --url https://gitlab.com/ --registr
 # 查看存储使用
 gitlab-rake gitlab:storage:projects
 
-# 清理旧 artifacts
-gitlab-rake gitlab:cleanup:project_orphans DRY_RUN=false
+# 清理孤儿 artifacts——先 dry-run 看清单再真删（DRY_RUN 是环境变量前缀，
+# 不是 rake 参数）；rake 任务名以本机 `gitlab-rake -T | grep cleanup` 为准
+gitlab-rake -T | grep cleanup
+DRY_RUN=true gitlab-rake gitlab:cleanup:orphan_job_artifact_files
+DRY_RUN=false gitlab-rake gitlab:cleanup:orphan_job_artifact_files
 
 # 清理 Container Registry
 gitlab-rake gitlab:cleanup:container_registry

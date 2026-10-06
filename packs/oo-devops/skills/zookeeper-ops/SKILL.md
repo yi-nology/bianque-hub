@@ -2,7 +2,7 @@
 name: zookeeper-ops
 description: Zookeeper 运维专家 - 集群管理、Leader 选举、数据治理、故障恢复
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -169,7 +169,7 @@ Select-String -Path C:\zookeeper\conf\zoo.cfg -Pattern "^server"
 (Select-String -Path C:\zookeeper\conf\zoo.cfg -Pattern "^server").Count
 
 # 检查防火墙规则
-Get-NetFirewallRule -Direction Inbound -Enabled True | Where-Object { $_.DisplayName -match "2188|2888|3888" }
+Get-NetFirewallRule -Direction Inbound -Enabled True | Where-Object { $_.DisplayName -match "2181|2888|3888" }
 
 # 测试节点间通信
 Test-NetConnection -ComputerName zk1 -Port 2888

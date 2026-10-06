@@ -13,8 +13,6 @@ skills:
 tools:
     - server: ask-ops
       allow: []
-    - server: sysprobe
-      allow: []
 dispatch_allow: []
 route_priority: P6
 route_group: middleware

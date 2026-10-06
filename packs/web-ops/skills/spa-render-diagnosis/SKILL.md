@@ -2,7 +2,7 @@
 name: spa-render-diagnosis
 description: SPA 白屏/渲染异常分型方法论：渲染采集→DOM 状态探查（eval 受审）→四分型判读（前端路由/资源失败/接口失败/样式遮蔽）——每型有判据与下一步，禁止"打不开"一句话收场（browser-ops 工具面）。
 mode: on_demand
-version: 0.1.0
+version: 0.2.0
 maturity: experimental
 requires_mcp:
   - server: browser-ops
@@ -16,8 +16,12 @@ requires_mcp:
 
 ## 数据来源
 
-`requires_mcp` 声明 browser-ops 四工具。其中 `browser_eval` 是执行档：本技能的
-探查表达式固定为只读 DOM 查询（JSON.stringify 包裹），不做任何写操作。
+`requires_mcp` 声明 browser-ops 四工具。**前提**：browser-ops 是站点 conf
+`mcp.servers` 显式启用面（缺省硬关）——工具不在场时不空转重试，输出启用指引
+（conf 增加 browser-ops server 并重启）并如实报告不可用。其中 `browser_eval`
+是执行档：本技能的探查表达式固定为只读 DOM 查询（JSON.stringify 包裹），不做
+任何写操作；该固定探查属只读判读采集，不受专家「执行档须用户明确要求」纪律
+阻断（专家 prompt 已开对应例外口径）。
 
 ## 方法论（固定顺序）
 

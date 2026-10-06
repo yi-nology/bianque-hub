@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-05",
+  "generated_at": "2026-10-06",
   "tool": "bq-markettool index-gen",
   "packs": [
     {
       "name": "chain-starter",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "api_version": 1,
       "description": "最小示例包：一个专家 + 一项技能 + 一条两步诊断链（含技能钉扎演示）。贡献者以此为模板起步，README 逐文件拆解。",
       "path": "packs/chain-starter",
@@ -17,7 +17,7 @@
     },
     {
       "name": "cicd-ops",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "api_version": 1,
       "description": "交付链诊断包（社区版首批）：Jenkins / GitLab CI / Harbor / ArgoCD 四技能 + 流水线分析专家，覆盖构建失败、runner 掉线、制品库异常、GitOps 同步失败分诊。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面；编目变更块两件（argocd sync/rollback）接「诊断+处方+受审执行」范式。",
       "path": "packs/cicd-ops",
@@ -30,7 +30,7 @@
     },
     {
       "name": "db-ops",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "api_version": 1,
       "description": "数据库诊断包（社区版首批）：MySQL 与 PostgreSQL 双专家，连接/锁/慢查询/容量五类分诊、复制链专项、PG 膨胀与 WAL 判读三技能 + 数据库例检链。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面。",
       "path": "packs/db-ops",
@@ -44,7 +44,7 @@
     },
     {
       "name": "k8s-ops",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "api_version": 1,
       "description": "Kubernetes 集群诊断包（社区版首批）：工作负载异常分诊/事件时间线/Helm 排查/证书巡检四技能 + 工作负载分析专家 + 集群巡检链（链入口直达，不经意图路由）。工具面声明 k8sgpt 0.4.39 契约清单 + ask-ops 宿主侧只读命令面（helm/kubeadm/kubectl）；编目变更块三件（helm 应急回滚/证书续期/滚动重启）接「诊断+处方+受审执行」范式。",
       "path": "packs/k8s-ops",
@@ -57,7 +57,7 @@
     },
     {
       "name": "mw-ops",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "api_version": 1,
       "description": "中间件诊断包（社区版首批）：缓存（Redis）与消息队列（Kafka/RabbitMQ）双专家，五类分诊/热Key大Key/消费积压/队列堆积四技能 + 中间件例检链。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面；编目变更块三件（UNLINK 删除/清队列/位点重置）接「诊断+处方+受审执行」范式。",
       "path": "packs/mw-ops",
@@ -71,7 +71,7 @@
     },
     {
       "name": "n8n-ops",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "api_version": 1,
       "description": "n8n 自托管平台运维包（社区版）：实例本体（起不来/资源/日志）、执行面（卡住/失败/膨胀）、webhook 触发面（404/CSRF）、队列模式（worker/Redis）、生命周期（加密密钥/备份/升级/license）五技能 + 平台诊断专家。方法论基于 n8n 官方部署文档与社区排障案例原生编写（含 2.x/3.x 版本基线），n8n 公共 API 走 datasources 查询面（API key 凭证面注入）、主机面走 ask-ops 只读采集；编目变更块一件（容器重启）接「诊断+处方+受审执行」范式。",
       "path": "packs/n8n-ops",
@@ -84,7 +84,7 @@
     },
     {
       "name": "obs-ops",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "api_version": 1,
       "description": "可观测自诊包（社区版首批）：“监控系统的监控”——Prometheus 采集与规则面、Grafana 数据源与面板面、Elasticsearch 集群与分片面、Loki 日志查询面四技能 + 可观测自诊专家，专治监控失明场景。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面；编目变更块两件（flood 只读锁解除/分片分配恢复）接「诊断+处方+受审执行」范式。",
       "path": "packs/obs-ops",
@@ -97,7 +97,7 @@
     },
     {
       "name": "oo-devops",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "api_version": 1,
       "description": "OpenOcta 生态运维技能包：31 位数字员工 × 189 项运维技能，覆盖中间件、数据库、CI/CD、可观测与云厂商运维（主机与 K8s 集群域归内置核心包 os-basics）",
       "path": "packs/oo-devops",
@@ -140,7 +140,7 @@
     },
     {
       "name": "os-basics",
-      "version": "1.3.3",
+      "version": "1.4.0",
       "api_version": 1,
       "description": "主机/OS + Kubernetes 集群诊断包（社区版）：巡检、性能、内存、IO、网络、安全六域专家与安全四技能，附主机快查链。与扁鹊内置同名包等位可接管，上游更新以本仓为准。",
       "path": "packs/os-basics",
@@ -159,7 +159,7 @@
     },
     {
       "name": "web-ops",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "api_version": 1,
       "description": "网页巡检取证包：无头 Chromium 渲染采集（SPA 正文/截图/白屏判读）——依赖 browser-ops 工具面（bianque-tools ≥ 含 browser-ops 的版本，conf mcp.servers 启用）。",
       "path": "packs/web-ops",

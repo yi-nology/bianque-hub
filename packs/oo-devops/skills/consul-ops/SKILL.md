@@ -2,7 +2,7 @@
 name: consul-ops
 description: Consul 运维专家 - 服务发现、KV 存储、集群管理、健康检查
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -104,7 +104,7 @@ consul members
 # 2. 节点信息
 consul info
 
-# 3. 健康检查
+# 3. Raft 共识面（peers 与 leader 在位情况）
 consul operator raft list-peers
 
 # 4. 服务列表
@@ -122,7 +122,7 @@ consul members
 # 2. 节点信息
 consul info
 
-# 3. 健康检查
+# 3. Raft 共识面（peers 与 leader 在位情况）
 consul operator raft list-peers
 
 # 4. 服务列表
@@ -151,11 +151,12 @@ consul operator raft list-peers
 # 检查日志中的选举问题
 grep "election" /var/log/consul/consul.log
 
-# 重启 Follower 节点
-consul leave
+# 重启 Follower 节点——直接 systemctl restart（consul leave 是把节点从
+# Raft 共识中优雅移除，当重启手段用会反复削减 quorum，多节点照做可致
+# 集群瘫痪；leave/force-leave 只用于节点永久下线）
 systemctl restart consul
 
-# 恢复（极端情况）
+# 节点永久下线（极端情况，确认不再回来才用）
 consul force-leave <node_name>
 ```
 

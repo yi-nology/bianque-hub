@@ -2,7 +2,7 @@
 name: k8s-helm
 description: 管理 Helm charts、releases 和 repositories。用于 Helm 安装、升级、回滚、chart 开发和 release 管理。
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -283,7 +283,10 @@ upgrade_helm_release(...)
 
 - **Helm CLI**: 所有 Helm 操作的必需工具
   ```bash
-  curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  # 供应链纪律：不直灌管道安装（下载即执行会盲跑远端脚本）。两步式——下载后校验
+  # checksum 再执行；或走包管理器（apt install helm / dnf install helm）。
+  curl -fsSL -o /tmp/get-helm-3 https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+  sha256sum /tmp/get-helm-3   # 与 helm 发布页 get-helm-3.sha256sum 比对一致后再 bash 执行
   ```
 
 ## 相关技能

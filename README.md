@@ -107,23 +107,25 @@ go run ./cmd/bq-markettool outdated --url https://github.com/yi-nology/bianque-h
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [os-basics](packs/os-basics/) | 1.3.3 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
-| [k8s-ops](packs/k8s-ops/) | 0.1.4 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
-| [mw-ops](packs/mw-ops/) | 0.2.2 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
-| [db-ops](packs/db-ops/) | 0.2.2 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
-| [web-ops](packs/web-ops/) | 0.1.0 | 网页巡检取证：SPA 渲染正文/全页截图取证/白屏四分型（browser-ops 工具面，conf 缺省关） |
-| [cicd-ops](packs/cicd-ops/) | 0.2.2 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位）+ 编目变更块两件（argocd sync/rollback） |
-| [obs-ops](packs/obs-ops/) | 0.3.2 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景）+ 编目变更块两件（flood 解锁/分配恢复） |
-| [n8n-ops](packs/n8n-ops/) | 0.2.2 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
-| [chain-starter](packs/chain-starter/) | 0.1.1 | 最小示例包（贡献模板，含技能钉扎演示） |
+| [os-basics](packs/os-basics/) | 1.4.0 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
+| [k8s-ops](packs/k8s-ops/) | 0.1.5 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
+| [mw-ops](packs/mw-ops/) | 0.2.3 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
+| [db-ops](packs/db-ops/) | 0.2.3 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
+| [web-ops](packs/web-ops/) | 0.2.0 | 网页巡检取证：SPA 渲染正文/全页截图取证/白屏四分型（browser-ops 工具面，conf 缺省关） |
+| [cicd-ops](packs/cicd-ops/) | 0.2.3 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位）+ 编目变更块两件（argocd sync/rollback） |
+| [obs-ops](packs/obs-ops/) | 0.3.3 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景）+ 编目变更块两件（flood 解锁/分配恢复） |
+| [n8n-ops](packs/n8n-ops/) | 0.2.3 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
+| [chain-starter](packs/chain-starter/) | 0.1.2 | 最小示例包（贡献模板，含技能钉扎演示） |
+| [oo-devops](packs/oo-devops/) | 1.1.1 | OpenOcta 归化参考库（31 员工 + 189 技能 + 7 MCP 声明）——**不进缺省分发**：方法论已按域收割进四领域包，本包作参考库维护（A 案：hub 为内容唯一编辑点） |
 
 ## oo-devops 迁移说明
 
-扁鹊仓原 `experts/oo-devops`（openocta 市场归化整包：31 员工 + 189 技能，构建产物
-禁手改）**已冻结，不再整包承接**。其中有诊断价值的方法论按域收割重写为本仓四包：
-**mw-ops / db-ops / cicd-ops / obs-ops**（血缘与未搬运清单见各包 provenance.json 与
-README 改造说明）。该域能力的后续维护只在对应领域包进行——改包内资产、升版本、
-走 PR，不再经市场转换管线。
+扁鹊仓原 `experts/oo-devops`（openocta 市场归化整包：31 员工 + 189 技能）**不再整包
+承接**。其中有诊断价值的方法论按域收割重写为本仓四包：**mw-ops / db-ops / cicd-ops /
+obs-ops**（血缘与未搬运清单见各包 provenance.json 与 README 改造说明）。该域能力的
+日常维护在对应领域包进行；oo-devops 本体按 2026-10-05 A 案转为 hub 托管参考库——
+内容唯一编辑点即 `packs/oo-devops/`（市场转换管线已退役，改动直接编辑并走 PR），
+不进 seed-sync 缺省分发，整包安装走控制台 bundle 路径。
 
 ## 本地校验
 

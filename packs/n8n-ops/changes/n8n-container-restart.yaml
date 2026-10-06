@@ -9,7 +9,7 @@
 # verify_readonly 走 ask-ops 只读面（docker ps --filter 在白名单）。
 api_version: 1
 slug: n8n-container-restart
-title: n8n 容器重启（主实例/worker/task biner）
+title: n8n 容器重启（主实例/worker/task runner）
 request_type: restart
 risk: 2
 rollback: "容器重启自愈性动作（docker restart 幂等）；中断的在跑执行按其失败路径重试——需等根因处置到位后重启，未查因重启只会复现"

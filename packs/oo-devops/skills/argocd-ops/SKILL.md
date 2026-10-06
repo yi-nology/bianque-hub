@@ -2,7 +2,7 @@
 name: argocd-ops
 description: ArgoCD 运维专家 - GitOps 部署、应用管理、同步策略、故障排查
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -13,7 +13,7 @@ maturity: experimental
 # ArgoCD 配置
 export ARGOCD_SERVER="argocd.example.com:443"
 export ARGOCD_AUTH_TOKEN=""
-export ARGOCD_INSECURE="true"
+export ARGOCD_INSECURE="true"   # ⚠ 跳过 TLS 校验：仅限本地调试端口转发场景，生产禁用
 export ARGOCD_GRPC_WEB="true"
 export ARGOCD_NAMESPACE="argocd"
 ```
@@ -31,7 +31,7 @@ contexts:
 servers:
   - server: argocd.example.com
     plain-text: false
-    insecure: true
+    insecure: true   # ⚠ 仅本地调试
 users:
   - name: admin
     auth-token: eyJhbGciOiJIUzI1NiIs...
@@ -186,25 +186,25 @@ $app.status.conditions | Format-Table type, message
 #### Linux/macOS
 ```bash
 # 测试仓库连接
-argocd repo add https://github.com/org/repo --username xxx --password xxx
+argocd repo add https://github.com/org/repo --username xxx   # 密码走交互输入或环境变量（ARNOCDEX Password 面），不落命令行
 
 # 查看仓库列表
 argocd repo list
 
 # 检查 SSH 密钥
-argocd cert add-ssh --batch --from-file ~/.ssh/id_rsa.pub
+argocd cert add-ssh --batch --from ~/.ssh/id_rsa.pub   # 官方 flag 是 --from（known_hosts 形态）
 ```
 
 #### Windows (PowerShell)
 ```powershell
 # 测试仓库连接
-argocd repo add https://github.com/org/repo --username xxx --password xxx
+argocd repo add https://github.com/org/repo --username xxx   # 密码走交互输入或环境变量（ARNOCDEX Password 面），不落命令行
 
 # 查看仓库列表
 argocd repo list
 
 # 检查 SSH 密钥
-argocd cert add-ssh --batch --from-file $env:USERPROFILE\.ssh\id_rsa.pub
+argocd cert add-ssh --batch --from $env:USERPROFILE\.ssh\id_rsa.pub
 
 # 测试 SSH 连接
 Test-NetConnection -ComputerName github.com -Port 22

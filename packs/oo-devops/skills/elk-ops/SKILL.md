@@ -2,7 +2,7 @@
 name: elk-ops
 description: ELK Stack 运维专家 - Elasticsearch、Logstash、Kibana 集群管理、日志分析、性能优化
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -157,13 +157,13 @@ Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='Elastic*'} 
 **Linux/macOS:**
 ```bash
 # 查看集群健康详情
-curl -s http://localhost:9200/_cluster/health?level=indices&pretty
+curl -s 'http://localhost:9200/_cluster/health?level=indices&pretty'
 
 # 查看未分配分片
-curl -s http://localhost:9200/_cat/shards?v&h=index,shard,prirep,state,unassigned.reason
+curl -s 'http://localhost:9200/_cat/shards?v&h=index,shard,prirep,state,unassigned.reason'
 
 # 查看分配解释
-curl -X POST http://localhost:9200/_cluster/allocation/explain?pretty -H 'Content-Type: application/json' -d'{
+curl -X POST 'http://localhost:9200/_cluster/allocation/explain?pretty' -H 'Content-Type: application/json' -d'{
   "index": "problematic_index",
   "shard": 0,
   "primary": true
@@ -365,8 +365,12 @@ curl -s http://localhost:9600/_node/stats/pipelines?pretty | grep -A5 "queue"
 # 查看重试队列
 ls -la /var/lib/logstash/queue/
 
-# 清空持久化队列（谨慎操作）
+# 清空持久化队列——队列里是尚未写入 ES 的事件，直接删=数据丢失。
+# 顺序：停 Logstash → 打包备份 queue 目录 → 再清理 → 起服务补灌或接受丢失
+systemctl stop logstash
+tar czf /var/backups/logstash-queue-$(date +%Y%m%d%H%M).tgz /var/lib/logstash/queue/
 rm -rf /var/lib/logstash/queue/main/*
+systemctl start logstash
 ```
 
 **Windows (PowerShell):**
@@ -466,7 +470,7 @@ Invoke-RestMethod -Uri "http://localhost:5601/api/saved_objects/_find?type=index
 **Linux/macOS:**
 ```bash
 # 查看慢查询日志
-curl -s http://localhost:9200/_cluster/settings?include_defaults=true&filter_path=**.search.slowlog
+curl -s 'http://localhost:9200/_cluster/settings?include_defaults=true&filter_path=**.search.slowlog'
 
 # 启用慢查询日志
 curl -X PUT http://localhost:9200/_all/_settings -H 'Content-Type: application/json' -d'{

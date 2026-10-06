@@ -2,7 +2,7 @@
 name: sentry-cli
 description: 通过 sentry-cli 进行 Sentry.io 错误监控。在处理 Sentry 发布、source maps、dSYMs、事件或问题管理时使用。涵盖认证、发布工作流、部署跟踪和调试文件上传。
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -20,7 +20,10 @@ brew install sentry-cli
 npm install -g @sentry/cli
 
 # 直接下载
-curl -sL https://sentry.io/get-cli/ | bash
+# 供应链纪律：不直灌管道安装。包管理器优先（brew install sentry-cli /
+# npm install -g @sentry/cli / apt 装 sentry-cli 官方源）；确需安装脚本时两步式：
+curl -sL -o /tmp/sentry-cli-install.sh https://sentry.io/get-cli/
+less /tmp/sentry-cli-install.sh   # 过目后再 bash 执行
 ```
 
 ## 认证

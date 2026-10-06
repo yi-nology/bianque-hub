@@ -56,6 +56,7 @@ route_keywords:
 - HTTPS 证书
 - SSL 证书
 route_group: security
+route_desc: 主机安全巡检助手：SSH 攻击/Root 登录/恶意进程/sudo 滥用四技能安全域（等保项）
 domain:
 - 安全
 - CVE

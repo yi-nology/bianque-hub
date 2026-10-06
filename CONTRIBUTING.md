@@ -79,7 +79,7 @@ requires_mcp:               # 可选：声明的工具面（server 必须被挂�
   适合主机层事实问答。声明方式 `tools: [{server: ask-ops}]`（allow 留空=全部）；
   问答型 support 角色请像内置 `platform/ask-ops` 一样显式钉 allow，不领受命令面。
 - **受审只读命令面**（`run_readonly_command`）：领域专家跑域 CLI 的通道——白名单
-  受审（redis 只读命令族 / kafka-\*.sh --describe / mysql -e 'SELECT…' / curl GET /
+  受审（redis 只读命令族 / kafka-\*.sh --describe / mysql -e 'SELECT|SHOW…' / curl GET /
   docker+kubectl 只读子命令等），引号外控制字符、写形态旗标、白名单外命令一律
   拒绝；stdout-only、尾部截断 400 行/32KB、退出码在 exit_code。
 - 技能处方里的命令必须与该守卫兼容：URL 带 `&` 等特殊字符要写成引号形态；
@@ -123,7 +123,7 @@ steps:
 5. **脱敏**：内网域名/内部工具名/密钥形态/私网 IP 一律拦截；
 6. **路由词纪律**：新包路由词避开已占用的域词——os-basics（巡检/体检/调优/瓶颈/
    安全/等保及六域症状词）、k8s-ops（工作负载诊断/pod诊断/helm排查等）、mw-ops
-   （缓存诊断/消息积压/主从延迟等）、db-ops（慢查询/锁等待等）、cicd-ops（构建失败/
+   （缓存诊断/消息积压等）、db-ops（慢查询/主从延迟/锁等待等）、cicd-ops（构建失败/
    流水线排障等）、obs-ops（监控失明/采集断点/面板无数据等）、n8n-ops（n8n排障/
    工作流执行卡住/webhook不触发等）；平台查询面词
    （prometheus/监控指标/指标查询）归内置监控入口。错位竞争会让两个入口互相劫持
@@ -153,7 +153,7 @@ steps:
     记录，平台对缺席容忍，但站点须确认 server 已挂载）。链/消歧是包级资产，
     不进专家闭包。
 12. **危险内容扫描（ClawHub「SKILL.md 变安装器」投毒案对标）**：`changes/` 变更块
-    是受审执行通道的实际执行面——pipe-to-shell（`curl|sh`）、`rm -rf /` 等命中
+    是受审执行通道的实际执行面——管道直灌安装（curl/wget 输出接 shell）、`rm -rf /` 等命中
     **ERROR**；技能/专家正文命中（安装指引、注入短语、凭证文件直读）为 **WARN**
     供复核（正文指引有合法形态，不硬拦）。启发式只拦明文，变形载荷靠平台执行面
     治理兜底。

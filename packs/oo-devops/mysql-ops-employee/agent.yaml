@@ -42,6 +42,6 @@ route_keywords:
     - MySQL 数字
     - mysql 数字
 symptoms:
-    - 主从延迟
+    - mysql主从延迟
     - 备份失败
 route_desc: MySQL 运维数字员工，专注于数据库运维、数据查询、故障排查、性能优化、备份恢复

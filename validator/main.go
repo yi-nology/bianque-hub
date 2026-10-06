@@ -180,7 +180,7 @@ func registerKeyword(kwOwner map[string]kwFirst, kw, pack, prio string) (level, 
 	if first.prio == prio {
 		return "ERROR", fmt.Sprintf("关键词/症状 %q 在 %s 与 %s 同优先级 %s 重复（真歧义，平台装载会失败）", kw, first.pack, pack, prio), true
 	}
-	return "WARN", fmt.Sprintf("关键词/症状 %q 跨层重复（%s@%s 与 %s@%s），高优先级胜出", kw, first.pack, first.prio, pack, first.prio), true
+	return "WARN", fmt.Sprintf("关键词/症状 %q 跨层重复（%s@%s 与 %s@%s），高优先级胜出", kw, first.pack, first.prio, pack, prio), true
 }
 
 // validator 全仓校验状态：跨包唯一性登记 + 全包扫描后才能判的延迟核对项。

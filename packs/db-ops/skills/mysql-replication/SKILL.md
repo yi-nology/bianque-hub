@@ -2,7 +2,7 @@
 name: mysql-replication
 description: MySQL 复制链诊断方法论：双线程（IO/SQL）定位、延迟三源归因（拉取慢/回放慢/大事务）、GTID 断点与常见错误码判读、并行回放与半同步状态核查（ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.0
+version: 0.1.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: ask-ops

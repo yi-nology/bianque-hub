@@ -13,8 +13,6 @@ skills:
 tools:
     - server: ask-ops
       allow: []
-    - server: sysprobe
-      allow: []
     - server: datasources
       allow: []
 dispatch_allow: []
@@ -30,5 +28,5 @@ route_keywords:
     - zabbix 监控
 symptoms:
     - zabbix触发器
-    - 模板配置
+    - zabbix模板配置
 route_desc: Zabbix 企业级监控员工，支持告警配置、模板管理、自动发现、性能监控

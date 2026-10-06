@@ -2,7 +2,7 @@
 name: n9e-modify-task-tpl
 description: 帮助用户生成、修改或排障夜莺(n9e)告警自愈脚本（task_tpl / ibex 脚本）。当用户要求"写一个磁盘清理/重启服务/清理日志/dump 进程/reload nginx"等自愈脚本，或问"自愈脚本怎么拿告警传过来的参数"、"stdin 是什么格式"、"timeout 应该填多少"、"为什么 is_recovered 永远 false"、"为什么自愈脚本拿不到 k8s namespace"、"脚本一直 running 怎么办"时使用。本技能专注**脚本正文层**——若用户要改告警规则、接收人或通知模板，引导到对应 skill。
 mode: on_demand
-version: 1.1.0
+version: 1.1.1
 maturity: experimental
 ---
 
@@ -259,7 +259,7 @@ func (c *IbexCallBacker) CallBack(ctx CallBackContext) {
 | `shutdown`、`reboot`、`init 0`、`init 6`、`halt`、`poweroff` | 整机停机——自愈脚本不应有此权限 |
 | `iptables -F` / `ufw disable` / `firewall-cmd --reload` 无备份 | 网络/安全策略丢失 |
 | `chmod -R 777 /`、`chown -R nobody:nobody /` | 权限破坏 |
-| `curl <非白名单 URL> \| sh`、`wget ... -O - \| bash` | 远程代码注入 |
+| 管道直灌安装（curl/wget 输出直接接 shell 执行） | 远程代码注入 |
 | base64/zip/gzip 编码的内嵌 shell | 静态审查规避 |
 | `kubectl delete node`、`kubectl drain` 无 PDB 检查 | 集群级影响 |
 

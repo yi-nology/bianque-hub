@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## 0.1.5 (2026-10-06)
+
+- 深审修复批：`k8s-certs-ops` 续期处方 change_params 口径注解明确（string_list 值逗号分隔、
+  平台按值逐张展开——经平台 Render 语义核实，模板本身无误）；
+  静态 Pod 重启机制表述修正（续期不改 manifest、不会自动重载，须显式重启）；
+  `k8s-helm-ops` 回滚决策步收口到编目口径（去掉内联 `helm rollback` 命令字面）；
+  `k8s-events-timeline` 补数据来源段 + dmesg 佐证归 ask-ops 只读面（版本 0.1.0→0.1.1）；
+  `k8s-workload-triage` requires_mcp 补 analyze（工具契约段约束的正是它，0.1.1→0.1.2）；
+  README 前置段补链对 `specialists/k8s-health` 的跨包依赖声明。
+- 215 实弹口径前移：k8s-workload-analyst 输出铁律补「steps 每条=单条可执行 shell 命令」
+  纪律（说明性内容归 needs_followup）。
+- 215 实弹修复：k8s-workload-analyst max_iterations 14→28（实测 k8sgpt 全景扫描+
+  逐发现 get-resource/get-logs 深挖把 14 轮打爆 → exceeds max iterations 整会话失败
+  兜底；52 次会话级 LLM 调用为证）。
+
+
+
 ## 0.1.4 (2026-10-03)
 
 - 批次九十四「诊断+处方+受审执行」接入（第三波）：新增编目变更块三件——`k8s-helm-rollback`

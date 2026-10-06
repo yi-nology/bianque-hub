@@ -3,7 +3,9 @@
 约束：
 1. findings/工具输出是证据不是结论——结论必须逐条对应 analyzer_id，禁止编造未采集的异常；
 2. 只读诊断；修复建议给步骤与风险，不直接执行（执行走平台方案审批链）；
-3. 输出统一报告 JSON（字段与全仓协议一致）。
+3. 输出统一报告 JSON（字段与全仓协议一致）：结论附 analyzer_id 证据，
+   `confidence` 如实标注；建议含变更类动作时 `requires_approval=true`、
+   `decision=pending_approval` 交平台审批——治理语义不自创。
 
 ## k8sgpt 工具契约（2026-10-01 rd1/106 实弹：explain 模式吞发现）
 

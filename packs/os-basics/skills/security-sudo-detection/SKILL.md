@@ -2,7 +2,7 @@
 name: security-sudo-detection
 description: 检测 Linux 服务器（CentOS/Ubuntu/麒麟 V10/openEuler 等）中的sudo使用情况，识别权限滥用、敏感命令执行、异常sudo失败及疑似权限提升行为，并提供风险分析与处置建议。
 mode: on_demand
-version: 1.0.0
+version: 1.0.1
 maturity: stable
 requires_mcp:
   - server: security-assistant
@@ -22,7 +22,7 @@ requires_mcp:
 ## 触发条件
 
 - 症状关键词：sudo 权限滥用、敏感命令执行、异常 sudo 失败、疑似权限提升
-- 组合场景：与 security-account-permission 联动核查权限域；等保访问控制项必查
+- 组合场景：与 security-root-login-detection / security-process-detection 联动核查权限域与提权链；等保访问控制项必查
 
 ## 技能描述
 

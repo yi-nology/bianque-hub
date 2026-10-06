@@ -3,7 +3,7 @@ name: 消息队列分析专家
 layer: expert
 kind: llm
 temperature: 0.2
-max_iterations: 12
+max_iterations: 24
 prompt_file: prompt.md
 skills:
   - kafka-triage

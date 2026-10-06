@@ -2,7 +2,7 @@
 name: security-ssh-attack
 description: 检测 Linux 服务器（CentOS/Ubuntu/麒麟 V10/openEuler 等）中的SSH暴力破解、密码猜测、凭据填充等攻击行为，识别异常登录模式及持续攻击，并提供风险分析与处置建议。
 mode: on_demand
-version: 1.0.0
+version: 1.0.1
 maturity: stable
 requires_mcp:
   - server: security-assistant
@@ -11,6 +11,9 @@ requires_mcp:
       - grep_file
       - collect_service_info
       - collect_system_info
+      - collect_network_status
+      - list_directory
+      - read_file
 ---
 
 
@@ -20,13 +23,13 @@ requires_mcp:
 ## 触发条件
 
 - 症状关键词：SSH 暴力破解、密码猜测、凭据填充、异常登录失败、持续 SSH 攻击
-- 组合场景：与 security-root-login-detection / security-account-permission 联动核查登录链；等保入侵防范项必查
+- 组合场景：与 security-root-login-detection / security-sudo-detection 联动核查登录链；等保入侵防范项必查
 
 ## 技能描述
 
 负责检测 Linux 服务器（Ubuntu/CentOS/麒麟 V10/openEuler 等）是否存在 SSH 暴力破解、密码猜测、凭据填充等攻击行为。分析前先按 /etc/os-release 判定目标平台。
 
-通过分析 SSH 认证日志，识别异常登录模式、攻击来源及持续攻击行为，结合 Rule Engine 与大模型完成风险分析，并在获得用户确认后执行自动化安全处置。
+通过分析 SSH 认证日志，识别异常登录模式、攻击来源及持续攻击行为，结合规则引擎与大模型完成风险分析；处置建议只随诊断报告提交平台审批（requires_approval 语义），技能自身不执行任何变更动作。
 
 ---
 
@@ -172,7 +175,7 @@ requires_mcp:
 
 ## 输出要求
 
-最终输出遵循 `AGENTS.md「报告协议」` 纯 JSON schema（`requires_approval` 恒 false）；下述内容要素映射至对应 JSON 字段，不作为独立输出格式。
+最终输出遵循平台统一报告 schema（纯 JSON，字段语义见专家 prompt 的输出协议段）；下述内容要素映射至对应 JSON 字段，不作为独立输出格式。仅检测与建议、不含处置执行时 `requires_approval` 为 false；报告含处置建议（封禁 IP/停账号等）时随建议置 true 交平台审批。
 
 最终输出应包括：
 

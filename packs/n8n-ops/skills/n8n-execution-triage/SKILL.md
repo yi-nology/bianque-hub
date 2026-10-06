@@ -2,7 +2,7 @@
 name: n8n-execution-triage
 description: n8n 执行面分诊方法论：卡住执行三态归因（queued 无消费者 / waiting 堆积 / running 不结束）、失败面判读、执行历史膨胀与 prune 三件套——固定顺序定位与判读基准（datasources n8n 查询面 + ask-ops 只读采集面）。
 mode: on_demand
-version: 0.1.1
+version: 0.2.1
 maturity: experimental
 requires_mcp:            # 采集依赖的工具面（装载期对账依据；旧 bianque-tools 二进制缺这些工具时应先重建）
   - server: datasources
@@ -41,7 +41,9 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
      已知堆积 bug 形态（社区高频）：堆积量与等待时长超设计预期才定性异常，处置（缩短等待/
      重启 worker）为建议面；
    - **running 长时不结束** = 单执行死循环/无超时保护：核对 `EXECUTIONS_TIMEOUT`（默认 -1
-     不限）与 `EXECUTIONS_TIMEOUT_MAX`（默认 3600s）是否生效，Code 节点长循环是高发点。
+     不限）与 `EXECUTIONS_TIMEOUT_MAX`（默认 3600s）是否生效，Code 节点长循环是高发点；
+     **queue 模式注意**：该超时由 worker 进程执行——env 只配在 main 容器、worker 容器
+     未同配是社区高频「超时不生效」根因（与本技能「四同核」口径一致，核 worker 侧）。
    手动「Stop」停不掉的执行是已知 bug 形态（queue mode 下不释放 worker）——如实记录，
    恢复手段（重启 worker / 受控更新执行状态）全部进建议面。
 3. **失败面**：error 样本按**错误节点 + 错误消息**聚类（credential 失效、对端 4xx/5xx、

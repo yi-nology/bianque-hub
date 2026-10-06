@@ -31,7 +31,7 @@ route_keywords:
     - Redis
     - redis
 symptoms:
-    - 缓存击穿
-    - 缓存雪崩
-    - redis内存满
+    - redis缓存击穿
+    - redis缓存雪崩
+    - redis内存打满
 route_desc: Redis 缓存运维员工，支持数据查询、性能监控、集群管理、持久化配置

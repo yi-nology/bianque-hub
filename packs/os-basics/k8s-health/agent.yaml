@@ -16,7 +16,7 @@ symptoms: [pod重启, crashloop, OOMKilled, 节点NotReady, 调度失败]
 route_desc: K8s 集群诊断与日志采集（k8sgpt）：凡涉及 Kubernetes 集群、pod、节点、命名空间的健康检查、错误日志捞取、事件排查、资源状态查询
 dispatch_allow: []
 tools:
-  # 工具名以 k8sgpt 0.4.39 实测为准（12 工具全集见 README §5）；v1 白名单只放诊断面。
+  # 工具名以 k8sgpt 0.4.39 实测为准（12 工具全集见本包 README「K8s 集群诊断域」；契约清单随 k8s-ops 包 mcp/k8sgpt.yaml——同名 server 契约单源，避免双包重名冲突）；v1 白名单只放诊断面。
   - server: k8sgpt
     allow: [analyze, cluster-info, get-logs, get-resource, list-events, list-namespaces, list-resources]
 skills:

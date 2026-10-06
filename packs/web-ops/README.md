@@ -24,14 +24,15 @@ mcp:
 
 | 件 | 说明 |
 |---|---|
-| `specialists/web-inspector` | 网页巡检取证专家：只读档采集→判读→取证固化三段式；交互动作仅受审使用 |
+| `imports/web-inspector` | 网页巡检取证专家：只读档采集→判读→取证固化三段式；交互动作仅受审使用 |
 | `web-console-screenshot` | 截图取证方法论：三件套（截图+正文摘录+最终 URL）固定产出 |
 | `spa-render-diagnosis` | SPA 白屏四分型（前端路由/资源失败/接口失败/样式遮蔽）：判据+探查表达式+下一步 |
 
 ## 安装
 
 ```bash
-bianque markettool install web-ops   # 从 hub 装（或 --hub 指本地克隆）
+go run ./cmd/bq-markettool install --url https://github.com/yi-nology/bianque-hub \
+  --pack web-ops --api http://<实例>:8900
 ```
 
 装包后专家/技能即入路由面：说「网页巡检」「页面取证」「spa白屏」类诉求即达

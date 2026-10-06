@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 0.2.3 (2026-10-06)
+
+- 深审修复批：pg-triage 凭证口径收敛到 .pgpass 单一通道（PGPASSWORD 前缀形态会连命令
+  进审计面，与「对话不回显」纪律相抵）；mysql-triage 容量面「bdir」占位名明确为 binlog
+  目录（log_bin 路径）。技能版本补账：mysql-triage/mysql-replication 的 requires_mcp
+  系 0.2.0 批次补录（升 0.1.1）、pg-triage 本次口径修正（0.1.1→0.1.2）。经平台 Render
+  语义核实（string_list 值逗号分隔、逐值展开成多行命令），pg-kill-idle-backend 模板
+  语义无误，不动。
+- 215 实弹口径前移：mysql-analyst/pg-analyst 输出铁律补「steps 每条=单条可执行 shell 命令」
+  纪律（mw-ops 实弹同型问题的预防性收口；说明性内容归 needs_followup）。
+- 215 实弹口径前移：mysql-analyst/pg-analyst max_iterations 12→24（同 mw-ops 实弹
+  根因：多面板分诊的诚实采集轮次超过旧预算）。
+
+
+
 ## 0.2.2 (2026-10-02)
 
 - 批次九十四「诊断+处方+受审执行」首批：新增编目变更块 `pg-kill-idle-backend`（终止 idle in transaction 后端，params: pids 清单）；pg-triage 技能 frontmatter 登记 `provides_changes` 并在输出要求里给 change_ref 处方口径（编目优先、自由 steps 兜底），技能升版 0.1.1。
