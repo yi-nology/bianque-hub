@@ -44,9 +44,9 @@
     },
     {
       "name": "gitlab-ops",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "api_version": 1,
-      "description": "GitLab 自托管平台运维包（社区版）：实例本体（502/打不开/服务面 readiness 分项）、仓库推拉面（push/clone 失败/gitaly/盘满）、认证与权限面（登录/LDAP/token/封禁）、生命周期（备份/升级/secrets/license）四技能 + 平台诊断专家。方法论基于 GitLab 官方文档（omnibus/Docker 形态、健康端点、备份恢复、升级路径）原生编写，oo-devops 参考库 gitlab 系技能仅作素材对账；CI 流水线与 runner 作业面归 cicd-ops；宿主侧统一 ask-ops 只读采集面（curl GET 健康与 API、systemctl/journalctl、docker 只读子命令、gitlab-runner 只读守卫）。",
+      "description": "GitLab 自托管平台运维包（社区版）：实例本体（502/打不开/服务面 readiness 分项）、仓库推拉面（push/clone 失败/gitaly/盘满）、认证与权限面（登录/LDAP/token/封禁）、生命周期（备份/升级/secrets/license）四技能 + 平台诊断专家。方法论基于 GitLab 官方文档（omnibus/Docker 形态、健康端点、备份恢复、升级路径）原生编写，oo-devops 参考库 gitlab 系技能仅作素材对账；CI 流水线与 runner 作业面归 cicd-ops；宿主侧统一 ask-ops 只读采集面（curl GET 健康与 API、systemctl/journalctl、docker 只读子命令、gitlab-runner 只读守卫）。含 gitlab 凭证类型（PRIVATE-TOKEN 鉴权探测 + GITLAB_URL/GITLAB_TOKEN env 注入；站点 conf 在 ask-ops 等消费方 credentials 声明加 gitlab:* 后生效——装包≠开洞）。",
       "path": "packs/gitlab-ops",
       "experts": [
         "gitlab-platform-analyst"

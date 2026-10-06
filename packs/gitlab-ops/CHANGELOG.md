@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.1.1 (2026-10-06)
+
+- 新增 `credentials/gitlab.yaml` 包分发凭证类型：PRIVATE-TOKEN 头 + `/api/v4/user`
+  鉴权探测（200=凭证有效/401=token 无效，依赖平台探测 headers 能力）+
+  GITLAB_URL/GITLAB_TOKEN env 注入。技能正文「PAT 走主机侧凭证注入」的约定自此有
+  平台供给路径；站点 conf 在消费方 MCP server `credentials:` 声明加 `gitlab:*` 后
+  自动注入（装包≠开洞）。录入走控制台凭证页或「用一句话创建」（类型注册表随包热装）。
+
 ## 0.1.0 (2026-10-06)
 
 - 首发（原生编写，非 oo-devops 血缘整搬；参考库 gitlab 系技能作素材对账）：
