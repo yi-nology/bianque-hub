@@ -1,0 +1,19 @@
+# GitLab 只读 MCP 桥声明（gitlab-ops 包；批次一百九十二内容轴，吃主仓一百八十七
+# MCP 治理面：包声明 server 控制台 MCP 页激活/凭证绑定，热生效无需改 conf 重启）。
+# 服务形态：stdio，站点自备第三方 gitlab MCP 桥二进制（env BQ_GITLAB_MCP_BIN 钉路径；
+# 未部署=启动展开为空自动剔除并 WARN，装包≠开洞零空转）。
+# 凭证：gitlab 类型（本包 credentials/gitlab.yaml）经凭证平面物化注入
+# GITLAB_URL/GITLAB_TOKEN——绑定在控制台 MCP 页按 server 覆盖（type:* 或 type:name）。
+# 工具面契约：以站点实际安装桥的 tools/list 实测为准（暂不作事实编目——不同桥工具名
+# 差异大，编错即误导授权面；首批实测后按 k8sgpt.yaml 形态补录）。
+name: gitlab
+version: 0.1.0
+description: GitLab 自托管只读 MCP 桥（站点自备二进制；激活与凭证绑定走控制台 MCP 治理面）
+definition:
+  command:
+    - ${BQ_GITLAB_MCP_BIN}
+  credentials:
+    - gitlab:*
+  selfcheck: false
+  timeout: 30s
+enabled: false

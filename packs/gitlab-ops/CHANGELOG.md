@@ -1,3 +1,10 @@
+## 0.2.0（2026-10-07）
+
+- **mcp/gitlab 只读桥声明**：吃主仓批次一百八十七 MCP 治理面——包声明 server 在控制台
+  MCP 页激活（Popconfirm「激活=开洞」确认）+ 按 server 凭证绑定（gitlab:* / gitlab:name），
+  即热生效，无需改 conf 重启。桥二进制站点自备（env BQ_GITLAB_MCP_BIN，未部署=启动
+  自动剔除不空转）；工具面契约待站点实测后补录（不同桥工具名差异大，不编造）。
+
 # CHANGELOG
 
 ## 0.1.1 (2026-10-06)

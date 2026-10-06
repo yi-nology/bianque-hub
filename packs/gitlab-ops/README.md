@@ -45,3 +45,14 @@ backup:restore）、`gitlab-rails console`、`gitlab-psql`、`docker exec`。
 
 本包无链：GitLab 故障是事件驱动排障（实例/仓库/认证/生命周期四面），无例检语义，
 走专家路由即可。v0.1.0 未编目变更块，处置全走自由 steps（`requires_approval` 恒 true）。
+
+## MCP 治理面（v0.2.0 起）
+
+包内 `mcp/gitlab.yaml` 声明只读 GitLab MCP 桥（吃主仓批次一百八十七治理面）：
+
+1. 站点自备桥二进制并 export `BQ_GITLAB_MCP_BIN=<路径>`（未部署=启动自动剔除不空转）；
+2. 控制台 MCP 页对该 server 点「激活」（确认语义=开洞，热生效）；
+3. 同页「绑定凭证」选 `gitlab:*`（全部启用实例）或 `gitlab:<实例名>`——凭证平面物化
+   注入 GITLAB_URL/GITLAB_TOKEN，改绑定即热重物化。
+
+未激活/未装桥时专家仍走 ask-ops 只读宿主面（本包主体方法论不依赖 MCP 桥）。
