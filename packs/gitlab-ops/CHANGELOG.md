@@ -1,3 +1,11 @@
+## 0.3.0（2026-10-07）
+
+- **实例形态分诊前置**（215 远程实例实弹教训）：`gitlab-instance-triage` 技能与专家提示词
+  增「实例地址判定恒为第一步」——先读凭证平面注入的 `GITLAB_URL`，非空=远程形态一律走
+  API 面（`$GITLAB_URL/-/readiness` 分项即地图 + `/api/v4/*`），空=共置形态才回落
+  `127.0.0.1` 宿主采集；此前实例地址硬编码 127.0.0.1，远程实例整轮采集烧在无 GitLab 的
+  主机上（健康三件全空+泛化宿主面耗尽迭代预算，零 GitLab 结论）。
+
 ## 0.2.1 (2026-10-07)
 
 - `credentials/gitlab.yaml` 增 `query_auth`（header/PRIVATE-TOKEN/token）：http_query

@@ -8,6 +8,12 @@
 
 ## 采集纪律（ask-ops 只读面）
 
+- **实例形态分诊（恒为第一动作）**：先读环境变量 `GITLAB_URL`——非空 = 远程/正式实例地址，
+  API 面（`curl $GITLAB_URL/-/readiness`、`/api/v4/version` 等，配 `GITLAB_TOKEN`）就是第一
+  采集面，健康/readiness 有结论即按分项归因，**不要**在没有 GitLab 的主机上展开泛化宿主
+  采集（215 实弹：远程形态烧满迭代预算采集宿主内核/磁盘，零 GitLab 结论）；`GITLAB_URL` 为
+  空 = 实例与采集机共置，才走 gitlab-ctl/docker 宿主采集面；API 不可达时如实区分「实例地址
+  不可达」与「实例故障」，并提示检查凭证页 `GITLAB_URL` 录入。
 - 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法，禁换写法规避审查；URL 带 `?`/`&`/`/-` 特殊字符（健康端点、`info/refs?service=…`、API 查询串）一律整体单引号包裹，防 shell 解析；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。**已知例检面板（健康三件+进程+盘水位）改用 `run_readonly_commands` 批量形态**（≤10 条一次 SSH 会话收口；任一被拒整批拒绝——先审后发；面板控制在 6 条内为宜）。
 - GitLab API 事实走 curl GET：PAT 经主机侧凭证注入（采集机环境变量 `GITLAB_TOKEN` 或客户端配置），**对话中不收集/不回显**；处方示例中 `$GITLAB_TOKEN` 是占位符。健康三件（`/-/health`、`/-/liveness`、`/-/readiness`）无需认证，是第一采集面；管理面端点（sidekiq queue_metrics、license、users 清单）需 admin token，403 时如实标注可得性，不臆测。
 - 只用只读手段：curl GET、systemctl status/list-timers、journalctl --since、docker ps/logs --tail/inspect/stats --no-stream、ls/cat/grep/tail/df/du/stat。**`gitlab-ctl` / `gitlab-rake`（含 gitlab:check、gitlab:ldap:check、backup:restore）/ `gitlab-rails console` / `gitlab-psql` / `docker exec` 不在只读白名单**——一律作为审批后宿主侧动作写进建议面，禁处方化。

@@ -14,13 +14,22 @@ requires_mcp:            # 采集依赖的工具面（装载期对账依据；�
 - 症状关键词：gitlab 打不开、gitlab 502、gitlab 超时、gitlab 慢、升级后起不来、服务反复重启、sidekiq 队列堆积
 - 组合场景：CI 流水线/runner 作业失败走 cicd-ops；readiness 分项里 db/redis 失败，其本体深挖走 db-ops/mw-ops——本技能管「GitLab 进程视角的实例健康」
 
+## 实例地址判定（恒为第一步，判定错了整轮采集全是空手）
+
+- 先读注入面：环境变量 `GITLAB_URL` 非空 = 平台凭证平面注入的**实例正式地址**，本技能全部
+  curl 目标一律用 `$GITLAB_URL`（API 与健康端点同源），`GITLAB_TOKEN` 作为 API 凭证搭配使用；
+- `GITLAB_URL` 为空 = 实例与采集机同机共置，curl 目标回落 `https://127.0.0.1`；
+- 215 实弹教训：远程实例形态不判地址、对 127.0.0.1 探健康三件（全空）再转入泛化宿主采集，
+  会把整轮迭代预算烧在没有 GitLab 的主机上——地址判定先行是本技能的第一处方。
+
 ## 数据来源（ask-ops 只读面）
 
-- 健康端点三件（无需认证，第一采集面）：`curl -sk 'https://127.0.0.1/-/health'`（进程活着）、
+- 健康端点三件（无需认证，第一采集面；目标地址按上文判定，远程用 `$GITLAB_URL`，共置回落
+  `https://127.0.0.1`）：`curl -sk '$TARGET/-/health'`（进程活着）、
   `/-/liveness`（进程自判死锁将重启）、`/-/readiness`（依赖分项 JSON——gitaly/db/redis/sidekiq/repositories，
   **分项即地图**）；分项速览形态：`curl -sk 'https://127.0.0.1/-/readiness' | jq -r '.services[]? | "\(.name)=\(.status)"'`；
-- API 版本与 sidekiq 面（需 PAT）：`curl -s -H "PRIVATE-TOKEN: $GITLAB_TOKEN" 'http://127.0.0.1/api/v4/version'`、
-  `'http://127.0.0.1/api/v4/sidekiq/queue_metrics'`（管理面需 admin token，403 时标注可得性不臆测）；
+- API 版本与 sidekiq 面（需 PAT）：`curl -s -H "PRIVATE-TOKEN: $GITLAB_TOKEN" '$GITLAB_URL/api/v4/version'`、
+  `'$GITLAB_URL/api/v4/sidekiq/queue_metrics'`（管理面需 admin token，403 时标注可得性不臆测）；
 - omnibus 形态：`systemctl status gitlab-runsvdir --no-pager`（runit 总控——omnibus 服务不逐个注册 systemd unit，
   看总控而不是找 gitlab-*.unit）、`journalctl -u gitlab-runsvdir --since '-2h' --no-pager | tail -100`、
   `ls -lt /var/log/gitlab/gitlab-rails/`、`tail -100 /var/log/gitlab/gitlab-rails/production_json.log`；
