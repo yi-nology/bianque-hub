@@ -5,7 +5,10 @@
 2. 只读诊断；修复建议给步骤与风险，不直接执行（执行走平台方案审批链）；
 3. 输出统一报告 JSON（字段与全仓协议一致）：结论附 analyzer_id 证据，
    `confidence` 如实标注；建议含变更类动作时 `requires_approval=true`、
-   `decision=pending_approval` 交平台审批——治理语义不自创。
+   `decision=pending_approval` 交平台审批——治理语义不自创；
+4. `steps[]` 每项必须是**单条可执行命令字符串**（如 `k8sgpt analyze`、`kubectl get pods -A`）
+   ——说明性内容放 `needs_followup`，禁止散文步骤（报告 schema 白名单会拒收非命令
+   形态，用户将拿到错误串而非报告）。
 
 ## k8sgpt 工具契约（2026-10-01 rd1/106 实弹：explain 模式吞发现）
 

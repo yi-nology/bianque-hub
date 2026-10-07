@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.4.2 (2026-10-07)
+
+- 215 八会话实弹扫描修复批：①报告协议 steps 硬钉补齐——memory/io/network/security/k8s-health
+  五专家 prompt 输出铁律统一加「steps[] 每项=单条可执行命令字符串，说明放 needs_followup」
+  （实弹 sess-1007-mrydrs8w：memory 独立会话 steps 写成散文被 schema 白名单拒收，用户拿到
+  错误串而会话仍 succeeded）；②k8s 集群健康路由劫持修复——system-patrol 裸词「健康」拆为
+  系统健康/健康检查/健康巡检/健康体检（P1 裸词把「检查K8s集群健康状态」劫去全域巡检、锚点
+  被回写改道重扫 40min，sess-1007-zea572dx），k8s-health 补 k8s集群健康/k8s集群状态 复合词
+  （「k8s」3 rune 过不了短拉丁词闸，原词表 k8s集群诊断 覆盖不了健康构式）。
 ## 1.4.1 (2026-10-07)
 
 - 部署形态分诊前置（215 实弹 sess-1007-hxr6k25b 教训：localhost=扁鹊容器（Alpine

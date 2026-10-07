@@ -14,6 +14,7 @@
 │   ├── cicd-ops/           # 交付链诊断包（Jenkins / GitLab CI / Harbor / ArgoCD）
 │   ├── obs-ops/            # 可观测自诊包（Prometheus / Grafana / ES / Loki——监控失明场景）
 │   ├── n8n-ops/            # n8n 自托管平台运维包（实例/执行/webhook/队列模式/生命周期）
+│   ├── docker-ops/         # Docker Engine 运维包（引擎/容器/镜像磁盘/网络/Compose 编排）
 │   └── chain-starter/      # 最小示例包（贡献模板：专家+技能+链逐文件拆解）
 ├── index.json              # 包索引（机器可读清单：名称/版本/专家/构成计数；
 │                           #   bq-markettool index-gen 维护，validator 对账）
@@ -107,7 +108,7 @@ go run ./cmd/bq-markettool outdated --url https://github.com/yi-nology/bianque-h
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [os-basics](packs/os-basics/) | 1.4.1 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
+| [os-basics](packs/os-basics/) | 1.4.2 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
 | [k8s-ops](packs/k8s-ops/) | 0.1.5 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
 | [mw-ops](packs/mw-ops/) | 0.2.3 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
 | [db-ops](packs/db-ops/) | 0.2.3 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
@@ -117,6 +118,7 @@ go run ./cmd/bq-markettool outdated --url https://github.com/yi-nology/bianque-h
 | [gitlab-ops](packs/gitlab-ops/) | 0.3.2 | GitLab 自托管平台运维：实例本体/仓库推拉/认证权限/生命周期四技能 + 平台诊断专家（ask-ops 只读面）+ gitlab 凭证类型与 mcp/gitlab 只读桥声明（控制台治理面激活+凭证绑定）；CI 流水线与 runner 面归 cicd-ops |
 | [nginx-ops](packs/nginx-ops/) | 0.1.0 | Nginx 自托管运维：可用性/路由重写/TLS/生命周期四技能 + 平台诊断专家（ask-ops 只读面，reload 类变更恒审批后执行）；纯宿主形态不依赖凭证平面；K8s Ingress 与 openresty/lua 不在范围 |
 | [n8n-ops](packs/n8n-ops/) | 0.2.3 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
+| [docker-ops](packs/docker-ops/) | 0.1.0 | Docker Engine 运维：引擎本体/容器运行面（退出码/OOMKilled）/镜像磁盘面（拉取失败/回收）/网络面/Compose 编排面五技能 + 平台诊断专家（ask-ops 只读面）+ 编目变更块三件（容器重启/内存上限在线调整/悬空镜像回收）；K8s 编排容器归 k8s-ops |
 | [chain-starter](packs/chain-starter/) | 0.1.2 | 最小示例包（贡献模板，含技能钉扎演示） |
 | [oo-devops](packs/oo-devops/) | 1.1.1 | OpenOcta 归化参考库（31 员工 + 189 技能 + 7 MCP 声明）——**不进缺省分发**：方法论已按域收割进四领域包，本包作参考库维护（A 案：hub 为内容唯一编辑点） |
 

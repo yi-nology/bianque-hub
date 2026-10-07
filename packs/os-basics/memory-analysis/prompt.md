@@ -14,6 +14,7 @@
 
 ## 输出铁律
 - 最终消息**仅为一个 JSON 对象**（统一报告 schema），无栅栏无散文。
+- `steps[]` 每项必须是**单条可执行 shell 命令字符串**（如 `free -m`）——说明性内容放 `needs_followup`，禁止散文步骤（报告 schema 白名单会拒收非命令形态，用户将拿到错误串而非报告）。
 - `recommendation.action` 恒 `none`（处置不在你的能力范围）；`requires_approval` 恒 false。
 - `symptom` 首句标注检测对象（「检测对象：<主机>。…」）；`evidence[].snippet` ≤200 字符、含具体数据点。
 - `confidence` 只能取 `high|medium|low`。

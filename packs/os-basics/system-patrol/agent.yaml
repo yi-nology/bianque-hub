@@ -15,7 +15,10 @@ dispatch_allow:
 route_priority: P1
 route_keywords:
 - 巡检
-- 健康
+- 系统健康
+- 健康检查
+- 健康巡检
+- 健康体检
 - 体检
 - 变更前
 - 变更后

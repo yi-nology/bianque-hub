@@ -43,6 +43,19 @@
       "chain": true
     },
     {
+      "name": "docker-ops",
+      "version": "0.1.0",
+      "api_version": 1,
+      "description": "Docker Engine 运维包（社区版）：引擎本体（daemon 起不来/daemon.json/存储驱动/live-restore）、容器运行面（退出码/OOMKilled/重启循环/资源上限）、镜像与磁盘面（拉取失败/加速器/system df/回收）、网络面（端口映射/bridge DNS/自定义网络）、Compose 编排面五技能 + 平台诊断专家。方法论基于 Docker 官方文档原生编写，oo-devops 参考库 docker-employee/docker-ops 技能仅作素材对账（env 注入/MCP 示例/PowerShell 变体未搬）；宿主侧统一 ask-ops 只读采集面（dockerGuard 只读子命令白名单：ps/logs --tail/inspect/stats --no-stream/events --until/port/history/diff/images/network|volume|system 子面；docker exec/run/pull/update/prune/compose 不在只读面）；编目变更块三件（容器重启/内存上限在线调整/悬空镜像回收）接「诊断+处方+受审执行」范式。边界：K8s 编排容器归 k8s-ops，宿主机本体归 os-basics，应用平台本体（n8n/GitLab/Nginx）归各自领域包，Harbor 仓库面归 cicd-ops。",
+      "path": "packs/docker-ops",
+      "experts": [
+        "docker-analyst"
+      ],
+      "skills": 5,
+      "changes": 3,
+      "chain": false
+    },
+    {
       "name": "gitlab-ops",
       "version": "0.3.2",
       "api_version": 1,
@@ -166,7 +179,7 @@
     },
     {
       "name": "os-basics",
-      "version": "1.4.1",
+      "version": "1.4.2",
       "api_version": 1,
       "description": "主机/OS + Kubernetes 集群诊断包（社区版）：巡检、性能、内存、IO、网络、安全六域专家与安全四技能，附主机快查链。与扁鹊内置同名包等位可接管，上游更新以本仓为准。",
       "path": "packs/os-basics",
