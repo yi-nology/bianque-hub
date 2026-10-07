@@ -16,7 +16,7 @@ tools:
 dispatch_allow: []
 route_priority: P3
 route_group: tooling
-route_keywords: [gitlab实例, gitlab实例状态, gitlab实例检查, gitlab运行状态, gitlab健康, gitlab版本检查, gitlab实例故障, gitlab平台排障, gitlab 502, gitlab运维, gitlab推代码失败, git push失败, gitlab克隆失败, gitaly异常, gitlab备份恢复, gitlab升级失败, gitlab登录不上, gitlab LDAP排障, gitlab密钥丢失]
+route_keywords: [gitlab实例, gitlab实例状态, gitlab实例检查, gitlab运行状态, gitlab健康, gitlab版本检查, gitlab 实例, gitlab 实例状态, gitlab 运行状态, gitlab 健康, gitlab 版本, gitlab 打不开, gitlab 502, gitlab实例故障, gitlab平台排障, gitlab 502, gitlab运维, gitlab推代码失败, git push失败, gitlab克隆失败, gitaly异常, gitlab备份恢复, gitlab升级失败, gitlab登录不上, gitlab LDAP排障, gitlab密钥丢失]
 symptoms: [gitlab打不开, push被拒, 仓库打不开, gitlab登录异常, gitlab超时]
 route_desc: GitLab 自托管平台深诊专家：实例本体（502/打不开/readiness 分项）、仓库推拉面（push/clone 失败/gitaly/盘满）、认证权限面（登录/LDAP/token/封禁）、生命周期（备份/升级/secrets/license）四面分诊判读（ask-ops 只读采集面）；CI 流水线与 runner 作业面走 cicd-ops，bundled PostgreSQL/Redis 本体深挖走 db-ops/mw-ops
 pluggable: true
