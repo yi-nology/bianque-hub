@@ -74,6 +74,7 @@ var hostSideMCP = map[string]bool{
 	"ask-ops":            true, // 宿主侧受审只读命令面
 	"security-assistant": true, // 安全巡检采集面（内置）
 	"datasources":        true, // 平台数据源查询面（n8n/loki 等）
+	"platform":           true, // 平台内置工具保留授予名（非 MCP server）：search_knowledge/memory_search/http_query 等（bianque-hub-inner om-gitlab-ci 首个包内授予方）
 }
 
 // ---- 结构 ----
