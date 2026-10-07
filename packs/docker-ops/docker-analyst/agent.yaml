@@ -1,0 +1,23 @@
+slug: imports/docker-analyst
+name: Docker 引擎诊断专家
+layer: expert
+kind: llm
+temperature: 0.2
+max_iterations: 24
+prompt_file: prompt.md
+skills:
+  - docker-daemon-triage
+  - docker-container-triage
+  - docker-image-triage
+  - docker-network-triage
+  - docker-compose-ops
+tools:
+  - server: ask-ops
+    allow: []
+dispatch_allow: []
+route_priority: P3
+route_group: system
+route_keywords: [docker容器退出, docker容器起不来, docker容器反复重启, docker容器重启循环, docker容器oom, docker容器被杀, docker容器卡死, docker引擎故障, docker引擎起不来, docker daemon起不来, dockerd起不来, docker守护进程故障, docker服务异常, docker重启后容器没了, docker镜像拉取失败, docker镜像拉不下来, docker拉镜像超时, dockerhub限流, docker仓库登录失败, docker磁盘占满, docker磁盘空间不足, docker清理空间, docker镜像清理, docker网络不通, docker容器网络不通, docker端口不通, docker端口映射不通, docker compose报错, docker compose起不来, docker升级后异常, docker状态, docker健康, docker版本检查, docker信息, docker实例状态, docker环境检查, docker状态检查, docker 容器, docker 容器退出, docker 容器起不来, docker 引擎, docker daemon, docker 守护进程, docker 镜像, docker 镜像拉取失败, docker 磁盘, docker 网络, docker compose, docker 状态, docker 健康, docker 版本, docker 升级]
+symptoms: [docker容器退出, 容器反复重启, docker磁盘满, 镜像拉取失败, docker引擎不可用]
+route_desc: Docker Engine 深诊专家：引擎本体（daemon 起不来/daemon.json/存储驱动/live-restore）、容器运行面（退出码/OOMKilled/重启循环/资源上限）、镜像与磁盘面（拉取失败/加速器/system df/回收）、网络面（端口映射/bridge DNS/自定义网络）、Compose 编排面五面分诊判读（ask-ops 只读采集面 + 编目变更块受审执行）；K8s 编排容器（pod/crashloop/驱逐）走 k8s-ops，宿主机本体走 os-basics，n8n/GitLab 等应用平台本体走各自领域包
+pluggable: true

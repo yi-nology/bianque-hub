@@ -1,0 +1,21 @@
+# 编目变更块（受审执行范式，docker-ops 首批）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：docker-container-triage（根因处置到位后的重启生效面：僵死恢复/
+# 配置或依赖处置后的进程重载）——前置纪律：先有根因结论，重启不是止血本身；
+# 未查因重启只会复现。compose 形态优先按工程语义处置（见 docker-compose-ops）。
+# verify_readonly 走 ask-ops 只读面（docker ps --filter 在白名单）。
+api_version: 1
+slug: docker-container-restart
+title: Docker 容器重启（僵死恢复/处置生效）
+request_type: restart
+risk: 2
+rollback: "容器重启自愈性动作（docker restart 幂等）；中断的在跑任务按其失败路径重试——需等根因处置到位后重启，未查因重启只会复现"
+verify_readonly:
+  - "docker ps --filter name={{container}}"
+params:
+  - name: container
+    kind: string
+    required: true
+commands:
+  - "docker restart {{container}}"

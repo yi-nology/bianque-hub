@@ -1,0 +1,15 @@
+# 编目变更块（受审执行范式，docker-ops 首批）：磁盘水位恢复的最小安全面——
+# 仅回收悬空镜像（无 tag 引用的构建残留层），等价 docker image prune -f。
+# 方法论依据：docker-image-triage 第 4 步回收梯度——悬空层删除不影响任何运行中
+# 容器与有 tag 镜像，是唯一可编目的自动回收面；-a 级深清（含未使用镜像/卷/构建
+# 缓存）不入编目，一律自由 steps 人工审批。需先有 system df 水位结论再开处方。
+api_version: 1
+slug: docker-image-prune
+title: Docker 悬空镜像回收（磁盘水位恢复）
+request_type: cleanup
+risk: 3
+rollback: "悬空镜像层删除不可逆（只能按诊断报告 images 清单的镜像名:tag 重新拉取/重建）；不影响运行中容器与有 tag 镜像——回收前后水位以 verify_readonly 的 system df 复测为准"
+verify_readonly:
+  - "docker system df"
+commands:
+  - "docker image prune -f"

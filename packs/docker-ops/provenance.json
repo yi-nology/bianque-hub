@@ -1,0 +1,7 @@
+{
+  "base_url": "https://github.com/yi-nology/bianque-hub",
+  "pack": "docker-ops",
+  "edition": "community",
+  "generated_at": "2026-10-07",
+  "origin_note": "原生编写：方法论基于 Docker 官方文档（docs.docker.com：engine 管理与 daemon.json 配置面、restart policy 与 live-restore 语义、容器退出码与 OOMKilled 判读、system df 四类水位与 prune 面、网络模型 bridge/自定义网络内置 DNS、Compose label 与 depends_on 语义）整理重写。oo-devops 参考库（packs/oo-devops）docker-employee 与 docker-ops/docker-sandbox 技能仅作素材对账：其 DOCKER_* 环境变量注入面、MCP server 示例代码、Windows PowerShell 变体、Docker Desktop sandbox 插件面未搬运。边界：K8s 编排容器（pod/crashloop/驱逐）归 k8s-ops；宿主机本体（CPU/内存/磁盘/内核的非 docker 视角）归 os-basics 系统巡检链；n8n/GitLab/Nginx 等应用平台本体归各自领域包（本包只管引擎与容器运行面共性）；Harbor 镜像仓库面归 cicd-ops；镜像构建优化（Dockerfile/Buildx 多平台）是咨询面不走诊断。工具面：ask-ops dockerGuard 只读子命令白名单（本机 tools 仓 servers/askops/readonly_guards.go 为准）；docker compose/exec/run/cp/pull/update/prune 不在只读面——变更动作经编目变更块（changes/ 三件）或审批后宿主侧自由 steps。未搬运清单（按需后续 minor 承接）：Swarm 集群编面（service/node/stack/secret/config）、Buildx 多平台构建、镜像安全扫描工具面（trivy/scout/snyk 装机自备）、cAdvisor/fluentd 监控日志部署面、containerd/cri 运行时面（crictl）、rootless 与 userns-remap 深度加固面。"
+}

@@ -1,0 +1,24 @@
+# 编目变更块（受审执行范式，docker-ops 首批）：OOMKilled 缓解专用——
+# 内存上限在线调整（docker update 不重建容器、不动镜像/卷/网络）。
+# 方法论依据：docker-container-triage 第 4 步 OOMKilled 证据链——须四点齐
+# （OOMKilled:true + 原上限值 + 当前水位 + 内核 OOM 行）才可开处方；内存泄漏型
+# 病根在应用面，本块只买运维窗口。memory-swap 与 memory 同值 = 禁额外 swap
+# （防 swap 打穿宿主）；目标值低于当前实际用量会执行报错（如实回传，先缩负载）。
+# rollback 的原值来自诊断报告 HostConfig 证据（要求先采集后处方）。
+api_version: 1
+slug: docker-resource-update
+title: Docker 容器内存上限在线调整（OOMKilled 缓解）
+request_type: tune
+risk: 3
+rollback: "docker update --memory <原值> --memory-swap <原值> <容器名>（原值以诊断报告 HostConfig.Memory/MemorySwap 证据为准）；仅调运行时上限，可反复调整，不改镜像/卷/网络"
+verify_readonly:
+  - "docker inspect {{container}} --format 'Memory={{.HostConfig.Memory}} MemorySwap={{.HostConfig.MemorySwap}}'"
+params:
+  - name: container
+    kind: string
+    required: true
+  - name: memory
+    kind: string
+    required: true
+commands:
+  - "docker update --memory {{memory}} --memory-swap {{memory}} {{container}}"
