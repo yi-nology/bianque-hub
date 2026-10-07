@@ -107,14 +107,14 @@ go run ./cmd/bq-markettool outdated --url https://github.com/yi-nology/bianque-h
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [os-basics](packs/os-basics/) | 1.4.0 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
+| [os-basics](packs/os-basics/) | 1.4.1 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
 | [k8s-ops](packs/k8s-ops/) | 0.1.5 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
 | [mw-ops](packs/mw-ops/) | 0.2.3 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
 | [db-ops](packs/db-ops/) | 0.2.3 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
 | [web-ops](packs/web-ops/) | 0.2.0 | 网页巡检取证：SPA 渲染正文/全页截图取证/白屏四分型（browser-ops 工具面，conf 缺省关） |
 | [cicd-ops](packs/cicd-ops/) | 0.2.3 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位）+ 编目变更块两件（argocd sync/rollback） |
 | [obs-ops](packs/obs-ops/) | 0.3.3 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景）+ 编目变更块两件（flood 解锁/分配恢复） |
-| [gitlab-ops](packs/gitlab-ops/) | 0.2.0 | GitLab 自托管平台运维：实例本体/仓库推拉/认证权限/生命周期四技能 + 平台诊断专家（ask-ops 只读面）+ gitlab 凭证类型与 mcp/gitlab 只读桥声明（控制台治理面激活+凭证绑定）；CI 流水线与 runner 面归 cicd-ops |
+| [gitlab-ops](packs/gitlab-ops/) | 0.3.2 | GitLab 自托管平台运维：实例本体/仓库推拉/认证权限/生命周期四技能 + 平台诊断专家（ask-ops 只读面）+ gitlab 凭证类型与 mcp/gitlab 只读桥声明（控制台治理面激活+凭证绑定）；CI 流水线与 runner 面归 cicd-ops |
 | [nginx-ops](packs/nginx-ops/) | 0.1.0 | Nginx 自托管运维：可用性/路由重写/TLS/生命周期四技能 + 平台诊断专家（ask-ops 只读面，reload 类变更恒审批后执行）；纯宿主形态不依赖凭证平面；K8s Ingress 与 openresty/lua 不在范围 |
 | [n8n-ops](packs/n8n-ops/) | 0.2.3 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
 | [chain-starter](packs/chain-starter/) | 0.1.2 | 最小示例包（贡献模板，含技能钉扎演示） |

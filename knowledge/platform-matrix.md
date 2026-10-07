@@ -1,9 +1,9 @@
 # 附：平台适配矩阵（共享参考，prompt_includes 注入）
 
-> 副本锚点：来源为扁鹊仓 `_shared/prompts/platform-matrix.md`，最近同步 2026-10-02。
+> 副本锚点：来源为扁鹊仓 `_shared/prompts/platform-matrix.md`，最近同步 2026-10-07。
 > 本文件是给非扁鹊运行时的参考副本；维护者 seed-sync 后顺手更新本行日期，漂移即可见。
 
-所有上机操作前先判定目标平台，再按对应族口径采集、生成命令与判读基线。本节为参考事实，与主 prompt 的行为铁律共同生效。
+所有上机操作前先判定目标平台与部署形态，再按对应族口径采集、生成命令与判读基线。本节为参考事实，与主 prompt 的行为铁律共同生效。
 
 ## 支持平台（识别以 /etc/os-release 为准）
 
@@ -21,6 +21,15 @@
 1. 优先采用 `get_system_inventory` 返回的结构化 `platform` 字段（distro_id/pretty_name/version/variant/family，family ∈ rpm|debian|unknown）；无该字段时再 `cat /etc/os-release` 自查，辅助 `uname -r`，麒麟可加 `nkvers`。
 2. 未命中上表时按 ID_LIKE / platform.family 分族兜底（debian→apt；rhel/fedora/suse→yum/dnf），并在报告中标注「未验证平台，按族口径处理」。
 3. 报告中记录「目标平台：<PRETTY_NAME>」（symptom 首句或 evidence 均可），后续判读与建议都以此为口径。
+
+## 部署形态分诊（与平台判定同为上机第一步）
+
+平台之外先定部署形态——目标是完整主机还是容器/最小镜像，采集面与判读口径不同：
+
+1. 判定证据：`/.dockerenv`（Docker）、`/run/.containerenv`（Podman）、根文件系统 overlay*/tmpfs、PID 1 是否 systemd、systemd/journalctl 有无。注意容器共享宿主内核，`uname -r` 报的是宿主内核，不能据此判容器内发行版（以 os-release/apk|dpkg|rpm 足迹为准）。
+2. **容器口径**：防火墙/MAC（SELinux/KYSEC/AppArmor）/auditd/sshd/登录认证日志等主机级控制在容器内通常缺失或不可验证——标「容器内不可验证，需宿主/编排层复核」，**不判不符合**；kernel/swap/内存/负载为宿主共享数据，判读注明归属宿主。
+3. **工具能力受限**：最小镜像常缺 file/ss/journalctl——read 家族（read_file/tail_file/grep_file）在缺 `file` 命令的环境报「cannot determine file type」，同路径失败一次即判环境能力缺失，改走 list_directory/collect 采集面，**不重试**；网络/端口采不到时标注「采集受限」，不得凭空补全。
+4. 报告记录部署形态（symptom 首句或 evidence，与目标平台并列）；容器目标附宿主层复核清单。
 
 ## 命令生成口径
 

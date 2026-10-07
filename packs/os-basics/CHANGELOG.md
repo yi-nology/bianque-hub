@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.4.1 (2026-10-07)
+
+- 部署形态分诊前置（215 实弹 sess-1007-hxr6k25b 教训：localhost=扁鹊容器（Alpine
+  最小镜像）被当"这台机器"审计，容器识别靠模型自觉而非制度）：平台适配矩阵
+  （hub knowledge/ 单源 + seed-sync 三份同步）新增「部署形态分诊」节——容器证据
+  （.dockerenv/containerenv/overlay/PID1）→ 容器口径（主机级项标「容器内不可验证，
+  需宿主/编排层复核」不判不符合；kernel/swap/内存注明归属宿主）；security-assistant
+  prompt Step0 改「先分诊后采集」，判读口径补容器目标与工具能力降级两条（read 家族
+  缺 `file` 环境同路径失败一次即转 list_directory/collect 面，不重试）。配套：扁鹊
+  仓 tools/servers/securityx 预检对 file 命令缺失（本地 ENOENT/远端 rc 127）降级——
+  head -c 8192 探头 NUL 扫描 + 整读内容复扫兜底（本仓不阻塞，随扁鹊发布生效）。
+
 ## 1.4.0 (2026-10-06)
 
 - 深审修复批：`k8s-node-diagnosis` 按仓内五段式补齐（数据来源/判读基准/输出要求，
