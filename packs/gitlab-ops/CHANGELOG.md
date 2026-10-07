@@ -1,3 +1,9 @@
+## 0.2.1 (2026-10-07)
+
+- `credentials/gitlab.yaml` 增 `query_auth`（header/PRIVATE-TOKEN/token）：http_query
+  消费面查询自动带鉴权——此前包分发类型一律匿名（公开项目 200 与鉴权端点 401 混报、
+  membership=true 恒空表的实弹根因）。
+
 ## 0.2.0（2026-10-07）
 
 - **mcp/gitlab 只读桥声明**：吃主仓批次一百八十七 MCP 治理面——包声明 server 在控制台
