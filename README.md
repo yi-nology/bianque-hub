@@ -88,6 +88,18 @@ bianque markettool install k8s-ops --expert k8s-workload-analyst
 专家级启停，或先卸整包；反之迷你包在位装整包同样预检拒绝）；链（chain.yaml）
 与跨专家消歧是包级资产，不随专家级安装落位。
 
+### 卸载与启停
+
+```bash
+bianque markettool uninstall os-basics               # 卸载：目录入 experts/_trash/ 可找回，core 内置包治理拒卸
+bianque markettool disable k8s-ops                   # 包级禁用（加载期整包跳过）；enable 还原
+bianque markettool uninstall k8s-ops.k8s-workload-analyst   # 迷你包按名同样可卸/可停
+```
+
+卸载/启停与安装共用同一套目标与凭据口径（`--api`/`BQMT_API` 自动发现、
+`BQMT_TOKEN`/`BQMT_USER`+`BQMT_PASS` 兜底）。服务没起的机器清落盘残留：
+`uninstall <名> --dest /path/to/experts`（目录同样移入 `_trash/`，不注销登记）。
+
 ## 索引与检索
 
 hub 仓根的 `index.json` 是**机器可读包索引**（对标 Claude Code 插件市场的
