@@ -24,20 +24,42 @@
 
 ## 装进扁鹊
 
-扁鹊侧自带导入工具（`bq-markettool install`），两种模式；工具同时随扁鹊二进制
-分发（部署机无 Go 工具链时直接 `bianque markettool <子命令> …`，配合 `--upload`
-免拷文件）：
+### 一条命令装包
+
+扁鹊实例在本机运行时，只需要包名——来源缺省即本仓（官方 hub），
+目标缺省自动探测 `http://127.0.0.1:8900` 走 API 模式（原子校验、
+失败回滚、插件页可管理）：
 
 ```bash
-# 推荐：经本机扁鹊实例的插件 API 安装（原子校验、失败回滚、插件页可管理）
-go run ./cmd/bq-markettool install \
-  --url https://github.com/yi-nology/bianque-hub \
-  --pack os-basics \
-  --api http://127.0.0.1:8900
-
-# 无服务在跑时：直接落盘到 experts/（重启或控制台「重载」生效）
-go run ./cmd/bq-markettool install --url <本仓> --pack os-basics --dest /path/to/experts
+bianque markettool install os-basics
 ```
+
+工具随扁鹊二进制分发（部署机无需 Go 工具链）；在扁鹊仓内开发也可用独立壳
+`go run ./cmd/bq-markettool install os-basics`。本机探测不到实例且未指定
+目标时**不会静默落盘**——命令会列出 API/落盘两种模式供你选。
+
+### 显式形态
+
+```bash
+# 远端/非缺省端口实例
+bianque markettool install os-basics --api http://<扁鹊主机>:8900 --user admin --pass <口令>
+
+# 包不在服务器同机（容器化部署）：zip 按值直传，免拷文件
+bianque markettool install os-basics --api http://127.0.0.1:8900 --upload
+
+# 无服务在跑：直接落盘到 experts/（重启或控制台「重载」生效）
+bianque markettool install os-basics --dest /path/to/experts
+#   已存在要覆盖升级：加 --force（旧版自动移入 <dest>/_trash/，免手删）
+
+# 装本地 fork 的分支
+bianque markettool install os-basics --url https://github.com/you/bianque-hub --ref my-fix
+```
+
+### 环境变量常驻（CI/常用免带参）
+
+`BQMT_HUB_URL`（=`--url`）、`BQMT_API`（=`--api`）、`BQMT_TOKEN`（=`--token`）、
+`BQMT_USER`+`BQMT_PASS`（=`--user`/`--pass`）：仅在对应 flag 未给出时生效，
+凭据不落命令行历史。`bianque markettool`（不带参）看全部子命令与缺省规则。
 
 已装过的包再次导入即**升级**；`os-basics` 社区版与扁鹊内置同名包**等位可接管**
 （slug/路由/技能完全一致，升级后原位替换，卸载并重启自动还原内置版）。
@@ -53,15 +75,12 @@ curl -X POST http://127.0.0.1:8900/api/v1/plugins/install \
 只装某个专家（专家级子集安装）：
 
 ```bash
-go run ./cmd/bq-markettool install \
-  --url https://github.com/yi-nology/bianque-hub \
-  --pack k8s-ops --expert k8s-workload-analyst \
-  --api http://127.0.0.1:8900
+bianque markettool install k8s-ops --expert k8s-workload-analyst
 ```
 
 `--expert` 可重复；每个专家安装为**独立插件**（`<包>.<专家>`，如
 `k8s-ops.k8s-workload-analyst`），独立升级/卸载/启停。装机前可先看清单：
-`bq-markettool experts --url <本仓> --pack k8s-ops`（列专家+闭包摘要+可安装性）；
+`bianque markettool experts k8s-ops`（列专家+闭包摘要+可安装性）；
 `--expert-all` 一键把整包所有专家各自装成独立插件；`pack-expert` 出迷你包 zip
 （控制台「插件」页上传路径同享）。插件页对迷你包显示血缘徽标
 （`derived_from`：源包/版本/专家；源包升级后未重派生提示 `derived_stale`）。
@@ -72,18 +91,21 @@ go run ./cmd/bq-markettool install \
 ## 索引与检索
 
 hub 仓根的 `index.json` 是**机器可读包索引**（对标 Claude Code 插件市场的
-marketplace.json 形态），`bq-markettool` 的检索面消费它：
+marketplace.json 形态），`bq-markettool` 的检索面消费它（`--url` 缺省=官方 hub，
+下列命令在任意目录可直接跑）：
 
 ```bash
 # 检索（有索引用索引；缺索引自动降级现场扫描=旧克隆兼容）
-go run ./cmd/bq-markettool search --url https://github.com/yi-nology/bianque-hub k8s
+bianque markettool search k8s
 
 # 单包详情（构成/专家闭包摘要+可安装性/凭证前提）
-go run ./cmd/bq-markettool info --url https://github.com/yi-nology/bianque-hub --pack k8s-ops
+bianque markettool info k8s-ops
+
+# 落后包一键批量升级（对标 npm update；缺省自动探测本机实例）
+bianque markettool update --user admin --pass <口令>
 
 # 已装包 vs hub 版本对照（--api 读插件登记面 / --dest 扫落盘目录；迷你包按血缘对源包版本）
-go run ./cmd/bq-markettool outdated --url https://github.com/yi-nology/bianque-hub \
-  --api http://127.0.0.1:8900 --user admin --pass <口令>
+bianque markettool outdated --user admin --pass <口令>
 ```
 
 - **索引维护**：包内容变更后由维护者 `bq-markettool index-gen --hub <本仓>` 全量
