@@ -96,8 +96,9 @@ bianque markettool disable k8s-ops                   # 包级禁用（加载期�
 bianque markettool uninstall k8s-ops.k8s-workload-analyst   # 迷你包按名同样可卸/可停
 ```
 
-卸载/启停与安装共用同一套目标与凭据口径（`--api`/`BQMT_API` 自动发现、
-`BQMT_TOKEN`/`BQMT_USER`+`BQMT_PASS` 兜底）。服务没起的机器清落盘残留：
+`bianque markettool list` 速览本机装了啥（版本/启停/专家/血缘/漂移）。卸载/启停与
+安装共用同一套目标与凭据口径（`--api`/`BQMT_API` 自动发现、`BQMT_TOKEN`/
+`BQMT_USER`+`BQMT_PASS` 兜底）。服务没起的机器清落盘残留：
 `uninstall <名> --dest /path/to/experts`（目录同样移入 `_trash/`，不注销登记）。
 
 ## 索引与检索
@@ -118,6 +119,10 @@ bianque markettool update --user admin --pass <口令>
 
 # 已装包 vs hub 版本对照（--api 读插件登记面 / --dest 扫落盘目录；迷你包按血缘对源包版本）
 bianque markettool outdated --user admin --pass <口令>
+
+# 检索/对照面（search/info/experts/outdated/list）支持 --json：schema 版本化输出，
+# 脚本与智能体直接消费（--json 下人类提示全静默，stdout 即纯 JSON）
+bianque markettool search --json k8s | jq '.results[].name'
 ```
 
 - **索引维护**：包内容变更后由维护者 `bq-markettool index-gen --hub <本仓>` 全量
@@ -185,7 +190,8 @@ go run ./validator ./packs   # CI 同款：结构契约 + 跨包唯一性 + 工�
 
 ```bash
 cd <扁鹊仓>
-go run ./cmd/bq-markettool seed-sync --hub <本仓路径> --repo . --packs os-basics --apply
+go run ./cmd/bq-markettool seed-sync --repo . --packs os-basics --apply
+# （--hub 可缺省：在扁鹊仓内自动识别同级 bianque-hub，或常设 BQMT_HUB_DIR）
 go run ./cmd/pack-lint   # 内嵌 seed 校验（在无 experts/ 的目录跑才走内嵌源）
 go build                 # seed 是 go:embed，改完必须重编译
 ```
