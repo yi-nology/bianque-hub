@@ -17,15 +17,15 @@
     },
     {
       "name": "cicd-ops",
-      "version": "0.2.3",
+      "version": "0.3.0",
       "api_version": 1,
-      "description": "交付链诊断包（社区版首批）：Jenkins / GitLab CI / Harbor / ArgoCD 四技能 + 流水线分析专家，覆盖构建失败、runner 掉线、制品库异常、GitOps 同步失败分诊。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面；编目变更块两件（argocd sync/rollback）接「诊断+处方+受审执行」范式。",
+      "description": "交付链诊断包（社区版首批）：Jenkins / GitLab CI / Harbor / ArgoCD 四技能 + 流水线分析专家，覆盖构建失败、runner 掉线、制品库异常、GitOps 同步失败分诊。方法论由 oo-devops 市场包收割重写（去工具耦合），GitLab 流水线面参考 GitLab 官方 CLI（glab）方法论学生级改写（身份/可见性预检、created/pending 两分、状态语义、trace 尾部下钻）；统一 ask-ops 只读采集面；编目变更块五件（argocd sync/rollback + GitLab 作业级/流水线级重跑与流水线取消）接「诊断+处方+受审执行」范式。",
       "path": "packs/cicd-ops",
       "experts": [
         "pipeline-analyst"
       ],
       "skills": 4,
-      "changes": 2,
+      "changes": 5,
       "chain": false
     },
     {

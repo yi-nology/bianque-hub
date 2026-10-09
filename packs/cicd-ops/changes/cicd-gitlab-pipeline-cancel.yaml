@@ -1,0 +1,27 @@
+# 编目变更块（受审执行，cicd-ops 第二批·GitLab 流水线面，参考 GitLab 官方 CLI glab
+# 的 remote-change 安全面：cancel/retry 均为显式确认动作——本块承接取消）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：gitlab-ci-triage——叫停场景=跑偏的已知错误部署、占用共享 runner 的
+# 僵尸流水线；进行中的部署作业被取消后按其自身失败路径处理，下游 GitOps/部署面
+# 联动判断须先进结论。
+# 命令依赖主机侧凭证 env（GITLAB_URL/GITLAB_TOKEN，与 gitlab-ops 包 gitlab 凭证类型
+# 同源）；站点未录入凭证时 curl 报错如实回传。POST 不走在读校验白名单——本块经审批
+# 受审执行通道执行，approve-what-you-execute。
+api_version: 1
+slug: cicd-gitlab-pipeline-cancel
+title: GitLab 流水线取消（叫停进行中流水线及其运行作业）
+request_type: cancel
+risk: 3
+rollback: "取消不可逆（被停作业不自动续跑）；需继续交付走 cicd-gitlab-pipeline-retry——进行中的部署步骤被打断按其失败路径处置，处方前把该影响面写进结论"
+verify_readonly:
+  - 'curl -s -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_URL/api/v4/projects/{{project}}/pipelines/{{pipeline_id}}"'
+params:
+  - name: project
+    kind: string
+    required: true
+  - name: pipeline_id
+    kind: string
+    required: true
+commands:
+  - 'curl -sS -X POST -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_URL/api/v4/projects/{{project}}/pipelines/{{pipeline_id}}/cancel"'

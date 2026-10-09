@@ -1,0 +1,27 @@
+# 编目变更块（受审执行，cicd-ops 第二批·GitLab 流水线面，参考 GitLab 官方 CLI glab
+# 的能力语义原生改写——glab ci retry 钉在 job 粒度，本块同型；流水线级另块承接）。
+# 契约见主仓 docs/PACK_GUIDE.md §4.2.5；治理红线：包侧只声明编目，
+# 审批/执行/验证归平台——本文件不写任何治理节点。
+# 方法论依据：gitlab-ci-triage 第 3 步——重跑处方前提 = 失败分类为环境面/资源面
+# 瞬态失败（clone 失败、依赖拉取抖动、runner 磁盘/超时）；真失败（测试/编译断言）
+# 交业务修复，不开本块。
+# 命令依赖主机侧凭证 env（GITLAB_URL/GITLAB_TOKEN，与 gitlab-ops 包 gitlab 凭证类型
+# 同源）；站点未录入凭证时 curl 报错如实回传。POST 不走在读校验白名单——本块经审批
+# 受审执行通道执行，approve-what-you-execute。
+api_version: 1
+slug: cicd-gitlab-job-retry
+title: GitLab 作业级重跑（单失败作业，不含流水线其余作业）
+request_type: retry
+risk: 2
+rollback: "重跑后如需叫停走 cicd-gitlab-pipeline-cancel（取消目标是整条流水线）；单作业重跑不重新触发已通过/其他阶段作业——前置为瞬态失败分类证据已进结论"
+verify_readonly:
+  - 'curl -s -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_URL/api/v4/projects/{{project}}/jobs/{{job_id}}"'
+params:
+  - name: project
+    kind: string
+    required: true
+  - name: job_id
+    kind: string
+    required: true
+commands:
+  - 'curl -sS -X POST -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_URL/api/v4/projects/{{project}}/jobs/{{job_id}}/retry"'

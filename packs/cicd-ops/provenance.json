@@ -3,5 +3,5 @@
   "pack": "cicd-ops",
   "edition": "community",
   "generated_at": "2026-10-02",
-  "origin_note": "jenkins-pipeline-triage/gitlab-ci-triage/harbor-triage/argocd-sync-triage 分别由 oo-devops（openocta 收割）jenkins-ops/gitlab-ops/harbor-ops/argocd-ops 技能重写；分诊路径与判读基准为本仓重构补齐。全部剥离原版环境变量/MCP 假设，统一 ask-ops 只读采集面与扁鹊输出协议。oo-devops 整包自此冻结，交付链域由本包承接。"
+  "origin_note": "jenkins-pipeline-triage/gitlab-ci-triage/harbor-triage/argocd-sync-triage 分别由 oo-devops（openocta 收割）jenkins-ops/gitlab-ops/harbor-ops/argocd-ops 技能重写；分诊路径与判读基准为本仓重构补齐。全部剥离原版环境变量/MCP 假设，统一 ask-ops 只读采集面与扁鹊输出协议。oo-devops 整包自此冻结，交付链域由本包承接。0.3.0 起 GitLab 流水线能力面（gitlab-ci-triage 0.2.0 与三件重跑/取消编目块）参考 GitLab 官方 CLI 插件 0.1.3（glab ci/api 命令面、remote-change 安全面与 preflight 凭证身份方法论）原生改写：glab 命令一律转 curl GET 只读形态与编目模板形态，不引入 glab 二进制依赖；glab-stack/MR 编写侧不在本包范围。"
 }

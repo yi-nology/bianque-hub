@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 0.3.0 (2026-10-09)
+
+- GitLab 流水线能力面升级（参考 GitLab 官方 CLI 插件 0.1.3 的 glab ci/api 与 preflight
+  方法论，原生改写为 curl GET 只读形态——glab 二进制不在 ask-ops 白名单，不引入新工具面）：
+  gitlab-ci-triage 0.2.3 批版本戳未动（内容级修复在位），本次统一升 **0.2.0**——
+  分诊路径新增第 0 步「token 身份与项目可见性预检」（401/403/空清单语义三分）；
+  job 卡住按 created（派活/匹配面）与 pending（runner 执行资源面）两分归因；
+  流水线失败先状态语义再读日志（allow_failure/manual 红标≠阻断）；数据来源补
+  MR/commit→流水线→pipelines/<pid>/jobs 明细→jobs/<jid>/trace 尾部的精确下钻链
+  （`:id` 占位符与 URL 编码路径口径钉死）。
+- 编目变更块三件新增（受审执行范式，包内累计五件）：`cicd-gitlab-job-retry`（作业级
+  单发重跑，risk 2）、`cicd-gitlab-pipeline-retry`（流水线级重跑，risk 3）、
+  `cicd-gitlab-pipeline-cancel`（叫停进行中，risk 3）——重跑粒度两分源自官方 CLI 把
+  retry 钉在 job id 的口径，防「单 job 需求发流水线级」混发；verify_readonly 走既有
+  curl GET 只读形态，命令依赖主机侧 GITLAB_URL/GITLAB_TOKEN（gitlab 凭证类型同源）。
+- pipeline-analyst：route_keywords 补「gitlab流水线失败」（全 hub 未占用复合词；
+  「gitlab流水线」被 oo-devops gitlab-employee P6 参考位占用，跨层重复不取）；
+  route_desc 更新 GitLab 面语义；prompt 采集纪律钉身份预检、处方纪律接三块编目。
+
 ## 0.2.3 (2026-10-06)
 
 - 深审修复批：argocd-sync-triage 杜撰配置名 `selfIgnoreConfig` 修正为真实机制

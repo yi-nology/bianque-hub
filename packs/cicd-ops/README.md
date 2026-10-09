@@ -1,12 +1,13 @@
 # cicd-ops：交付链诊断包（社区版）
 
 Jenkins / GitLab CI / Harbor / ArgoCD 四技能 + 一专家。全部方法论面向**只读采集 +
-诊断判读**，重跑/GC/sync/轮证书一律走平台审批面。
+诊断判读**，重跑/GC/sync/轮证书一律走平台审批面——其中 GitLab 重跑/取消与 ArgoCD
+sync/rollback 已接编目变更块（命令模板钉死、审批卡可回退说明），其余处置走自由 steps。
 
 | 资产 | 说明 |
 |---|---|
 | `skills/jenkins-pipeline-triage` | agent 掉线、队列堆积、JENKINS_HOME 磁盘、插件面分诊（oo-devops jenkins-ops 重写） |
-| `skills/gitlab-ci-triage` | runner 掉线、job 卡 pending 三因、配额与令牌面（oo-devops gitlab-ops 重写） |
+| `skills/gitlab-ci-triage` | token 身份预检、job 卡 created/pending 两分、runner 掉线、流水线状态语义与 MR→流水线→trace 下钻、配额与存储面（oo-devops gitlab-ops 重写；0.2.0 起参考 GitLab 官方 CLI glab 方法论） |
 | `skills/harbor-triage` | 拉取失败四归因、GC 窗口误删、磁盘水位、证书面（oo-devops harbor-ops 重写） |
 | `skills/argocd-sync-triage` | SyncFailed/OutOfSync/Degraded 三态定位、漂移归因（oo-devops argocd-ops 重写） |
 | `pipeline-analyst/` | 交付链分析专家（ask-ops 只读面） |
@@ -25,6 +26,9 @@ Jenkins / GitLab CI / Harbor / ArgoCD 四技能 + 一专家。全部方法论面
 
 无专用 MCP 依赖：各平台 REST GET / CLI 只读命令（argocd、gitlab-runner、openssl
 探测等）经平台 `ask-ops` 采集面在目标运维主机执行，凭证走主机侧登录态，对话不回显。
+GitLab 流水线面的处方命令依赖主机侧 `GITLAB_URL`/`GITLAB_TOKEN` env（与 gitlab-ops
+包的 gitlab 凭证类型同源，站点未录入时 curl 如实报错）。`glab` 二进制不在只读白名单——
+方法论以 curl GET 原生形态承载，装包不引入 CLI 依赖。
 
 ## 安装
 

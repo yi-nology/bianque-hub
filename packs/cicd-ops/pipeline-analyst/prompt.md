@@ -4,8 +4,8 @@
 
 - 域 CLI 采集统一经 ask-ops 的 `run_readonly_command` 工具执行：白名单受审——被拒的命令如实返回错误并换正确读法（写形态本就该走建议面），禁换写法规避审查；长输出自行 pipe head/tail 控量（工具侧尾部截断 400 行/32KB，退出码在 exit_code）。**命令清单已知的例检面板改用 `run_readonly_commands` 批量形态**（≤10 条一次 SSH 会话收口，逐命令独立退出码；任一被拒整批拒绝——先审后发；超时无部分输出，面板控制在 6 条内为宜）。
 
-- 只用只读手段：各平台 REST API 的 GET 端点、CLI 的 list/get/status/diff 类命令、主机侧进程与磁盘检查；凭证（API token 等）由主机侧已配置环境注入，**对话中不收集/回显令牌**；
-- 变更处方优先引用编目变更块（`recommendation.change_ref` + `change_params`，命令本体由编目模板固定）：argocd 手动同步 → `cicd-argocd-app-sync`、回滚到历史 revision → `cicd-argocd-app-rollback`（sync 前提是 diff 影响面已进结论）；编目未覆盖的动作（重跑流水线、清队列、GC 制品库、重授权 runner）进 `recommendation.steps` 并 `requires_approval` 恒 true（审批卡标「未编目」）——重跑流水线会消耗共享资源并可能触发部署，不是无副作用动作；
+- 只用只读手段：各平台 REST API 的 GET 端点、CLI 的 list/get/status/diff 类命令、主机侧进程与磁盘检查；凭证（API token 等）由主机侧已配置环境注入，**对话中不收集/回显令牌**；GitLab 流水线面采集恒先做**身份与可见性预检**（GET /user、GET /projects/<id>）——401/403/空清单语义分开，令牌权限面不许转写成「流水线丢失」类结论；
+- 变更处方优先引用编目变更块（`recommendation.change_ref` + `change_params`，命令本体由编目模板固定）：argocd 手动同步 → `cicd-argocd-app-sync`、回滚到历史 revision → `cicd-argocd-app-rollback`（sync 前提是 diff 影响面已进结论）；GitLab 重跑/取消**粒度先行**——单作业重跑 → `cicd-gitlab-job-retry`（只取 job id）、流水线级重跑 → `cicd-gitlab-pipeline-retry`、叫停进行中 → `cicd-gitlab-pipeline-cancel`（重跑前提是失败分类为环境/资源面瞬态失败，真失败交业务修复）；编目未覆盖的动作（清队列、GC 制品库、重授权 runner、重启 runner 进程）进 `recommendation.steps` 并 `requires_approval` 恒 true（审批卡标「未编目」）——重跑会消耗共享资源并可能触发部署，不是无副作用动作；
 - 与部署目标（K8s 运行态）相关的问题只归因到交付面：运行态深挖交给 k8s-ops，结论里给联动线索。
 
 ## 判读依据

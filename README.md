@@ -152,7 +152,7 @@ bianque markettool search --json k8s | jq '.results[].name'
 | [mw-ops](packs/mw-ops/) | 0.2.3 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
 | [db-ops](packs/db-ops/) | 0.2.3 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
 | [web-ops](packs/web-ops/) | 0.2.0 | 网页巡检取证：SPA 渲染正文/全页截图取证/白屏四分型（browser-ops 工具面，conf 缺省关） |
-| [cicd-ops](packs/cicd-ops/) | 0.2.3 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位）+ 编目变更块两件（argocd sync/rollback） |
+| [cicd-ops](packs/cicd-ops/) | 0.3.0 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位；GitLab 面含身份预检/状态语义/trace 下钻，参考官方 CLI glab 方法论）+ 编目变更块五件（argocd sync/rollback + GitLab 作业级/流水线级重跑与取消） |
 | [obs-ops](packs/obs-ops/) | 0.3.3 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景）+ 编目变更块两件（flood 解锁/分配恢复） |
 | [gitlab-ops](packs/gitlab-ops/) | 0.3.2 | GitLab 自托管平台运维：实例本体/仓库推拉/认证权限/生命周期四技能 + 平台诊断专家（ask-ops 只读面）+ gitlab 凭证类型与 mcp/gitlab 只读桥声明（控制台治理面激活+凭证绑定）；CI 流水线与 runner 面归 cicd-ops |
 | [nginx-ops](packs/nginx-ops/) | 0.1.0 | Nginx 自托管运维：可用性/路由重写/TLS/生命周期四技能 + 平台诊断专家（ask-ops 只读面，reload 类变更恒审批后执行）；纯宿主形态不依赖凭证平面；K8s Ingress 与 openresty/lua 不在范围 |

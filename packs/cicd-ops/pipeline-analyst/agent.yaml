@@ -16,7 +16,7 @@ tools:
 dispatch_allow: []
 route_priority: P3
 route_group: tooling
-route_keywords: [构建失败, 流水线排障, 流水线卡住, jenkins排障, gitlabci排障, runner掉线, 镜像推送失败, 制品库排障, argo同步失败, 发布受阻]
+route_keywords: [构建失败, 流水线排障, 流水线卡住, jenkins排障, gitlabci排障, gitlab流水线失败, runner掉线, 镜像推送失败, 制品库排障, argo同步失败, 发布受阻]
 symptoms: [构建报错, 构建排队, agent掉线, 同步不健康, 发布超时]
-route_desc: CI/CD 交付链深诊专家：Jenkins 构建与队列、GitLab runner 与管道、Harbor 制品库、ArgoCD 同步四域分诊判读（ask-ops 只读采集面）
+route_desc: CI/CD 交付链深诊专家：Jenkins 构建与队列、GitLab 流水线与 runner（身份预检/状态语义/trace 尾部下钻）、Harbor 制品库、ArgoCD 同步四域分诊判读（ask-ops 只读采集面）
 pluggable: true
