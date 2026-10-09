@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09",
+  "generated_at": "2026-10-10",
   "tool": "bq-markettool index-gen",
   "packs": [
     {
@@ -179,7 +179,7 @@
     },
     {
       "name": "os-basics",
-      "version": "1.4.2",
+      "version": "1.5.0",
       "api_version": 1,
       "description": "主机/OS + Kubernetes 集群诊断包（社区版）：巡检、性能、内存、IO、网络、安全六域专家与安全四技能，附主机快查链。与扁鹊内置同名包等位可接管，上游更新以本仓为准。",
       "path": "packs/os-basics",

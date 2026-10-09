@@ -147,7 +147,7 @@ bianque markettool search --json k8s | jq '.results[].name'
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [os-basics](packs/os-basics/) | 1.4.2 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
+| [os-basics](packs/os-basics/) | 1.5.0 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
 | [k8s-ops](packs/k8s-ops/) | 0.1.5 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
 | [mw-ops](packs/mw-ops/) | 0.2.3 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
 | [db-ops](packs/db-ops/) | 0.2.3 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
@@ -159,7 +159,7 @@ bianque markettool search --json k8s | jq '.results[].name'
 | [n8n-ops](packs/n8n-ops/) | 0.2.3 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
 | [docker-ops](packs/docker-ops/) | 0.1.0 | Docker Engine 运维：引擎本体/容器运行面（退出码/OOMKilled）/镜像磁盘面（拉取失败/回收）/网络面/Compose 编排面五技能 + 平台诊断专家（ask-ops 只读面）+ 编目变更块三件（容器重启/内存上限在线调整/悬空镜像回收）；K8s 编排容器归 k8s-ops |
 | [chain-starter](packs/chain-starter/) | 0.1.2 | 最小示例包（贡献模板，含技能钉扎演示） |
-| [oo-devops](packs/oo-devops/) | 1.1.1 | OpenOcta 归化参考库（31 员工 + 189 技能 + 7 MCP 声明）——**不进缺省分发**：方法论已按域收割进四领域包，本包作参考库维护（A 案：hub 为内容唯一编辑点） |
+| [oo-devops](packs/oo-devops/) | 1.2.0 | OpenOcta 归化参考库（31 员工 + 189 技能 + 7 MCP 声明）——**不进缺省分发**：方法论已按域收割进四领域包，本包作参考库维护（A 案：hub 为内容唯一编辑点） |
 
 ## oo-devops 迁移说明
 

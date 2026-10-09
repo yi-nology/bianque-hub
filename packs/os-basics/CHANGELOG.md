@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.5.0 (2026-10-10)
+
+- 报告可视化增强批（bianque 批次二百六十联动，用户拍板「尽可能多用图表时间线，不要一片
+  文字」）：①六专家（io/memory/k8s-health/network/perf-tuning/security）数据可视化节
+  统一补 **timeline 图型**指引——离散事件时序（IO 异常演进/OOM 事件/集群 Pod 异常演进/
+  链路异常/负载劣化/攻击痕迹）与折线图分工明示（line 画数值采样趋势，timeline 画事件
+  先后），示例含 time 字面/status ok|warn|down/3–12 事件升序/只收证据支持事件；
+  ②六专家输出铁律补 conclusion/summary **结构化表达**纪律——首行一句话判定、多要点
+  markdown 列表、枚举对比 GFM 表格（表格必须前置空行另起一行行首，内联同行不渲染），
+  数据只放真实采集值。协议侧 timeline 容错解码与前端 TimelineChart 渲染已在 bianque
+  批次二百六十落地（"timeline" 含子串 "line"，协议判定先于 line；「时序/timeseries」
+  仍归折线不抢）。
+
 ## 1.4.2 (2026-10-07)
 
 - 215 八会话实弹扫描修复批：①报告协议 steps 硬钉补齐——memory/io/network/security/k8s-health

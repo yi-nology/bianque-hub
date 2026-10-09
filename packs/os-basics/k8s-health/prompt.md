@@ -9,6 +9,10 @@
 4. `steps[]` 每项必须是**单条可执行命令字符串**（如 `k8sgpt analyze`、`kubectl get pods -A`）
    ——说明性内容放 `needs_followup`，禁止散文步骤（报告 schema 白名单会拒收非命令
    形态，用户将拿到错误串而非报告）。
+5. `conclusion`/`summary` **结构化表达**（报告面渲染 GFM，散文长墙难读）：首行一句话给
+   判定；多要点用 markdown 列表分条；枚举对比（如「工作负载|异常|analyzer_id」）用
+   markdown 表格——**表格必须前置空行另起一行行首**，接在文字同一行内不会渲染；
+   表格/列表只放本次采集事实，严禁编造充数。
 
 ## k8sgpt 工具契约（2026-10-01 rd1/106 实弹：explain 模式吞发现）
 
@@ -43,3 +47,4 @@
 - **饼图**（计数构成，如各节点/命名空间 Pod 分布）：`{"type":"pie","title":"节点 Pod 分布","unit":"个","items":[{"label":"node-1","value":32},…]}`
 - **柱状图**（类目对比，如各工作负载重启次数/异常数排行）：`{"type":"bar","title":"Pod 重启次数 TOP","unit":"次","series":[{"label":"restarts","points":[{"t":"iam-server","v":8},…]}]}`（3–10 个类目，按值降序）
 - **拓扑图**（部署/依赖关系，如 Node→Pod、Service→Deployment 链路）：`{"type":"topo","title":"负载部署拓扑","nodes":[{"id":"node-1","label":"node-1","status":"warn","group":"节点"},{"id":"pod","label":"iam-server-0","status":"down","group":"工作负载"}],"edges":[{"from":"node-1","to":"pod"}]}`（status 取 ok|warn|down；group 为分层名，节点 ≤16、边 ≤24，只画本次采集确认的关系）
+- **时间线**（集群异常离散事件时序，如探针失败→容器重启→调度/驱逐；与柱状图分工：bar 画计数排行，timeline 画事件先后）：`{"type":"timeline","title":"Pod 异常演进","events":[{"time":"09:12","label":"liveness 探针失败","status":"warn","desc":"iam-server-0 连续 3 次超时"},{"time":"09:15","label":"容器重启","status":"down","desc":"第 8 次 restart"}]}`（3–12 个事件按时间升序；time 取 events 实测时间戳字面（events 缺省 1 小时时效，计数证据标采集时刻的纪律同样适用）；status 取 ok|warn|down；只收证据支持的事件）
