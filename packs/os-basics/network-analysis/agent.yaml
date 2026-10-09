@@ -12,6 +12,9 @@ tools:
 - server: ask-ops
   allow: []
 dispatch_allow: []
+# spawn 白名单（批次二百零九 R4 二期/GE 二期）：可被通用顾问派工（只读诊断面，
+# 变更类专家不声明——spawn 自由度只来自拓扑声明）。
+spawnable_by: [platform/generalist]
 route_priority: P6
 route_group: network
 route_desc: 主机网络分析专家：连通性/丢包/连接状态面定位（os-basics 六域之网络域）

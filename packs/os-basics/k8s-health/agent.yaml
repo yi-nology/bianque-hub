@@ -15,6 +15,9 @@ symptoms: [pod重启, crashloop, OOMKilled, 节点NotReady, 调度失败]
 #（2026-09-21 k8s 106 审计：无关键词的「捞 pod 错误日志」曾被派到本地日志域在服务本机空转）。
 route_desc: K8s 集群诊断与日志采集（k8sgpt）：凡涉及 Kubernetes 集群、pod、节点、命名空间的健康检查、错误日志捞取、事件排查、资源状态查询
 dispatch_allow: []
+# spawn 白名单（批次二百零九 R4 二期/GE 二期）：可被通用顾问派工（只读诊断面，
+# 变更类专家不声明——spawn 自由度只来自拓扑声明）。
+spawnable_by: [platform/generalist]
 tools:
   # 工具名以 k8sgpt 0.4.39 实测为准（12 工具全集见本包 README「K8s 集群诊断域」；契约清单随 k8s-ops 包 mcp/k8sgpt.yaml——同名 server 契约单源，避免双包重名冲突）；v1 白名单只放诊断面。
   - server: k8sgpt

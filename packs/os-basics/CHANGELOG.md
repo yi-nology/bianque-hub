@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.5.1 (2026-10-10)
+
+- seed 漂移回流补丁（1.5.0 回灌时发现）：io/memory/k8s-health/network 四专家 agent.yaml
+  补 `spawnable_by: [platform/generalist]` spawn 白名单声明——bianque 批次二百零九
+  （GE 二期 dispatch_agent 派工）当时直接改了平台仓 seed 快照未上回流 hub，seed-sync
+  回灌会把该声明冲掉（通用顾问对四只读诊断域的派工能力回退）。hub 为内容唯一编辑点，
+  本笔逐字节对齐 seed 现值完成回流；perf-tuning/security-assistant 不在派工白名单
+  （变更倾向/复核面），不声明。
+
 ## 1.5.0 (2026-10-10)
 
 - 报告可视化增强批（bianque 批次二百六十联动，用户拍板「尽可能多用图表时间线，不要一片
