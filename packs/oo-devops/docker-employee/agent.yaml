@@ -30,4 +30,4 @@ route_keywords:
 symptoms:
     - 容器退出
     - docker磁盘占用
-route_desc: Docker 容器运维员工，支持镜像管理、容器编排、网络配置、存储优化
+route_desc: Docker 单机容器——容器生命周期与 exec 现场、镜像构建与加载、compose 编排、bridge 网络与数据卷。K8s 集群走 k8s、镜像仓库走 harbor

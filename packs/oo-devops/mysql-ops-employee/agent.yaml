@@ -44,4 +44,4 @@ route_keywords:
 symptoms:
     - mysql主从延迟
     - 备份失败
-route_desc: MySQL 运维数字员工，专注于数据库运维、数据查询、故障排查、性能优化、备份恢复
+route_desc: MySQL 运维现场——连接数打满、主从复制延迟、锁等待死锁、慢查询现场处置、备份恢复与 binlog 磁盘占用。深度 SQL 调优走 mysql-dba

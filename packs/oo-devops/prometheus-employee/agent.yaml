@@ -40,4 +40,4 @@ route_keywords:
 symptoms:
     - 监控目标down
     - 指标缺口
-route_desc: Prometheus 监控运维员工，支持监控指标查询、告警管理、配置调整、目标状态巡检
+route_desc: Prometheus 监控——指标缺失与抓取目标 down、PromQL 查询、告警规则与静默、TSDB 存储治理。Zabbix 主机监控走 zabbix

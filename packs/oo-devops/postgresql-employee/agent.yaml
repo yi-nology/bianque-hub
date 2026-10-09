@@ -33,4 +33,4 @@ route_keywords:
     - postgresql dba
 symptoms:
     - pgsql锁等待
-route_desc: PostgreSQL 数据库运维员工，支持 SQL 优化、备份恢复、性能调优、高可用配置
+route_desc: PostgreSQL 系专家——vacuum 表膨胀、长事务与 xid 回卷、复制槽、pg_stat 等待事件、连接池治理。MySQL/MongoDB 走各自专家

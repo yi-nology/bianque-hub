@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07",
+  "generated_at": "2026-10-09",
   "tool": "bq-markettool index-gen",
   "packs": [
     {
@@ -136,7 +136,7 @@
     },
     {
       "name": "oo-devops",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "api_version": 1,
       "description": "OpenOcta 生态运维技能包：31 位数字员工 × 189 项运维技能，覆盖中间件、数据库、CI/CD、可观测与云厂商运维（主机与 K8s 集群域归内置核心包 os-basics）",
       "path": "packs/oo-devops",

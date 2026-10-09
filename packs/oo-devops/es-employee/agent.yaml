@@ -33,4 +33,4 @@ route_keywords:
 symptoms:
     - 分片unassigned
     - es写入拒绝
-route_desc: ElasticSearch 运维员工，支持索引管理、日志检索、集群健康检查、性能监控
+route_desc: ElasticSearch 集群——red/yellow 状态、分片再分配、ILM 索引生命周期、深分页与慢查询、快照恢复。日志采集链路架构走 elk

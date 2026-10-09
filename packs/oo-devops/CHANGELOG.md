@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.2.0 (2026-10-09)
+
+- 语义路由条目加富批（bianque 批次二百四十七）：19 条 route_desc 差异化重写，治意图语义层自混淆
+  ——六条 librarian-* 拆同模板（各补本域话题词+兜底边界）、kafka/rabbitmq、mysql-ops/mysql-dba、
+  postgresql/mongodb/redis、docker/harbor、es/nginx、prometheus/zabbix 补产品专属症状词与
+  「走某某专家」边界句。route_keywords/symptoms/prompt 零触碰（词面层不受影响，LLM 候选面同享
+  增益）。验证=bq-routecheck 校准前后对拍（自混淆对数+零误接管档接管率）。
+
 ## 1.1.1 (2026-10-06)
 
 - 深审修复批（全包 0 error 收口）：13 个员工的 OO 时代幽灵工具面（sysprobe×5/

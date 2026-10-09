@@ -27,4 +27,4 @@ route_keywords:
     - harbor 镜像仓库
 symptoms:
     - harbor镜像拉取失败
-route_desc: Harbor 容器镜像仓库运维员工，支持镜像管理、安全扫描、复制策略、项目管理
+route_desc: Harbor 镜像仓库——推送拉取失败、项目与配额、镜像复制与 GC、Trivy 扫描、机器人账号凭据。单机容器运行走 docker

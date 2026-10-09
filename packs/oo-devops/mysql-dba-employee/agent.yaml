@@ -37,4 +37,4 @@ route_keywords:
 symptoms:
     - mysql慢查询
     - 连接池打满
-route_desc: MySQL DBA 员工，支持自动化查询、性能诊断、慢日志分析、状态监控、健康巡检
+route_desc: MySQL DBA 深诊——执行计划与索引设计、参数调优、慢日志模式分析、容量巡检报告、主从一致性方案。现场止血与备份恢复走 mysql-ops

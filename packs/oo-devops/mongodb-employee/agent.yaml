@@ -28,4 +28,4 @@ route_keywords:
     - mongodb
 symptoms:
     - 副本集异常
-route_desc: MongoDB NoSQL 数据库运维员工，支持文档查询、集群管理、分片配置、性能监控
+route_desc: MongoDB 专家——副本集选举与 oplog 窗口、分片键与 chunk 均衡、文档查询性能、WiredTiger 缓存。关系型 SQL 库不在本域

@@ -28,4 +28,4 @@ route_keywords:
 symptoms:
     - rabbitmq消息堆积
     - 队列阻塞
-route_desc: RabbitMQ 消息队列运维员工，支持队列管理、消息路由、集群配置、高可用部署
+route_desc: RabbitMQ 消息队列专家——队列堆积、交换机与路由键、死信队列、vhost 集群镜像、消费者 prefetch 调优。Kafka 主题/消费组走 kafka

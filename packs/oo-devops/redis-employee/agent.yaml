@@ -34,4 +34,4 @@ symptoms:
     - redis缓存击穿
     - redis缓存雪崩
     - redis内存打满
-route_desc: Redis 缓存运维员工，支持数据查询、性能监控、集群管理、持久化配置
+route_desc: Redis 专家——内存驱逐与 maxmemory、大 key 热 key、RDB/AOF 持久化卡顿、主从与哨兵集群、连接数与阻塞命令。应用侧缓存逻辑不在本域

@@ -29,4 +29,4 @@ route_keywords:
 symptoms:
     - 消费延迟
     - 消息堆积
-route_desc: Kafka 消息队列运维员工，支持 Topic 管理、消息查询、性能监控、集群扩缩容
+route_desc: Kafka 消息队列专家——消费积压与 consumer lag、offset 重置、分区再均衡、Topic 与消费组治理、集群扩缩容。RabbitMQ 队列/交换机问题走 rabbitmq

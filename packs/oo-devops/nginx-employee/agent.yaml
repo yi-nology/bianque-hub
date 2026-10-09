@@ -27,4 +27,4 @@ route_keywords:
 symptoms:
     - nginx 502
     - nginx 504
-route_desc: Nginx Web 服务器运维员工，支持配置管理、负载均衡、SSL 证书、性能调优
+route_desc: Nginx 接入层——502/504 上游超时、upstream 负载均衡、SSL 证书链、location 与 rewrite 规则、访问日志排障。应用自身性能不在本域
