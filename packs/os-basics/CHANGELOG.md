@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.8.1 (2026-10-10)
+
+- **k8s-health 补 k8s 专属镜像拉取词面（bianque 批次二百六十四追加一，用户纠正）**：
+  1.8.0 评审曾以「镜像拉取失败已存 docker-ops@P3、加入 k8s-health@P2 会跨包抢赢」为由
+  剔除该词——用户指出 **docker-ops 与 k8s-health 是两个独立域**（Docker Engine 镜像拉取
+  vs K8s Pod 镜像拉取是不同场景，docker-analyst route_desc 自己就声明「K8s 编排容器
+  pod/crashloop/驱逐 走 k8s-ops」）。正解不是剔除、也不是塞裸词（裸词「镜像拉取失败」
+  进 P2 反会劫持 docker 的 P3 裸词 symptom，validator 跨层重复告警），而是给 k8s-health
+  **自己的 k8s 专属复合词**：route_keywords 补 `ErrImagePull`/`ImagePullBackOff`（k8s
+  规范状态串，与基线 crashloop/OOMKilled 同模式）+ `pod镜像拉取失败`（蒸馏「镜像拉取失败」
+  8 hits 的 pod 复合形态）。三词均 k8s 专属、不与 docker-ops 的 docker 前缀复合词
+  （docker镜像拉取失败/docker镜像拉不下来）或裸词撞，各域独立各管各的。
+- **为何进 route_keywords 而非 symptoms**：k8s-health 是 P2，symptoms 仅 P6 专家经确定性
+  兜底层生效（1.8.0 架构校准），故 k8s 镜像拉取词须进 route_keywords（P2 关键词层）才
+  确定性路由；ErrImagePull/ImagePullBackOff 为长拉丁串不触发 pack-lint 裸泛词警告。
+- index.json 经 index-gen 再生（os-basics 1.8.1），validator os-basics scope 0 error，
+  README 版本行同步。
+
 ## 1.8.0 (2026-10-10)
 
 - **运维场景识别词面增强（bianque 批次二百六十四，红帽知识库蒸馏）**：从红帽公开文档

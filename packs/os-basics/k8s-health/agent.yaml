@@ -9,7 +9,7 @@ route_priority: P2
 route_group: kubernetes
 # 关键词纪律（2026-09-19）：禁裸泛词（k8s/kubernetes/pod 曾在 P2 劫持「什么是 Kubernetes」
 # 类概念问句，抢在概念类降级之前派发域检查）——只收复合限定的诊断意图词。
-route_keywords: [k8s健康, k8s集群健康, k8s集群状态, k8s集群诊断, k8s节点异常, pod驱逐, 拉不起来, k8sgpt分析, 集群日志, pod日志, k8s日志, 节点日志, etcd, StorageClass, NetworkPolicy, ConfigMap, StatefulSet]
+route_keywords: [k8s健康, k8s集群健康, k8s集群状态, k8s集群诊断, k8s节点异常, pod驱逐, 拉不起来, k8sgpt分析, 集群日志, pod日志, k8s日志, 节点日志, etcd, StorageClass, NetworkPolicy, ConfigMap, StatefulSet, ErrImagePull, ImagePullBackOff, pod镜像拉取失败]
 symptoms: [pod重启, crashloop, OOMKilled, 节点NotReady, 调度失败, pod状态异常, pod一直重启, 节点故障, 节点失联, pod调度失败, pod无法启动, 网络策略不生效, 节点状态异常]
 # 路由描述（LLM 语义面）：日志/事件/资源诉求凡涉及集群、pod、命名空间语境即指向本专家
 #（2026-09-21 k8s 106 审计：无关键词的「捞 pod 错误日志」曾被派到本地日志域在服务本机空转）。
