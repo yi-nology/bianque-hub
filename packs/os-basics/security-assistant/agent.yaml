@@ -27,6 +27,11 @@ tools:
   - read_file
   - tail_file
   - list_directory
+# read_spill 溢出存档取回（bianque 批次二百八十五，对标 deepseek-harness spill seam）：
+# 工具输出超预算被截断时全文已存档，本工具按 offset/limit 分页取回原文——不重放
+# 昂贵远端采集。只读、会话隔离（仅本会话存档目录），平台内置非 MCP。
+- server: platform
+  allow: [read_spill]
 dispatch_allow: []
 route_priority: P0
 route_keywords:

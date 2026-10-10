@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.9.0 (2026-10-11)
+
+- **七专家授予 read_spill 溢出存档取回（bianque 批次二百八十五，对标
+  deepseek-harness spill seam「locator+retrieval hint」检索闭环）**：平台侧
+  budgetTool 超预算截断时全文落盘 `<mcp.spill_dir>/<session_id>/`，此前截断提示
+  里的服务器本地路径是模型够不着的死胡同——1.9.0 起 io-analysis/k8s-health/
+  memory-analysis/network-analysis/perf-tuning/security-assistant/system-patrol
+  七专家显式授予 platform/read_spill（只读、会话隔离：ctx 归属+定位符单段净化+
+  路径前缀守卫），按 offset/limit 分页取回被截断的中段原文（报错栈/关键行），
+  无需重放昂贵远端采集。截断提示只在工具实际被授予时才引导取回（提示与能力面
+  同构）。平台侧 _shared generalist/explore 同款授予（bianque 仓）。
+
 ## 1.8.2 (2026-10-10)
 
 - **批二百六十四词面回访：组件名词撤出高优 route_keywords（bianque 批次二百七十七，

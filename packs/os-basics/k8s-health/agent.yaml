@@ -22,5 +22,9 @@ tools:
   # 工具名以 k8sgpt 0.4.39 实测为准（12 工具全集见本包 README「K8s 集群诊断域」；契约清单随 k8s-ops 包 mcp/k8sgpt.yaml——同名 server 契约单源，避免双包重名冲突）；v1 白名单只放诊断面。
   - server: k8sgpt
     allow: [analyze, cluster-info, get-logs, get-resource, list-events, list-namespaces, list-resources]
+  # read_spill 溢出存档取回（bianque 批次二百八十五，对标 deepseek-harness spill seam）：
+  # 截断存档按 offset/limit 分页取回，不重放昂贵远端采集。只读、会话隔离，平台内置非 MCP。
+  - server: platform
+    allow: [read_spill]
 skills:
   - k8s-node-diagnosis
