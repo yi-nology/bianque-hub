@@ -24,6 +24,23 @@ disambiguation:
 - keyword: 报错
   rules:
   - context:
+    - 排查
+    - 全面
+    - 诊断
+    - 根因
+    - 故障
+    - 卡顿
+    - 很卡
+    - 太卡
+    - 卡死
+    - 变慢
+    - 很慢
+    - 太慢
+    - 性能
+    - 负载
+    target: workflow/fault-diagnosis
+    note: 排查/性能诉求归故障链（「日志里全是报错」是证据位置描述，不改变全面排查诉求；故障链内含日志域专家）
+  - context:
     - 日志
     - dmesg
     - journal
