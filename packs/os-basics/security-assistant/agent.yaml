@@ -55,28 +55,6 @@ route_keywords:
 - 证书有效期
 - HTTPS 证书
 - SSL 证书
-- IdM
-- SSSD
-- Kerberos
-- Active Directory
-- LDAP
-- SCAP
-- RBAC
-- CVE
-- kinit
-- oscap
-- OpenSCAP
-- LUKS
-- KDC
-- keytab
-- certmonger
-- SSO
-- Clevis
-- Tang
-- PKCS#11
-- enforcing
-- permissive
-- semanage
 route_group: security
 route_desc: 主机安全巡检助手：SSH 攻击/Root 登录/恶意进程/sudo 滥用四技能安全域（等保项）
 domain:
@@ -115,4 +93,26 @@ symptoms:
 - 合规检查
 - 密钥轮换
 - 漏洞扫描
+- IdM
+- SSSD
+- Kerberos
+- Active Directory
+- LDAP
+- SCAP
+- RBAC
+- CVE
+- kinit
+- oscap
+- OpenSCAP
+- LUKS
+- KDC
+- keytab
+- certmonger
+- SSO
+- Clevis
+- Tang
+- PKCS#11
+- enforcing
+- permissive
+- semanage
 pluggable: false

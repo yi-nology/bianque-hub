@@ -51,6 +51,65 @@ disambiguation:
     - '*'
     target: workflow/fault-diagnosis
     note: 默认归故障链
+# ── 口语故障主诉确定性承接（bianque 批次二百七十七：批二百六十四词面评审回访——「系统很卡/
+#    连不上/打不开」类最高频故障口语全不在词表，确定性模式直接落 P5 自答；按「报错」同款
+#    消歧默认故障链承接。安全语境分支置顶防遮蔽 P0 红线（本层先于 P0 执行））──
+- keyword: 很卡
+  rules:
+  - context:
+    - 入侵
+    - 后门
+    - 挖矿
+    - 暴力破解
+    - 安全
+    target: specialists/security-assistant
+    note: 安全语境让位红线
+  - context:
+    - '*'
+    target: workflow/fault-diagnosis
+    note: 口语故障主诉归故障链
+- keyword: 卡死
+  rules:
+  - context:
+    - 入侵
+    - 后门
+    - 挖矿
+    - 暴力破解
+    - 安全
+    target: specialists/security-assistant
+    note: 安全语境让位红线
+  - context:
+    - '*'
+    target: workflow/fault-diagnosis
+    note: 口语故障主诉归故障链
+- keyword: 连不上
+  rules:
+  - context:
+    - 入侵
+    - 后门
+    - 挖矿
+    - 暴力破解
+    - 安全
+    target: specialists/security-assistant
+    note: 安全语境让位红线
+  - context:
+    - '*'
+    target: workflow/fault-diagnosis
+    note: 口语故障主诉归故障链
+- keyword: 打不开
+  rules:
+  - context:
+    - 入侵
+    - 后门
+    - 挖矿
+    - 暴力破解
+    - 安全
+    target: specialists/security-assistant
+    note: 安全语境让位红线
+  - context:
+    - '*'
+    target: workflow/fault-diagnosis
+    note: 口语故障主诉归故障链
 - keyword: 检查
   rules:
   - context:

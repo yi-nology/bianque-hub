@@ -1,5 +1,31 @@
 # CHANGELOG
 
+## 1.8.2 (2026-10-10)
+
+- **批二百六十四词面回访：组件名词撤出高优 route_keywords（bianque 批次二百七十七，
+  用户报「对话识别老是不准」探针定性）**：1.8.0 蒸馏把 22 个身份/基础设施组件名词
+  （IdM/SSSD/Kerberos/Active Directory/LDAP/SCAP/RBAC/CVE/kinit/oscap/OpenSCAP/LUKS/
+  KDC/keytab/certmonger/SSO/Clevis/Tang/PKCS#11/enforcing/permissive/semanage）放进
+  security-assistant **P0** route_keywords、7 个 patrol 检查项名词（kdump/vmcore/
+  crashkernel/NTP/chronyd/sysctl/GRUB）放进 system-patrol **P1** route_keywords——探针
+  实测两类确定性劫持：①P0 先于 LLM 无仲裁，「LDAP 登录失败帮我排查」「K8s RBAC 权限
+  怎么配置」必进安全助手；②P1 词经仲裁可翻案 LLM，「sysctl 参数怎么调优」「NTP 时间
+  不同步」被单项问题劫进 patrol，与其自家 route_desc「单项问题不进本入口」自相矛盾。
+  语义层放大器：条目向量文本=route_desc+触发词行（bianque semantic.go SetSemanticFace），
+  route_keywords 每加一词语义劫持面自动变宽。处理：两处 29 词全部撤出 route_keywords
+  转 symptoms（P0/P1 条目的 symptoms 不进确定性兜底扫层〔该层仅扫 P6〕，仅作消歧
+  context_from_symptoms 与登记面语义）；SELinux/证书过期/暴力破解等强安全意图词原位保留。
+- **口语故障主诉确定性承接**：「系统很卡/卡死/连不上/打不开」类最高频故障口语全不在
+  词表，确定性模式直接落 P5 自答——disambiguation 按「报错」同款消歧默认故障链承接
+  （安全语境分支置顶，防本层〔先于 P0 执行〕遮蔽红线；插入位在「检查」规则前，防
+  「很卡帮我检查下」被检查默认 patrol 截走）。
+- **memory-analysis「内存占用过高」补词评估后放弃**：该词 6 rune≥4 一旦进 route_keywords
+  即成「显式域词」，在词表优先级扫描之前接管（bianque intent_layers.go
+  longestDomainKeyword 显式点名优先）——golden 存量钉测「内存占用过高是什么原因→
+  rootcause-analysis」当场红。归因问句的根因诉求优先级高于域词点名，此路不通；该句
+  依赖 LLM 面承接。
+- index.json 经 index-gen 再生（os-basics 1.8.2），validator 0 error，README 版本行同步。
+
 ## 1.8.1 (2026-10-10)
 
 - **k8s-health 补 k8s 专属镜像拉取词面（bianque 批次二百六十四追加一，用户纠正）**：
