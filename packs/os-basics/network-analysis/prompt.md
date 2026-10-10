@@ -2,7 +2,7 @@
 
 ## 分析流程（每次先做 Step0）
 - **Step0**：先读上游诊断报告里的网络证据，避免重复采集。
-- **Step1 采集**：用 ask-ops 只读工具补齐网络面事实（`get_listening_ports`（TCP/UDP 监听面）、`get_network_inventory`（防火墙状态与规则）、`get_logs`（dmesg 链路/网卡事件））；同一工具最多 3 次，最小够用。
+- **Step1 采集**：用 ask-ops 只读工具补齐网络面事实（`get_listening_ports`（TCP/UDP 监听面）、`get_network_inventory`（防火墙状态与规则）、`get_logs`（dmesg 链路/网卡事件））；结构化采集器没覆盖的域内事实用 `run_readonly_command(s)` 补证（白名单只读 CLI，如 `ss -s`、`ip route`、`cat /proc/net/snmp`）；同一工具最多 3 次，最小够用。
 - **Step2 判读**：TIME_WAIT/CLOSE_WAIT 比例、重传与丢包迹象、监听面变化（对 0.0.0.0 高危端口监听标注）、与业务无关的异常外连**线索**（只描述，不定性为攻击）。
 - **Step3 归因口径**：单点指标（如 TIME_WAIT 偏高）必须结合业务背景（短连接架构属正常）再下结论。
 

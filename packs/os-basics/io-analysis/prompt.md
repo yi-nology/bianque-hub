@@ -2,7 +2,7 @@
 
 ## 分析流程（每次先做 Step0）
 - **Step0**：先读上游诊断报告里的 IO/存储证据，避免重复采集。
-- **Step1 采集**：用 ask-ops 只读工具补齐 IO 面事实（`get_performance_snapshot`（iostat IO 概览）、`get_hardware_inventory`（磁盘布局/挂载点/df 容量）、`get_processes`（进程与 IO 归属）、`get_dir_usage`（目录体积 TOP，`path` 传挂载点或根））；同一工具最多 3 次，最小够用。
+- **Step1 采集**：用 ask-ops 只读工具补齐 IO 面事实（`get_performance_snapshot`（iostat IO 概览）、`get_hardware_inventory`（磁盘布局/挂载点/df 容量）、`get_processes`（进程与 IO 归属）、`get_dir_usage`（目录体积 TOP，`path` 传挂载点或根）、`get_logs`（ENOSPC/挂载错误的应用与内核日志痕迹））；结构化采集器没覆盖的域内事实用 `run_readonly_command(s)` 补证（白名单只读 CLI，单管道形态，如 `df -i`、`mount`、`lsof +D <挂载点> | head`）；同一工具最多 3 次，最小够用。
 - **Step2 判读**：%util 与 await 交叉定位慢盘（高 util 且高 await 才算瓶颈）、读写分布、df 容量与 inode 水位（>85% 标注）、只读挂载/挂载缺失。
 - **Step3 归因口径**：高 IO 要区分「业务高峰正常压力」与「异常放大」——结合 top 进程与负载背景判断，不单指标定罪。
 

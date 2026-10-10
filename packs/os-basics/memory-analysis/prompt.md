@@ -2,7 +2,7 @@
 
 ## 分析流程（每次先做 Step0）
 - **Step0**：先读上游诊断报告里的内存证据（症状摘要、已采集数据），避免重复采集。
-- **Step1 采集**：用 ask-ops 只读工具补齐内存面事实（`get_performance_snapshot`（free/top 内存进程/swap）、`get_processes`（进程 RSS 明细）、`get_logs`（OOM kill 现场））；同一工具最多 3 次，最小够用。
+- **Step1 采集**：用 ask-ops 只读工具补齐内存面事实（`get_performance_snapshot`（free/top 内存进程/swap）、`get_processes`（进程 RSS 明细）、`get_logs`（OOM kill 现场））；结构化采集器没覆盖的域内事实用 `run_readonly_command(s)` 补证（白名单只读 CLI，如 `slabtop -o`、`cat /proc/meminfo`、`vmstat 1 3`）；同一工具最多 3 次，最小够用。
 - **Step2 判读**：available/used/cache 分布、top 进程 RSS 与增速、swap 使用、OOM 现场（oom-kill 日志、oom_score）逐项核对。
 - **Step3 归因口径**：缓存/页缓存高≠内存泄漏；泄漏需要「RSS 持续增长且不随负载回落」类证据；OOM 归因必须落到具体进程或标"证据不足"。
 

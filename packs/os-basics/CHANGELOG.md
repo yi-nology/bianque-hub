@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## 1.7.0 (2026-10-10)
+
+- **三域诊断专家最小权限收敛**（bianque 批次二百六十三 工具权限标注审计轮）：
+  io/memory/network-analysis 的 `tools.allow: []`（=ask-ops 全部 14 工具，含破坏性
+  run_approved_command/run_approved_commands）改显式 12 工具只读白名单（十结构化
+  采集器 + probe_host + run_readonly_command(s) 白名单只读 CLI 对）。修正三处不合理：
+  ①授权面与 prompt 能力声明矛盾——三份 prompt 首行都承诺「你没有任何处置工具——
+  处置建议只随报告提交审批，绝不自行执行」，allow 面却发了破坏性工具（运行时策略门
+  会拒绝 LLM 自主变异调用，但授予本身污染工具清单、浪费 ReAct 迭代并诱使模型试探）；
+  ②`allow: []` 使专家工具集含变更类，agentrun 重试守卫无法整体放行（RetryAfterMutation
+  被迫 false，bianque 实弹 sess-1010-bbnbxb56 轮 429 限流后拒重试环节 failed 的促成
+  因素之一，v0.14.6 豁免缝治标、本笔授权收敛治本）；③意图/能力面失真——只读诊断
+  专家的工具清单是路由与派工的能力事实源，超授即误描述。
+- 三专家 prompt Step1 采集面同步补 `run_readonly_command(s)` 声明（域内补证示例：
+  df -i/mount/lsof、slabtop/vmstat、ss/ip route——此前实弹中模型自发使用该工具
+  取证有效但 prompt 未声明，授权面与 prompt 各说各话）；io-analysis 补 `get_logs`
+  （ENOSPC/挂载错误的应用与内核日志痕迹，Docker 被测体实弹 order-service ENOSPC
+  案例即此路径）。
+- 审计记录：平台工具注解面（48+8 工具 readOnly/destructive 全标注）与运行时治理链
+  （变异 OpToolCall 任何模式拒绝/变更唯一通道=审批方案+一次性凭据/灾难黑名单/
+  受审命令 vetting/L4 双确认）核验健壮，本笔为内容侧授权面收敛；hub 其余 46 个
+  `allow: []` 专家文件（mw/db/k8s/docker/nginx/web/obs/cicd/gitlab/n8n/oo-devops 等
+  非 Linux 主机域）同模式挂账待后续批清扫。
+
 ## 1.6.0 (2026-10-10)
 
 - 「报错」消歧规则补排查/性能诉求前置分支（bianque Docker Ubuntu 被测体实弹

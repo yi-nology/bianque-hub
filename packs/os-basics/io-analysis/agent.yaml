@@ -9,8 +9,24 @@ prompt_file: prompt.md
 prompt_includes:
 - _shared/prompts/platform-matrix.md
 tools:
+# 显式只读采集面（最小权限收敛）：十结构化采集器 + run_readonly 白名单只读 CLI 对。
+# run_approved_command(s)（破坏性受审执行）不授予——prompt 承诺「没有任何处置工具」，
+# 授权面与能力声明同构；变更恒走方案审批面（平台闸门对 LLM 自主变异调用一律拒绝，
+# 授予只是污染工具清单、浪费迭代并诱使模型试探）。
 - server: ask-ops
-  allow: []
+  allow:
+  - get_hardware_inventory
+  - get_system_inventory
+  - get_network_inventory
+  - get_security_inventory
+  - get_performance_snapshot
+  - get_logs
+  - get_processes
+  - get_listening_ports
+  - get_dir_usage
+  - probe_host
+  - run_readonly_command
+  - run_readonly_commands
 dispatch_allow: []
 # spawn 白名单（批次二百零九 R4 二期/GE 二期）：可被通用顾问派工（只读诊断面，
 # 变更类专家不声明——spawn 自由度只来自拓扑声明）。
