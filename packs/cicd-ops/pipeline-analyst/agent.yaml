@@ -12,7 +12,22 @@ skills:
   - argocd-sync-triage
 tools:
   - server: ask-ops
-    allow: []
+    # 显式只读采集面（最小权限收敛，bianque 批次二百六十四）：十结构化采集器+probe_host
+    # +run_readonly 白名单只读 CLI 对（域内 CLI 取证）；run_approved_*（破坏性受审执行）
+    # 不授予——分析专家=只读采集判读域（prompt 零变更工具引用），变更恒走方案审批面。
+    allow:
+      - get_hardware_inventory
+      - get_system_inventory
+      - get_network_inventory
+      - get_security_inventory
+      - get_performance_snapshot
+      - get_logs
+      - get_processes
+      - get_listening_ports
+      - get_dir_usage
+      - probe_host
+      - run_readonly_command
+      - run_readonly_commands
 dispatch_allow: []
 route_priority: P3
 route_group: tooling

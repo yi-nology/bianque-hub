@@ -10,7 +10,19 @@ skills:
   - spa-render-diagnosis
 tools:
   - server: browser-ops
-    allow: []
+    # 显式全量白名单（最小权限收敛，bianque 批次二百六十四）：只读档五工具自由采集；
+    # 执行档三工具（click/type/eval）是技能钉扎的设计能力（spa-render-diagnosis 的
+    # eval 只读三连等），prompt 已带执行档纪律（必须说明必要性/严禁 eval 绕只读档）；
+    # browser-ops server 治理缺省硬关（装包≠开洞），显式列出防 allow 空=全量漂移。
+    allow:
+      - browser_open
+      - browser_content
+      - browser_screenshot
+      - browser_tabs
+      - browser_close
+      - browser_click
+      - browser_type
+      - browser_eval
 dispatch_allow: []
 route_priority: P4
 route_group: tooling

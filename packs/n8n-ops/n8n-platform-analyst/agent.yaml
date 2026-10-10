@@ -13,7 +13,22 @@ skills:
   - n8n-lifecycle-ops
 tools:
   - server: ask-ops
-    allow: []
+    # 显式只读采集面（最小权限收敛，bianque 批次二百六十四）：十结构化采集器+probe_host
+    # +run_readonly 白名单只读 CLI 对（域内 CLI 取证）；run_approved_*（破坏性受审执行）
+    # 不授予——分析专家=只读采集判读域（prompt 零变更工具引用），变更恒走方案审批面。
+    allow:
+      - get_hardware_inventory
+      - get_system_inventory
+      - get_network_inventory
+      - get_security_inventory
+      - get_performance_snapshot
+      - get_logs
+      - get_processes
+      - get_listening_ports
+      - get_dir_usage
+      - probe_host
+      - run_readonly_command
+      - run_readonly_commands
   - server: datasources          # n8n 公共 API 只读查询面（API key 经凭证面注入）
     allow: [n8n_list_workflows, n8n_get_workflow, n8n_list_executions, n8n_get_execution]
 dispatch_allow: []

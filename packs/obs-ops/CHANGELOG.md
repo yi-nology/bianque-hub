@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.4.0 (2026-10-10)
+
+- **obs-analyst 工具授权最小权限收敛**（bianque 批次二百六十四，除 oo-devops 外全 hub 清扫）：
+  `ask-ops allow: []`（=全部 14 工具，含破坏性 run_approved_command(s)）改显式 12 工具
+  只读白名单（十结构化采集器+probe_host+run_readonly 只读 CLI 对）。修正三处不合理：
+  ①授权面与 prompt 能力声明矛盾（分析专家=只读采集判读域，prompt 零变更工具引用，
+  处置建议只随报告进审批）；②`allow: []` 使工具集含变更类，agentrun 重试守卫整步骤
+  收紧（RetryAfterMutation=false，429 限流拒重试环节 failed 实弹在案，bianque 侧
+  agentkit v0.14.6 豁免缝治标、授权收敛治本）；③能力/路由事实源失真——工具清单是
+  派工与路由的能力面，超授即误描述。域 CLI 采集面（run_readonly 白名单内 mysql/psql/
+  redis-cli/kafka/docker/kubectl 只读子命令等）完整保留，零能力损失。
+
 ## 0.3.3 (2026-10-06)
 
 - 深审修复批：README 与包体脱节收口（「三技能」→四技能、资产表补 loki-triage 行、

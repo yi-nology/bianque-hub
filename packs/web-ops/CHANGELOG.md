@@ -1,3 +1,12 @@
+## 0.3.0 (2026-10-10)
+
+- **web-inspector 工具授权显式化**（bianque 批次二百六十四 最小权限清扫，除 oo-devops 外全 hub 收敛）：
+  `browser-ops allow: []`（=全量授予语义）改显式 8 工具白名单——只读档五工具
+  （open/content/screenshot/tabs/close）+执行档三工具（click/type/eval）。执行档是
+  技能钉扎的设计能力（spa-render-diagnosis 的 eval 只读三连等），prompt 已带执行档
+  纪律（必须说明必要性/严禁 eval 绕只读档），browser-ops server 治理缺省硬关
+  （装包≠开洞）；显式列出防「allow 空=全量」在新工具注册时静默扩权。
+
 # Changelog
 
 ## 0.2.0 - 2026-10-06

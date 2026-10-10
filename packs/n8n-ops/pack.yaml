@@ -1,6 +1,6 @@
 api_version: 1
 name: n8n-ops
-version: 0.2.3
+version: 0.3.0
 description: n8n 自托管平台运维包（社区版）：实例本体（起不来/资源/日志）、执行面（卡住/失败/膨胀）、webhook 触发面（404/CSRF）、队列模式（worker/Redis）、生命周期（加密密钥/备份/升级/license）五技能 + 平台诊断专家。方法论基于 n8n 官方部署文档与社区排障案例原生编写（含 2.x/3.x 版本基线），n8n 公共 API 走 datasources 查询面（API key 凭证面注入）、主机面走 ask-ops 只读采集；编目变更块一件（容器重启）接「诊断+处方+受审执行」范式。
 provides:
   experts:
