@@ -48,6 +48,16 @@ route_keywords:
 - NVMe
 - 块IO
 - 设备队列
+- GFS2
+- XFS
+- ext4
+- NFS
+- multipath
+- multipathd
+- iSCSI
+- CephFS
+- OSD
+- fsck
 symptoms:
 - iowait
 - 磁盘
@@ -58,3 +68,15 @@ symptoms:
 - 多路径
 - NVMe
 - 块设备
+- 磁盘空间不足
+- 挂载失败
+- 文件系统损坏
+- 文件系统只读
+- 存储容量不足
+- 存储不可用
+- 磁盘配额超限
+- 磁盘写入慢
+- 磁盘故障
+- 快照创建失败
+- 多路径未生效
+- 存储路径故障

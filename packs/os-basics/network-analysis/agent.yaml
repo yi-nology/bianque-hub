@@ -48,6 +48,21 @@ route_keywords:
 - 网络延迟高
 - 协议栈丢包
 - 链路断
+- nmcli
+- NetworkManager
+- VLAN
+- firewalld
+- MTU
+- DHCP
+- Keepalived
+- iptables
+- ifcfg
+- firewall-cmd
+- bonding
+- VRRP
+- nmtui
+- bridge
+- HAProxy
 symptoms:
 - 网络
 - 丢包
@@ -60,3 +75,15 @@ symptoms:
 - 重传
 - 链路
 - ping不通
+- 端口不通
+- 路由不通
+- 虚拟机连不上网
+- 防火墙规则不生效
+- 网络配置不生效
+- 负载均衡不生效
+- 流量分发不均
+- 网卡绑定失败
+- 虚拟机断网
+- 防火墙拦截
+- DNS解析失败
+- 网络丢包

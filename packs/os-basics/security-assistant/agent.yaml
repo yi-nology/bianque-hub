@@ -55,6 +55,28 @@ route_keywords:
 - 证书有效期
 - HTTPS 证书
 - SSL 证书
+- IdM
+- SSSD
+- Kerberos
+- Active Directory
+- LDAP
+- SCAP
+- RBAC
+- CVE
+- kinit
+- oscap
+- OpenSCAP
+- LUKS
+- KDC
+- keytab
+- certmonger
+- SSO
+- Clevis
+- Tang
+- PKCS#11
+- enforcing
+- permissive
+- semanage
 route_group: security
 route_desc: 主机安全巡检助手：SSH 攻击/Root 登录/恶意进程/sudo 滥用四技能安全域（等保项）
 domain:
@@ -75,4 +97,22 @@ symptoms:
 - PAM
 - SSH
 - 证书过期
+- 认证失败
+- 登录失败
+- 无法登录
+- 无法访问文件
+- 证书不受信任
+- 智能卡登录失败
+- 无法加入域
+- 合规检查失败
+- 认证报错
+- SSO登录失败
+- 访问被阻止
+- 签名验证失败
+- 认证超时
+- 权限配置错误
+- SELinux拦截
+- 合规检查
+- 密钥轮换
+- 漏洞扫描
 pluggable: false

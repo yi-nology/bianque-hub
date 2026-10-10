@@ -109,3 +109,128 @@ disambiguation:
     - '*'
     target: workflow/fault-diagnosis
     note: 故障场景切换走故障链（执行必经审批闸门）
+
+# ── 跨域歧义消解（批次二百六十四：redhat-kb 红帽文档蒸馏词面评审，ambiguity.md 素材；
+#    吸取批次二百六十二「消歧劫持」教训——跨域歧义词进消歧按上下文分流，不塞单域 symptoms）──
+- keyword: 内存不足
+  rules:
+  - context:
+    - 性能
+    - 卡顿
+    - 慢
+    - 负载
+    target: workflow/perf-tuning
+    note: 性能诉求归调优流
+  - context:
+    - 巡检
+    - 健康
+    target: workflow/system-patrol
+    note: 巡检场景
+  - context:
+    - '*'
+    target: specialists/memory-analysis
+    note: 默认归内存分析
+- keyword: iowait
+  rules:
+  - context:
+    - 性能
+    - 调优
+    - 瓶颈
+    target: workflow/perf-tuning
+    note: 性能调优语境归调优
+  - context:
+    - '*'
+    target: specialists/io-analysis
+    note: 默认归 IO 域
+- keyword: 磁盘IO慢
+  rules:
+  - context:
+    - 性能
+    - 调优
+    target: workflow/perf-tuning
+    note: 性能调优语境
+  - context:
+    - '*'
+    target: specialists/io-analysis
+    note: 默认归 IO 域
+- keyword: NUMA
+  rules:
+  - context:
+    - 性能
+    - 调优
+    - 绑定
+    target: workflow/perf-tuning
+    note: 性能调优语境
+  - context:
+    - '*'
+    target: specialists/memory-analysis
+    note: 默认归内存域
+- keyword: 权限不足
+  rules:
+  - context:
+    - 磁盘
+    - 文件
+    - 挂载
+    - 存储
+    target: specialists/io-analysis
+    note: 存储/文件权限归 IO
+  - context:
+    - '*'
+    target: specialists/security-assistant
+    note: 默认归安全域
+- keyword: 权限被拒绝
+  rules:
+  - context:
+    - 磁盘
+    - 文件
+    - 挂载
+    target: specialists/io-analysis
+    note: 存储/文件权限归 IO
+  - context:
+    - '*'
+    target: specialists/security-assistant
+    note: 默认归安全域
+- keyword: 集群状态异常
+  rules:
+  - context:
+    - pod
+    - 节点
+    - k8s
+    - 容器
+    target: specialists/k8s-health
+    note: 容器集群语境归 k8s
+  - context:
+    - 存储
+    - ceph
+    - 磁盘
+    target: specialists/io-analysis
+    note: 存储集群语境归 IO
+  - context:
+    - '*'
+    action: clarify
+    note: 先澄清：是 K8s 集群还是存储集群？
+- keyword: firewalld
+  rules:
+  - context:
+    - 安全
+    - 入侵
+    - 合规
+    - 基线
+    target: specialists/security-assistant
+    note: 安全语境归安全域
+  - context:
+    - '*'
+    target: specialists/network-analysis
+    note: 默认归网络域（防火墙工具）
+- keyword: PVC
+  rules:
+  - context:
+    - pod
+    - 存储类
+    - k8s
+    target: specialists/k8s-health
+    note: K8s 存储声明归 k8s
+  - context:
+    - '*'
+    target: specialists/io-analysis
+    note: 默认归 IO 存储域

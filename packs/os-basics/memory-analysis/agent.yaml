@@ -45,6 +45,7 @@ route_keywords:
 - memcg
 - 回收抖动
 - 内存告警
+- TLB miss
 symptoms:
 - oom
 - 内存
@@ -53,3 +54,8 @@ symptoms:
 - VSZ
 - oom_score
 - 内存不够
+- 内存占用高
+- 内存访问慢
+- 内存分配失败
+- 内存超分
+- 虚拟机内存不足

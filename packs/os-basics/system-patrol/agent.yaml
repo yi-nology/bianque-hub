@@ -23,6 +23,13 @@ route_keywords:
 - 变更前
 - 变更后
 - 巡检报告
+- kdump
+- vmcore
+- crashkernel
+- NTP
+- chronyd
+- sysctl
+- GRUB
 route_desc: 全面多域例行体检（CPU/内存/IO/网络/安全并行采集）与变更前后对比；单项指标或单一资源的问题不进本入口（单项即时事实走 ask-ops
   快速问答）
 domain:
@@ -34,4 +41,8 @@ symptoms:
 - 健康
 - 变更前
 - 变更后
+- 时间不同步
+- 时钟漂移
+- 服务状态异常
+- 驱动加载失败
 pluggable: false

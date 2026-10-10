@@ -26,6 +26,14 @@ route_keywords:
 - 吞吐
 - 性能调优
 - 性能瓶颈
+- Performance Co-Pilot
+- tuned
+- tuned-adm
+- SystemTap
+- cgroups
+- numactl
+- turbostat
+- cpupower
 route_desc: 性能瓶颈定位与参数调优建议（建议模式，执行需审批）
 domain:
 - 性能调优
@@ -33,3 +41,19 @@ symptoms:
 - 调优
 - 瓶颈
 - 吞吐
+- CPU占用高
+- 系统卡顿
+- 虚拟机卡顿
+- 响应慢
+- 性能下降
+- 系统响应慢
+- CPU争抢
+- 资源分配不均
+- 吞吐低
+- 性能抖动
+- 应用响应慢
+- 应用变慢
+- CPU频率低
+- 系统性能差
+- 虚拟机性能差
+- 排查性能瓶颈

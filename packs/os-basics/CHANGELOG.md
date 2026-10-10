@@ -1,5 +1,51 @@
 # CHANGELOG
 
+## 1.8.0 (2026-10-10)
+
+- **运维场景识别词面增强（bianque 批次二百六十四，红帽知识库蒸馏）**：从红帽公开文档
+  语料（HuggingFace `mtpti5iD/redhat-docs_dataset`，55,741 条 docs.redhat.com 结构化
+  文档，CC-BY-SA-4.0）经 DGX Spark 容器化三阶段蒸馏（确定性筛选 4,950 候选 →
+  TensorFold Qwen3.8-Flash-Next 判域提炼中文症状词，bad_json=0/err=0 → 聚合 9,860
+  独立词），**人工保守评审**收敛为 148 词面增量 + 9 条消歧规则并入六域专家：
+  - io-analysis +23（症状 磁盘空间不足/挂载失败/文件系统损坏/文件系统只读/存储不可用…；
+    关键词 GFS2/XFS/ext4/NFS/VDO/multipath/iSCSI/CephFS/OSD…）
+  - memory-analysis +7（内存占用高/内存访问慢/内存超分…；KSM/TLB miss）
+  - network-analysis +29（端口不通/路由不通/防火墙规则不生效/负载均衡不生效/DNS解析失败…；
+    nmcli/NetworkManager/VLAN/firewalld/MTU/DHCP/Keepalived/iptables/bonding/VRRP…）
+  - perf-tuning +25（CPU占用高/系统卡顿/响应慢/性能下降/CPU争抢/性能抖动…；
+    PCP/Performance Co-Pilot/tuned/SystemTap/cgroups/numactl/turbostat…）
+  - security-assistant +40（认证失败/登录失败/无法访问文件/证书不受信任/SELinux拦截…；
+    IdM/SSSD/Kerberos/LDAP/SCAP/RBAC/CVE/oscap/LUKS/keytab/Clevis/Tang/PKCS#11…）
+  - k8s-health +13（pod状态异常/节点失联/网络策略不生效/pod一直重启…；etcd/StorageClass/
+    NetworkPolicy/ConfigMap/StatefulSet——遵守本专家「禁裸泛词只收复合限定词」纪律，
+    剔除 CRD/CSI/cordon/drain 裸缩写裸动词；镜像拉取失败已存 docker-ops@P3 剔除防跨包劫持）
+  - system-patrol +11（时间不同步/时钟漂移/服务状态异常/驱动加载失败；kdump/vmcore/
+    crashkernel/NTP/chronyd/sysctl/GRUB）
+- **9 条跨域消歧规则**（disambiguation.yaml）：内存不足/iowait/磁盘IO慢/NUMA/权限不足/
+  权限被拒绝/集群状态异常/firewalld/PVC——按上下文分流（如「内存不足+性能」归 perf-tuning、
+  默认归 memory-analysis），防批次二百六十二式词面劫持。
+- **评审纪律（吸取本仓两条实弹教训）**：①批次二百四十七裁决「不再投机堆词」——堆词面
+  对语义层接管率零位移，真杠杆=消歧规则+route_desc 例句；故本批以**外科式补确定性
+  症状/关键词层真缺口 + 消歧**为主，9,860→149 保守收敛（非 bulk 灌词），子串/过泛风险词
+  （延迟高⊂网络延迟高、服务不可用/资源不足/升级失败 过泛、裸 perf 子串）已剔除。
+  ②跨域歧义词一律进消歧不塞单域 symptoms。③route_desc 症状样例句富化（批次247 定档的
+  另一真杠杆）与蒸馏暴露的 **RHEL HA/Pacemaker 孤儿词族**（pcs/Pacemaker/stonith/fencing/
+  集群脑裂——os-basics 现无专家承接）挂账后续批，需产品拍板是否新增 ha-cluster 域。
+- 蒸馏产物与评审件（curated-additions.yaml/ambiguity.md/symptom-candidates.yaml）存
+  bianque 侧 `~/my_project/redhat-kb/distill/`；OpenShift 产品专属词（RHACS/OLM/
+  MachineConfig/ClusterLogging…）不属本包（主机/OS+K8s 社区版），延后未来 openshift 包。
+- **架构校准（bianque 侧 routecheck 内嵌 seed 实证）**：确定性路由中 `symptoms` 仅对
+  **P6 专家**（io/memory/network）经症状兜底层生效；perf(P2)/security(P0)/k8s(P2)/
+  patrol(P1)/log(P2) 的 symptoms 不进确定性兜底，仅供**在线 LLM 语义层**富化专家描述子
+  （与 security P0 基线 symptoms 同一既有设计，非本批引入）。故本批**确定性生效面**=
+  route_keywords（全优先级关键词层）+ P6 三域 symptoms + 9 条消歧规则（消歧层先于
+  关键词层，实测「内存不足导致系统卡顿」正确归 perf 而非被「卡顿」P1 劫持）。
+- **验证**：bianque golden 路由回归 39/39（新增 7 条批次264 用例锁消歧默认/上下文分支+
+  P6 症状兜底+route_keyword 直派）；pack-lint 内嵌源 exit 0（短拉丁词 XFS/NFS/MTU/NTP/OSD
+  带 advisory 裸泛词警告，与存量 LVM 同类，概念题由「什么是X」守卫拦）；hub validator
+  os-basics scope 0 error；go build + agents/scheduler 包绿。
+- index.json 经 index-gen 再生（os-basics 1.8.0），validator 0 error，README 版本行同步。
+
 ## 1.7.0 (2026-10-10)
 
 - **三域诊断专家最小权限收敛**（bianque 批次二百六十三 工具权限标注审计轮）：
