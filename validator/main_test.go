@@ -400,3 +400,173 @@ func TestScanDangerous(t *testing.T) {
 		t.Fatalf("干净文档不得报: %+v", f)
 	}
 }
+
+// ---- 校验模式：hub 仓根 vs 内嵌快照 ----
+//
+// 回归 bianque-hub#1：判据硬编码「被校验对象是 hub 仓」⇒ 校验主仓内嵌 seed
+// （hub packs/ 的同步副本，按内容资产单源纪律**本就没有** provenance.json）
+// 恒报 6 error。恒红 ⇒ 这条路没人走 ⇒ 同步漂移只能靠人眼比对。
+
+// TestEmbeddedModeSkipsHubOnlyJudgments 内嵌快照模式：仓级资产判据跳过，
+// 包内容判据一条不减。
+func TestEmbeddedModeSkipsHubOnlyJudgments(t *testing.T) {
+	root := t.TempDir()
+	pack := filepath.Join(root, "demo")
+	writeMinimalPack(t, pack)
+	// 内嵌快照形态：没有 provenance.json（它是市场包标记，副本不该有）
+	if err := os.Remove(filepath.Join(pack, "provenance.json")); err != nil {
+		t.Fatal(err)
+	}
+
+	// hub 模式：仓级资产判据成立 → ERROR（并带「模式不对」的提示）
+	findings, errN, _ := runWithMode([]string{pack}, modeHub)
+	if errN == 0 || !hasMsg(findings, "provenance.json") {
+		t.Fatalf("hub 模式应要求 provenance.json：errN=%d %v", errN, errorMessages(findings))
+	}
+	if !hasMsg(findings, "--mode=embedded") {
+		t.Fatalf("hub 模式报错应提示内嵌快照用哪种模式：%v", findings)
+	}
+
+	// 内嵌快照模式：仓级资产判据跳过 → 0 error
+	findings, errN, _ = runWithMode([]string{pack}, modeEmbedded)
+	if errN != 0 {
+		t.Fatalf("内嵌快照模式不该报仓级资产错：errN=%d %v", errN, errorMessages(findings))
+	}
+	// 且必须**说清**这轮判据面比 hub 窄——「没报」不等于「都过了」
+	if !hasMsg(findings, "内嵌快照模式") {
+		t.Fatalf("内嵌快照模式应声明已跳过哪些判据：%v", findings)
+	}
+}
+
+// TestEmbeddedModeKeepsContentJudgments 内嵌快照模式**只**放宽仓级资产判据；
+// 包内容判据（契约门/版本同步/跨包唯一性/工具面覆盖）一条不减。
+func TestEmbeddedModeKeepsContentJudgments(t *testing.T) {
+	root := t.TempDir()
+	pack := filepath.Join(root, "demo")
+	writeMinimalPack(t, pack)
+	if err := os.Remove(filepath.Join(pack, "provenance.json")); err != nil {
+		t.Fatal(err)
+	}
+	// 破坏契约门：内嵌快照同样必须拦下
+	manifest := readFileT(t, filepath.Join(pack, "pack.yaml"))
+	writeFileT(t, filepath.Join(pack, "pack.yaml"), strings.Replace(manifest, "api_version: 1", "api_version: 2", 1))
+
+	findings, errN, _ := runWithMode([]string{pack}, modeEmbedded)
+	if errN == 0 || !hasMsg(findings, "api_version") {
+		t.Fatalf("内嵌快照模式仍须拦内容契约错：errN=%d %v", errN, errorMessages(findings))
+	}
+}
+
+// TestEmbeddedModeSkipsIndexJudgment index.json 是 hub 仓根的检索索引，
+// 内嵌快照不做检索 ⇒ 该判据跳过（否则恒报「index.json 缺失」）。
+func TestEmbeddedModeSkipsIndexJudgment(t *testing.T) {
+	root := t.TempDir()
+	packs := filepath.Join(root, "packs")
+	writeMinimalPack(t, filepath.Join(packs, "demo"))
+
+	findings, errN, _ := runWithMode([]string{packs}, modeHub)
+	if errN != 0 || !hasMsg(findings, "index.json 缺失") {
+		t.Fatalf("hub 模式缺索引应 WARN：errN=%d %v", errN, errorMessages(findings))
+	}
+
+	findings, errN, _ = runWithMode([]string{packs}, modeEmbedded)
+	if errN != 0 {
+		t.Fatalf("内嵌快照模式不该报索引错：errN=%d %v", errN, errorMessages(findings))
+	}
+	if hasMsg(findings, "index.json 缺失") {
+		t.Fatalf("内嵌快照模式应跳过索引判据：%v", findings)
+	}
+}
+
+// TestGraphChainAccepted 图模型链（v3；spec 2026-10-22 §5.1）必须被认：
+// 平台侧是「先按 v2 原样校验再迁移」，hub 发 v2、平台迁 v3 都合法。
+// 判据不认 v3 ⇒ 平台迁移过的链被报「无步骤」＝纯误报。
+func TestGraphChainAccepted(t *testing.T) {
+	root := t.TempDir()
+	pack := filepath.Join(root, "demo")
+	writeMinimalPack(t, pack)
+	writeFileT(t, filepath.Join(pack, "chain.yaml"), `slug: workflow/demo-chain
+name: 测试图链
+version: 3
+route_priority: P4
+route_group: tooling
+route_keywords: [测试图链]
+route_desc: 图模型测试链
+nodes:
+  - id: n1
+    type: agent
+    agent: imports/demo-expert
+    skill: demo-skill
+    instruction: 第一步
+  - id: n2
+    type: agent
+    agent: imports/demo-expert
+    instruction: 第二步
+edges:
+  - {from: n1, to: n2}
+`)
+
+	findings, errN, _ := run([]string{pack})
+	if errN != 0 {
+		t.Fatalf("图模型链应被接受：errN=%d %v", errN, errorMessages(findings))
+	}
+	if hasMsg(findings, "无步骤") || hasMsg(findings, "无节点") {
+		t.Fatalf("图模型链不该被报无步骤/无节点：%v", findings)
+	}
+}
+
+// TestGraphChainNodeJudgments 图模型链的节点内容判据与 v2 同源：
+// 引用 engine 专家 → ERROR；缺 id 只影响定位（平台装载期深判，不在此重复）。
+func TestGraphChainNodeJudgments(t *testing.T) {
+	root := t.TempDir()
+	pack := filepath.Join(root, "demo")
+	writeMinimalPack(t, pack)
+	// 把包内专家改成 engine 专家（链内禁 engine）
+	agentYAML := readFileT(t, filepath.Join(pack, "demo-expert", "agent.yaml"))
+	writeFileT(t, filepath.Join(pack, "demo-expert", "agent.yaml"),
+		strings.Replace(agentYAML, "kind: llm", "kind: engine", 1))
+	writeFileT(t, filepath.Join(pack, "chain.yaml"), `slug: workflow/demo-chain
+version: 3
+route_priority: P4
+route_group: tooling
+route_desc: 图模型测试链
+nodes:
+  - id: n1
+    type: agent
+    agent: imports/demo-expert
+    instruction: 第一步
+`)
+
+	findings, errN, _ := run([]string{pack})
+	if errN == 0 || !hasMsg(findings, "engine") {
+		t.Fatalf("图模型节点引用 engine 专家应 ERROR：errN=%d %v", errN, errorMessages(findings))
+	}
+	if !hasMsg(findings, "节点 n1") {
+		t.Fatalf("图模型节点判据应点名到节点 id：%v", findings)
+	}
+}
+
+// TestParseArgs 命令行解析：--mode=hub|embedded（两种写法）+ 未知参数报错。
+func TestParseArgs(t *testing.T) {
+	m, dirs, err := parseArgs([]string{"./packs"})
+	if err != nil || m != modeHub || len(dirs) != 1 || dirs[0] != "./packs" {
+		t.Fatalf("默认应 hub 模式 + 原样目录：m=%v dirs=%v err=%v", m, dirs, err)
+	}
+	m, dirs, err = parseArgs([]string{"--mode=embedded", "./packs"})
+	if err != nil || m != modeEmbedded || len(dirs) != 1 {
+		t.Fatalf("--mode=embedded 应生效：m=%v dirs=%v err=%v", m, dirs, err)
+	}
+	m, dirs, err = parseArgs([]string{"./packs", "--mode", "embedded"})
+	if err != nil || m != modeEmbedded || len(dirs) != 1 {
+		t.Fatalf("开关在位置参数之后也要认（flag.Parse 遇首个位置参数即停）：m=%v dirs=%v err=%v", m, dirs, err)
+	}
+	if _, _, err := parseArgs([]string{"--mode=bogus"}); err == nil {
+		t.Fatal("未知模式应报错")
+	}
+	if _, _, err := parseArgs([]string{"--mode"}); err == nil {
+		t.Fatal("--mode 缺值应报错")
+	}
+	if _, _, err := parseArgs([]string{"--bogus"}); err == nil {
+		t.Fatal("未知参数应报错（不静默吞掉）")
+	}
+}

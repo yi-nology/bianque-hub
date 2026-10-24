@@ -178,6 +178,26 @@ go run ./validator ./packs   # CI 同款：结构契约 + 跨包唯一性 + 工�
 
 校验单个包可直达包目录：`go run ./validator ./packs/chain-starter`。
 
+**校验模式**（判据按「被校验对象是什么」分档，默认 `hub`）：
+
+| 模式 | 适用对象 | 判据面 |
+|---|---|---|
+| `--mode=hub`（默认）| hub 仓根 | 全量：含**仓级资产**判据（`provenance.json` 的「必须有」/`index.json` 对账/README 包清单表）|
+| `--mode=embedded` | **内嵌快照**（扁鹊主仓里由 `bq-markettool seed-sync` 同步来的包副本）| 跳过仓级资产判据；**包内容判据一条不减**（契约门/版本同步/跨包唯一性/工具面覆盖/脱敏/危险命令）|
+
+```bash
+go run ./validator --mode=embedded /path/to/bianque/internal/agents/seed
+```
+
+为什么要有模式：仓级资产只对 hub 仓根成立——内嵌快照按内容资产单源纪律**本就没有**
+`provenance.json`（它是市场包标记），也不做检索（无 `index.json`）、没有 README 清单表。
+用 hub 判据去校验它**恒红**，于是「校验主仓 seed 验证同步有没有把内容弄坏」这条路
+走不通——而那恰恰是最有价值的用法。**恒红会教会人忽略校验器**。
+
+图模型链（`version: 3` 的 `nodes`/`edges`，spec 2026-10-22 §5.1）与 v2 树模型
+（`steps`）**同权**：平台侧是「先按 v2 原样校验再迁移」，故 hub 发 v2、平台迁 v3
+都合法，校验器两种都认。
+
 ## 参与贡献
 
 新增/修改技能、专家、诊断链请读 [CONTRIBUTING.md](CONTRIBUTING.md)——复制
