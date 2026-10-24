@@ -120,6 +120,20 @@ type chainStep struct {
 	Skill       any    `yaml:"skill"`
 }
 
+// graphNode 图模型链的节点（v3；spec 2026-10-22 §5.1）。
+//
+// 只镜像**内容契约**要用到的字段：链内执行单元引用谁、钉扎哪个技能、
+// 有没有指令。图的拓扑（边/环/可达性/变量引用/预算）由平台装载期深判，
+// 本仓不重复实现（见 chainNodeViews）。
+type graphNode struct {
+	ID          string `yaml:"id"`
+	Type        string `yaml:"type"`
+	Title       string `yaml:"title"`
+	Agent       string `yaml:"agent"`
+	Instruction string `yaml:"instruction"`
+	Skill       any    `yaml:"skill"`
+}
+
 type chainDef struct {
 	Slug          string      `yaml:"slug"`
 	Name          string      `yaml:"name"`
@@ -129,6 +143,70 @@ type chainDef struct {
 	RouteKeywords []string    `yaml:"route_keywords"`
 	Symptoms      []string    `yaml:"symptoms"`
 	Steps         []chainStep `yaml:"steps"`
+	// Version 链形状版本：0/缺省 = v2 树模型（steps）；≥3 = 图模型（nodes+edges）。
+	Version int         `yaml:"version"`
+	Nodes   []graphNode `yaml:"nodes"`
+}
+
+// isGraph 是否图模型链（与平台 ChainDef.IsGraph 同口径：version≥3 或有节点）。
+func (c chainDef) isGraph() bool { return c.Version >= 3 || len(c.Nodes) > 0 }
+
+// chainNodeView 链内一个执行单元的归一视图：v2 步骤与 v3 节点共用同一套内容判据。
+type chainNodeView struct {
+	pos         string // 定位串：v2「步骤1」、v3「节点 n1」
+	kind        string
+	agent       string
+	instruction string
+	skill       any
+}
+
+// chainNodeViews 把链的步骤/节点归一成同一套判据的视图。
+//
+// v2（steps）与 v3（nodes+edges，spec 2026-10-22 §5.1）是**两种链形状**，
+// 但**内容契约同源**：链内执行单元只能引用叶子专家、禁 engine 专家、
+// 技能钉扎须能在本包找到。平台侧的次序也是「先按 v2 原样校验再迁移」，
+// 故本仓对两种形状用同一套内容判据。
+//
+// 图的**拓扑**判据（边指向不存在的节点 / 有环 / 可达性 / 变量引用 /
+// 节点与层数预算）**不在这里重复实现**——那是平台装载期的深判，
+// 在此重写一份就是两份真相，且必然漂移。
+func chainNodeViews(c chainDef) []chainNodeView {
+	if c.isGraph() {
+		out := make([]chainNodeView, 0, len(c.Nodes))
+		for _, n := range c.Nodes {
+			kind := n.Type
+			if kind == "" {
+				kind = "agent"
+			}
+			pos := n.ID
+			if pos == "" {
+				pos = "?" // 缺 id 是平台装载期的判据；此处不重复判，只为定位不空
+			}
+			out = append(out, chainNodeView{
+				pos:         "节点 " + pos,
+				kind:        kind,
+				agent:       n.Agent,
+				instruction: n.Instruction,
+				skill:       n.Skill,
+			})
+		}
+		return out
+	}
+	out := make([]chainNodeView, 0, len(c.Steps))
+	for i, st := range c.Steps {
+		kind := st.Type
+		if kind == "" {
+			kind = "agent"
+		}
+		out = append(out, chainNodeView{
+			pos:         fmt.Sprintf("步骤%d", i+1),
+			kind:        kind,
+			agent:       st.Agent,
+			instruction: st.Instruction,
+			skill:       st.Skill,
+		})
+	}
+	return out
 }
 
 type skillFront struct {
@@ -184,8 +262,37 @@ func registerKeyword(kwOwner map[string]kwFirst, kw, pack, prio string) (level, 
 	return "WARN", fmt.Sprintf("关键词/症状 %q 跨层重复（%s@%s 与 %s@%s），高优先级胜出", kw, first.pack, first.prio, pack, prio), true
 }
 
+// mode 校验模式：判据按「被校验对象是什么」分档。
+//
+// **hub 仓根**与**内嵌快照**（扁鹊主仓里由 `bq-markettool seed-sync` 同步来的包副本）
+// 是两种对象，仓级资产判据只对前者成立：
+//
+//   - `provenance.json` 的「必须有」——它是**市场包**的来源标记，内嵌快照按内容资产
+//     单源纪律本就不该有（它是 hub `packs/` 的副本，不是市场包）；
+//   - `index.json`——hub 仓根的**检索索引**（`bq-markettool search/info` 的面），
+//     内嵌快照不做检索；
+//   - README 包清单表——hub 仓级的版本纪律表，内嵌快照没有那张表。
+//
+// 混用判据的后果是**恒红**：同一份完全合法的内容换个位置校验就报 error，
+// 于是「用 validator 校验主仓 seed」这条路走不通——而那恰恰是最有价值的用法
+// （seed 是同步产物，「同步有没有把内容弄坏」正是需要机械校验的地方）。
+// 恒红会教会人忽略 validator，与「假红是门禁的头号死法」同一条道理。
+//
+// 故加模式判据，**不做自动判定**：自动判定在「两仓并排维护者布局」下容易误判
+// （hub 仓里也可能有一份 seed 副本），显式 flag 不会猜错。
+type mode string
+
+const (
+	// modeHub hub 仓根（默认）：全量校验，含仓级资产判据。
+	modeHub mode = "hub"
+	// modeEmbedded 内嵌快照：跳过仓级资产判据；**包内容判据一条不减**
+	// （内容判据才是「同步有没有把内容弄坏」的答案）。
+	modeEmbedded mode = "embedded"
+)
+
 // validator 全仓校验状态：跨包唯一性登记 + 全包扫描后才能判的延迟核对项。
 type validator struct {
+	mode         mode
 	findings     []finding
 	skillOwner   map[string]string   // 技能名 → 包（跨包唯一性）
 	skillNeeds   map[string][]string // 技能名 → requires_mcp server 清单（工具面覆盖核对）
@@ -219,11 +326,15 @@ func (v *validator) add(level, pack, format string, a ...any) {
 }
 
 func main() {
-	dirs := os.Args[1:]
+	m, dirs, err := parseArgs(os.Args[1:])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "validator: %v\n", err)
+		os.Exit(2) // 用法错与「校验不过」分档：2 = 用法错，1 = 校验不过
+	}
 	if len(dirs) == 0 {
 		dirs = []string{"./packs"}
 	}
-	findings, errN, warnN := run(dirs)
+	findings, errN, warnN := runWithMode(dirs, m)
 	for _, f := range findings {
 		fmt.Printf("%-5s [%s] %s\n", f.level, f.pack, f.msg)
 	}
@@ -233,10 +344,55 @@ func main() {
 	}
 }
 
-// run 执行全部校验层（独立于 main 以便测试）：包发现 → 包级校验 → 跨包核对 →
-// 版本同步核对 → 脱敏扫描，返回 findings 与 error/warning 计数。
+// parseArgs 解析命令行：`--mode=hub|embedded`（默认 hub）+ 位置参数（校验目录）。
+//
+// 不用 flag 包：flag.Parse 遇首个位置参数即停，
+// `validator ./packs --mode=embedded` 里的模式开关会被当成目录参数吞掉。
+func parseArgs(args []string) (mode, []string, error) {
+	m := modeHub
+	var dirs []string
+	for i := 0; i < len(args); i++ {
+		a := args[i]
+		var raw string
+		switch {
+		case a == "--mode" || a == "-mode":
+			if i+1 >= len(args) {
+				return "", nil, fmt.Errorf("%s 缺值（可选 hub|embedded）", a)
+			}
+			i++
+			raw = args[i]
+		case strings.HasPrefix(a, "--mode="):
+			raw = strings.TrimPrefix(a, "--mode=")
+		case strings.HasPrefix(a, "-mode="):
+			raw = strings.TrimPrefix(a, "-mode=")
+		case strings.HasPrefix(a, "-"):
+			return "", nil, fmt.Errorf("未知参数 %q（可用：--mode=hub|embedded）", a)
+		default:
+			dirs = append(dirs, a)
+			continue
+		}
+		switch raw {
+		case string(modeHub):
+			m = modeHub
+		case string(modeEmbedded):
+			m = modeEmbedded
+		default:
+			return "", nil, fmt.Errorf("未知模式 %q（可选 hub|embedded）", raw)
+		}
+	}
+	return m, dirs, nil
+}
+
+// run 执行全部校验层（hub 模式；独立于 main 以便测试）。
 func run(dirs []string) ([]finding, int, int) {
+	return runWithMode(dirs, modeHub)
+}
+
+// runWithMode 按模式执行全部校验层：包发现 → 包级校验 → 跨包核对 →
+// 版本同步核对 → 脱敏扫描，返回 findings 与 error/warning 计数。
+func runWithMode(dirs []string, m mode) ([]finding, int, int) {
 	v := &validator{
+		mode:         m,
 		skillOwner:   map[string]string{},
 		skillNeeds:   map[string][]string{},
 		changeOwner:  map[string]string{},
@@ -248,6 +404,14 @@ func run(dirs []string) ([]finding, int, int) {
 		packVersions: map[string]string{},
 		packMCP:      map[string]map[string]bool{},
 		expertRefs:   map[string]expertRef{},
+	}
+	if m == modeEmbedded {
+		// 模式提示放在**最前**：跑的人第一眼就该知道这轮判据面比 hub 模式窄，
+		// 免得把「没报」当成「都过了」。
+		v.add("WARN", "mode", "内嵌快照模式：已跳过仓级资产判据"+
+			"（provenance.json 的「必须有」要求 / index.json 对账 / README 包清单表）"+
+			"——它们是 hub 仓级资产，不是包内容契约；"+
+			"包内容判据（契约门/版本同步/跨包唯一性/工具面覆盖/脱敏/危险命令）一条未减")
 	}
 	for _, root := range dirs {
 		// 参数自身含 pack.yaml：单包模式（模板包自检命令即此形态——曾因只认
@@ -275,14 +439,16 @@ func run(dirs []string) ([]finding, int, int) {
 		}
 		if !found {
 			v.add("ERROR", filepath.Base(root), "目录 %s 下未发现任何包（校验单个包请指向含 pack.yaml 的目录）", root)
-		} else {
+		} else if v.mode == modeHub {
 			v.checkIndex(root)
 		}
 	}
 	v.checkCrossRefs()
 	v.checkExpertInstall()
 	v.checkChangeRefs()
-	v.checkReadme()
+	if v.mode == modeHub {
+		v.checkReadme()
+	}
 	// 脱敏扫描：显式参数 + 当前目录（默认仓库根——根 README/CONTRIBUTING 也必须
 	// 在覆盖内），文件级去重防双报。
 	roots := slices.Clone(dirs)
@@ -331,9 +497,16 @@ func (v *validator) checkPack(packDir, packName string) {
 	if strings.TrimSpace(m.Description) == "" {
 		add("ERROR", "pack.yaml 缺 description")
 	}
-	if _, err := os.Stat(filepath.Join(packDir, "provenance.json")); err != nil {
-		add("ERROR", "缺 provenance.json（市场包来源标记，装进扁鹊靠它识别为市场版）")
-	} else if pj, err := os.ReadFile(filepath.Join(packDir, "provenance.json")); err == nil {
+	// provenance.json 是**市场包**的来源标记：hub 仓根的每个包都要有（装进扁鹊
+	// 靠它识别为市场版），内嵌快照按内容资产单源纪律本就不该有（它是 hub packs/
+	// 的副本）。故「必须有」这条要求只在 hub 模式成立；在场就照常校验内容
+	// （内嵌副本若带了 provenance.json，坏了照样要报）。
+	provPath := filepath.Join(packDir, "provenance.json")
+	if _, err := os.Stat(provPath); err != nil {
+		if v.mode == modeHub {
+			add("ERROR", "缺 provenance.json（hub 模式要求：市场包来源标记，装进扁鹊靠它识别为市场版；校验内嵌快照请用 --mode=embedded）")
+		}
+	} else if pj, err := os.ReadFile(provPath); err == nil {
 		var prov struct {
 			BaseURL string `json:"base_url"`
 		}
@@ -641,8 +814,13 @@ func (v *validator) checkPack(packDir, packName string) {
 			} else if c.Slug != "" {
 				v.chainOwner[c.Slug] = packName
 			}
-			if len(c.Steps) == 0 {
-				add("ERROR", "chain %s 无步骤", c.Slug)
+			views := chainNodeViews(c)
+			if len(views) == 0 {
+				if c.isGraph() {
+					add("ERROR", "chain %s 无节点", c.Slug)
+				} else {
+					add("ERROR", "chain %s 无步骤", c.Slug)
+				}
 			}
 			if c.RoutePriority == "" {
 				add("ERROR", "chain %s 缺 route_priority", c.Slug)
@@ -662,29 +840,26 @@ func (v *validator) checkPack(packDir, packName string) {
 					add(level, "chain %s: %s", c.Slug, msg)
 				}
 			}
-			for i, st := range c.Steps {
-				kind := st.Type
-				if kind == "" {
-					kind = "agent"
+			for _, nv := range views {
+				if nv.kind != "agent" {
+					continue
 				}
-				if kind == "agent" {
-					if strings.HasPrefix(st.Agent, "workflow/") {
-						add("ERROR", "chain %s 步骤%d 引用 %q 非法：链步骤只能是叶子专家（治理闭环由平台衔接）", c.Slug, i+1, st.Agent)
+				if strings.HasPrefix(nv.agent, "workflow/") {
+					add("ERROR", "chain %s %s 引用 %q 非法：链步骤只能是叶子专家（治理闭环由平台衔接）", c.Slug, nv.pos, nv.agent)
+				}
+				if k, ok := expertSlugs[nv.agent]; ok && k == "engine" {
+					add("ERROR", "chain %s %s 引用 engine 专家 %q（链步骤禁 engine）", c.Slug, nv.pos, nv.agent)
+				} else if !ok {
+					add("WARN", "chain %s %s 引用 %q 不在本包（跨包引用合法，请确认目标包已安装）", c.Slug, nv.pos, nv.agent)
+				}
+				if pin := skillRefName(nv.skill); pin != "" {
+					if !present[pin] {
+						add("WARN", "chain %s %s 钉扎技能 %q 不在本包（跨包引用合法，请确认目标包已安装且技能名无误）", c.Slug, nv.pos, pin)
 					}
-					if k, ok := expertSlugs[st.Agent]; ok && k == "engine" {
-						add("ERROR", "chain %s 步骤%d 引用 engine 专家 %q（链步骤禁 engine）", c.Slug, i+1, st.Agent)
-					} else if !ok {
-						add("WARN", "chain %s 步骤%d 引用 %q 不在本包（跨包引用合法，请确认目标包已安装）", c.Slug, i+1, st.Agent)
-					}
-					if pin := skillRefName(st.Skill); pin != "" {
-						if !present[pin] {
-							add("WARN", "chain %s 步骤%d 钉扎技能 %q 不在本包（跨包引用合法，请确认目标包已安装且技能名无误）", c.Slug, i+1, pin)
-						}
-						v.mountChecks = append(v.mountChecks, mountCheck{pack: packName, expert: st.Agent, skill: pin, chainSlug: c.Slug})
-					}
-					if st.Instruction == "" && st.Skill == nil {
-						add("WARN", "chain %s 步骤%d 无 instruction 且未钉扎技能", c.Slug, i+1)
-					}
+					v.mountChecks = append(v.mountChecks, mountCheck{pack: packName, expert: nv.agent, skill: pin, chainSlug: c.Slug})
+				}
+				if nv.instruction == "" && nv.skill == nil {
+					add("WARN", "chain %s %s 无 instruction 且未钉扎技能", c.Slug, nv.pos)
 				}
 			}
 		}
@@ -823,7 +998,7 @@ func (v *validator) checkReadme() {
 			continue
 		}
 		if rv != ver {
-			v.add("ERROR", name, "README 包清单版本 %s 与 pack.yaml %s 不一致（发版须同步 README 表）", rv, ver)
+			v.add("ERROR", name, "README 包清单版本 %s 与 pack.yaml %s 不一致（发版须同步 README 表；README 清单表是 hub 仓级资产，校验内嵌快照请用 --mode=embedded）", rv, ver)
 		}
 	}
 }
@@ -837,7 +1012,7 @@ func (v *validator) checkIndex(packsRoot string) {
 	raw, err := os.ReadFile(filepath.Join(filepath.Dir(packsRoot), "index.json"))
 	if err != nil {
 		if os.IsNotExist(err) {
-			v.add("WARN", "index", "index.json 缺失（仓根）——跑 `bq-markettool index-gen -hub <本仓>` 生成并提交（检索面走索引，缺省降级现场扫描）")
+			v.add("WARN", "index", "index.json 缺失（仓根）——跑 `bq-markettool index-gen -hub <本仓>` 生成并提交（检索面走索引，缺省降级现场扫描；校验内嵌快照请用 --mode=embedded）")
 			return
 		}
 		v.add("ERROR", "index", "读取 index.json: %v", err)

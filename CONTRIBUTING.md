@@ -18,6 +18,12 @@
 go run ./validator ./packs        # CI 同款；校验单个包可直达包目录：./packs/你的包名
 ```
 
+   校验**内嵌快照**（扁鹊主仓里由 `bq-markettool seed-sync` 同步来的包副本）时用
+   `--mode=embedded`——它跳过仓级资产判据（`provenance.json` / `index.json` /
+   README 包清单表），但**包内容判据一条不减**（契约门/版本同步/跨包唯一性/
+   工具面覆盖/脱敏/危险命令）。用 hub 模式校验内嵌快照会恒红（副本本就没有
+   市场包标记），恒红会教会人忽略校验器。
+
 6. 若 PR 变更了包的**版本号或包名**，同步改仓根 `index.json` 里对应条目的
    `version`/`name` 一行（validator 对账门禁：漏包/多录/版本漂移=ERROR）。
    全量刷新（experts/计数等字段）由维护者跑 `bq-markettool index-gen` 收口，
