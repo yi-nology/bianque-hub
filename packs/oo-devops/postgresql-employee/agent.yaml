@@ -17,9 +17,36 @@ skills:
     - db-readonly
 tools:
     - server: ask-ops
-      allow: []
+      # 显式只读白名单（最小权限收敛，bianque 批次四百四十四装包知情同意闸对账）：
+      # 十结构化采集器 + probe_host + run_readonly 只读 CLI 对（os-basics 1.7.0 同款）。
+      # allow: [] 在契约里是「该 server 全量授予」，ask-ops 含破坏性受审执行
+      # （run_approved_command(s)）——空 allow 按最坏记 ask-ops/* 变更面，装包/升级
+      # 被知情同意闸拦截。employee/librarian 是咨询答疑面（处置恒走方案审批面），
+      # 破坏性受审执行不授予。
+      allow:
+        - get_hardware_inventory
+        - get_system_inventory
+        - get_network_inventory
+        - get_security_inventory
+        - get_performance_snapshot
+        - get_logs
+        - get_processes
+        - get_listening_ports
+        - get_dir_usage
+        - probe_host
+        - run_readonly_command
+        - run_readonly_commands
     - server: datasources
-      allow: []
+      # 显式全量白名单（防 allow 空=全量在新工具注册时静默扩权）：datasources 目录
+      # 七工具全列（prometheus/loki 采集 + n8n API 查询），零能力损失。
+      allow:
+        - prom_query
+        - loki_query_range
+        - loki_labels
+        - n8n_list_workflows
+        - n8n_get_workflow
+        - n8n_list_executions
+        - n8n_get_execution
 dispatch_allow: []
 route_priority: P6
 route_group: middleware
