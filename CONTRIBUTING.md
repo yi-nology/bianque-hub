@@ -82,8 +82,10 @@ requires_mcp:               # 可选：声明的工具面（server 必须被挂�
 ### 工具面约定（ask-ops 两层）
 
 - **固定清单面**（十工具：inventory 四件 + 性能快照/日志/进程/端口/目录体积/探测）：
-  适合主机层事实问答。声明方式 `tools: [{server: ask-ops}]`（allow 留空=全部）；
-  问答型 support 角色请像内置 `platform/ask-ops` 一样显式钉 allow，不领受命令面。
+  适合主机层事实问答。**allow 必须显式列出**——ask-ops 含破坏性受审执行
+  （run_approved_command(s)），留空=该 server 全量授予，装包时按最坏记变更面被
+  知情同意闸拦（bianque 批次四百四十四），CI 同判 ERROR；问答型 support 角色请像
+  内置 `platform/ask-ops` 一样显式钉 allow，不领受命令面。
 - **受审只读命令面**（`run_readonly_command`）：领域专家跑域 CLI 的通道——白名单
   受审（redis 只读命令族 / kafka-\*.sh --describe / mysql -e 'SELECT|SHOW…' / curl GET /
   docker+kubectl 只读子命令等），引号外控制字符、写形态旗标、白名单外命令一律
@@ -163,6 +165,17 @@ steps:
     **ERROR**；技能/专家正文命中（安装指引、注入短语、凭证文件直读）为 **WARN**
     供复核（正文指引有合法形态，不硬拦）。启发式只拦明文，变形载荷靠平台执行面
     治理兜底。
+13. **装包闸对账（bianque 批次四百四十二/四百四十三/四百四十四）**：平台装包/升级时
+    两道闸，hub CI 提前同判。①**变更面授权知情同意**：专家 `tools` 对 ask-ops /
+    terminal-assistant / browser-ops 用空 allow（契约=全量授予，聚合面按最坏记
+    server/* 变更面）或显式授予破坏性工具 ⇒ 装机被拦（管理员须带
+    `allow_destructive_tools` 知情同意；bq-markettool API 通道不带该参数，装机必
+    400）——hub 侧一律 ERROR，设计内执行档须在 validator `destructiveExemptions`
+    登记理由（现存唯一豁免：web-ops web-inspector 执行档三件；豁免不改变平台行为，
+    装该包仍须站点勾选同意）；②**depends_on 环境前提**：技能依赖核目标实例技能库
+    存在性+版本区间（区间非法/不含目标现值/未知技能 CI 拦；pack 级 `optional` 被
+    平台忽略勿声明）、MCP 依赖只核「已配置且启用」（`min_version` 平台不判，展示面
+    字段）。
 
 ## review 约定
 

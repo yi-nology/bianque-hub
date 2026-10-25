@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 1.3.0 (2026-10-25)
+
+- 31 位数字员工工具授权面显式化（bianque 批次四百四十四装包知情同意闸对账）：全部专家的
+  ask-ops `allow: []`（契约语义=该 server 全量授予；ask-ops 含破坏性受审执行
+  run_approved_command(s)，包级聚合按最坏记 ask-ops/* 变更面 ⇒ 本包装/升级被知情同意闸
+  拦截，bq-markettool API 通道不带 consent 参数装机必 400）收敛为显式只读十二件套
+  （十结构化采集器 + probe_host + run_readonly 只读 CLI 对，os-basics 1.7.0 同款）——
+  employee/librarian 是咨询答疑面（处置恒走方案审批面），零能力损失。datasources（14 专家）
+  /security-assistant（vault）空 allow 同批显式化：datasources 目录七工具全列
+  （prom/loki×2/n8n×4，防新工具注册静默扩权），security-assistant 采集面 11 工具与
+  os-basics security-assistant 授予面同款。hub 校验器同批新增破坏面授权对账
+  （DestructiveTools 单源镜像 + 设计内执行档豁免登记）与 depends_on 环境前提契约检查
+  （批次四百四十二）。
+
 ## 1.2.0 (2026-10-09)
 
 - 语义路由条目加富批（bianque 批次二百四十七）：19 条 route_desc 差异化重写，治意图语义层自混淆

@@ -1,6 +1,8 @@
 // bianque-hub 结构契约校验器（独立于扁鹊平台，CI 与本地同款）。
 //
-// 校验分五层：pack.yaml 契约门、专家/技能/链结构规则、跨包唯一性与工具面覆盖、
+// 校验分六层：pack.yaml 契约门、专家/技能/链结构规则、跨包唯一性与工具面覆盖、
+// 装包闸对账（变更面授权知情同意〔批四四三/四四四〕与 depends_on 环境前提〔批四四二〕——
+// 平台在装包/升级时判定，不满足即拒；hub 在 CI 提前拦）、
 // 版本同步（CHANGELOG 头部条目与 README 包清单表）、脱敏扫描。
 // 规则与扁鹊 internal/agents 装载校验（packs.go）同源，但独立实现——平台私仓
 // 不外泄，规则漂移以本文件注释为准绳同步。
@@ -24,6 +26,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/Masterminds/semver/v3"
 	"gopkg.in/yaml.v3"
 )
 
@@ -44,6 +47,7 @@ var (
 	skillModes        = map[string]bool{"static": true, "on_demand": true}
 	prioRe            = regexp.MustCompile(`^P[0-6]$`)
 	semverRe          = regexp.MustCompile(`^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$`)
+	pluginNameRe      = regexp.MustCompile(`^[a-z0-9][a-z0-9._-]{0,128}$`)
 	changelogHeadRe   = regexp.MustCompile(`(?m)^##\s+(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)`)
 	readmeRowRe       = regexp.MustCompile(`(?m)^\|\s*\[[^\]]+\]\(packs/([^/)]+)/\)\s*\|\s*([^\s|]+)`)
 	toolServerAllowRe = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
@@ -77,18 +81,82 @@ var hostSideMCP = map[string]bool{
 	"platform":           true, // 平台内置工具保留授予名（非 MCP server）：search_knowledge/memory_search/http_query 等（bianque-hub-inner om-gitlab-ci 首个包内授予方）
 }
 
+// destructiveTools 平台侧变更面（破坏性）工具单源镜像（bianque
+// internal/service/common/lint.go DestructiveTools——批次四百四十三包级工具授权面
+// ToolSurface 与批次四百四十四装包知情同意闸的判定面）。对齐语义：agent.yaml tools 的
+// allow 空 = 该 server 全量授予（registry 契约），聚合面按最坏记 server/*；显式 allow
+// 命中清单内工具名按具体破坏面记。任一命中 ⇒ 该包装/升级被平台闸拦（管理员须显式带
+// allow_destructive_tools 知情同意）。hub 侧除登记豁免的设计内执行档外一律 ERROR——
+// 装包被拦是发布后事故（bq-markettool API 通道不带 consent 参数，装机必 400），CI 先拦。
+var destructiveTools = map[string]map[string]bool{
+	"ask-ops": {"run_approved_command": true, "run_approved_commands": true},
+	"terminal-assistant": {
+		"shell_execute": true, "ssh_execute": true, "terminal_session": true,
+		"service_manager": true, "file_manager": true, "config_manager": true,
+		"package_manager": true, "system_manager": true,
+	},
+	"browser-ops": {"browser_click": true, "browser_type": true, "browser_eval": true},
+}
+
+// destructiveExemptions 设计内执行档豁免登记（键 = 包名/专家 slug，值 = 理由，进 CI
+// 输出供复核）。豁免只放行 hub CI，不改变平台行为——该包装/升级时站点仍须勾选知情
+// 同意。新增破坏面授权必须在此登记理由，否则 CI 拦（防静默扩权）。
+var destructiveExemptions = map[string]string{
+	"web-ops/imports/web-inspector": "browser-ops 执行档三工具（click/type/eval）是技能钉扎的设计能力" +
+		"（spa-render-diagnosis 的 eval 只读三连等），prompt 自带执行档纪律；browser-ops server " +
+		"治理缺省硬关（装包≠开洞）——批次二百六十四既有决策，安装时须站点知情同意",
+}
+
 // ---- 结构 ----
 
 type packManifest struct {
-	APIVersion  int    `yaml:"api_version"`
-	Name        string `yaml:"name"`
-	Version     string `yaml:"version"`
-	Description string `yaml:"description"`
-	Changelog   string `yaml:"changelog"`
+	APIVersion  int          `yaml:"api_version"`
+	Name        string       `yaml:"name"`
+	Version     string       `yaml:"version"`
+	Description string       `yaml:"description"`
+	Changelog   string       `yaml:"changelog"`
+	DependsOn   *packDepends `yaml:"depends_on"`
 	Provides    struct {
 		Experts []string `yaml:"experts"`
 		Skills  []string `yaml:"skills"`
 	} `yaml:"provides"`
+}
+
+// packDepends pack.yaml 顶层 depends_on（bianque 批次四百四十二装包环境前提校验对齐）。
+// 平台在 Install/Upgrade 暂存后、激活前判定：技能依赖核目标实例技能库的存在性+版本区间
+// （不满足即拒装并删除暂存，allow_missing_deps 才放行）；MCP 依赖只核「已配置且启用」
+// （min_version 无版本源不判，属展示面字段）。技能依赖是 skill.Decl 双形态（裸串 /
+// {name, version, optional}）；**pack 级 optional 被平台忽略、一律按必需判**——声明即误描。
+type packDepends struct {
+	Skills []packDepSkill `yaml:"skills"`
+	MCP    []packDepMCP   `yaml:"mcp"`
+}
+
+type packDepSkill struct {
+	Name     string `yaml:"name"`
+	Version  string `yaml:"version"`
+	Optional bool   `yaml:"optional"`
+}
+
+// UnmarshalYAML 兼容裸串形态（平台 skill.Decl 同款双形态）。
+func (s *packDepSkill) UnmarshalYAML(unmarshal func(any) error) error {
+	var bare string
+	if err := unmarshal(&bare); err == nil {
+		s.Name = bare
+		return nil
+	}
+	type raw packDepSkill
+	var r raw
+	if err := unmarshal(&r); err != nil {
+		return err
+	}
+	*s = packDepSkill(r)
+	return nil
+}
+
+type packDepMCP struct {
+	Name       string `yaml:"name"`
+	MinVersion string `yaml:"min_version"`
 }
 
 // mcpServer 工具面声明（agent.yaml 的 tools 与 SKILL.md 的 requires_mcp 同构）。
@@ -307,6 +375,9 @@ type validator struct {
 	// 专家独立安装性核对输入（spec 2026-10-05-per-expert-install §6）
 	packMCP    map[string]map[string]bool // 包名 → 包内 mcp/ 契约 server 集
 	expertRefs map[string]expertRef       // 专家 slug → 闭包引用快照
+	// 装包闸对账输入（批次四四二/四四四）：技能名 → 本仓现值版本；包名 → depends_on 声明
+	skillVersions map[string]string
+	packDependsOn map[string]*packDepends
 }
 
 // expertRef 专家闭包引用快照（checkExpertInstall 的核对输入）。
@@ -392,18 +463,20 @@ func run(dirs []string) ([]finding, int, int) {
 // 版本同步核对 → 脱敏扫描，返回 findings 与 error/warning 计数。
 func runWithMode(dirs []string, m mode) ([]finding, int, int) {
 	v := &validator{
-		mode:         m,
-		skillOwner:   map[string]string{},
-		skillNeeds:   map[string][]string{},
-		changeOwner:  map[string]string{},
-		skillChanges: map[string][]string{},
-		expertOwner:  map[string]string{},
-		expertTools:  map[string][]string{},
-		chainOwner:   map[string]string{},
-		kwOwner:      map[string]kwFirst{},
-		packVersions: map[string]string{},
-		packMCP:      map[string]map[string]bool{},
-		expertRefs:   map[string]expertRef{},
+		mode:          m,
+		skillOwner:    map[string]string{},
+		skillNeeds:    map[string][]string{},
+		changeOwner:   map[string]string{},
+		skillChanges:  map[string][]string{},
+		expertOwner:   map[string]string{},
+		expertTools:   map[string][]string{},
+		chainOwner:    map[string]string{},
+		kwOwner:       map[string]kwFirst{},
+		packVersions:  map[string]string{},
+		packMCP:       map[string]map[string]bool{},
+		expertRefs:    map[string]expertRef{},
+		skillVersions: map[string]string{},
+		packDependsOn: map[string]*packDepends{},
 	}
 	if m == modeEmbedded {
 		// 模式提示放在**最前**：跑的人第一眼就该知道这轮判据面比 hub 模式窄，
@@ -446,6 +519,7 @@ func runWithMode(dirs []string, m mode) ([]finding, int, int) {
 	v.checkCrossRefs()
 	v.checkExpertInstall()
 	v.checkChangeRefs()
+	v.checkDepends()
 	if v.mode == modeHub {
 		v.checkReadme()
 	}
@@ -496,6 +570,14 @@ func (v *validator) checkPack(packDir, packName string) {
 	}
 	if strings.TrimSpace(m.Description) == "" {
 		add("ERROR", "pack.yaml 缺 description")
+	}
+	// 平台插件名法度（bianque 批次四百四十三装包面 plugin_svc 对齐）：不合即装包拒收。
+	if m.Name != "" && !pluginNameRe.MatchString(m.Name) {
+		add("ERROR", "pack.yaml name=%q 不合平台插件名法度（^[a-z0-9][a-z0-9._-]{0,128}$，装包即拒）", m.Name)
+	}
+	// depends_on 环境前提声明（批次四四二装包闸）：登记后跨包核对（checkDepends）。
+	if m.DependsOn != nil {
+		v.packDependsOn[packName] = m.DependsOn
 	}
 	// provenance.json 是**市场包**的来源标记：hub 仓根的每个包都要有（装进扁鹊
 	// 靠它识别为市场版），内嵌快照按内容资产单源纪律本就不该有（它是 hub packs/
@@ -609,6 +691,32 @@ func (v *validator) checkPack(packDir, packName string) {
 			if !toolServerAllowRe.MatchString(t.Server) {
 				add("ERROR", "%s tools server=%q 命名非法（小写中划线）", d.Slug, t.Server)
 			}
+			// 变更面（破坏性）授权对账（批次四四三/四四四装包知情同意闸镜像）：
+			// allow 空 = 该 server 全量授予，含破坏性工具的 server 按最坏记 server/*，
+			// 装包/升级被平台闸拦（bq-markettool API 通道不带 consent 参数，装机必 400）。
+			if len(t.Allow) == 0 {
+				if destructiveTools[t.Server] != nil {
+					add("ERROR", "%s tools 对 %s 用空 allow 全量授予（含破坏性受审执行，装包被知情同意闸拦）——请显式列出只读白名单（批次二百六十四收敛范式）", d.Slug, t.Server)
+				} else {
+					add("WARN", "%s tools 对 %s 空 allow=全量授予（新工具注册时静默扩权）——请显式列出工具", d.Slug, t.Server)
+				}
+			} else {
+				// 显式 allow：命中破坏面清单 ⇒ 未登记豁免 ERROR（新增破坏面授权必须
+				// 在 destructiveExemptions 登记理由）；已登记 ⇒ WARN 保持知情同意要求可见。
+				var hits []string
+				for _, tool := range t.Allow {
+					if destructiveTools[t.Server][tool] {
+						hits = append(hits, tool)
+					}
+				}
+				if len(hits) > 0 {
+					if _, ok := destructiveExemptions[packName+"/"+d.Slug]; ok {
+						add("WARN", "%s 显式授予变更面工具 %s.%s（已登记设计内执行档豁免）——该包装/升级时站点须知情同意（allow_destructive_tools）", d.Slug, t.Server, strings.Join(hits, "/"))
+					} else {
+						add("ERROR", "%s 显式授予变更面（破坏性）工具 %s.%s——装包/升级被知情同意闸拦；若系设计内执行档请在 validator destructiveExemptions 登记理由", d.Slug, t.Server, strings.Join(hits, "/"))
+					}
+				}
+			}
 			toolServers = append(toolServers, t.Server)
 		}
 		v.expertTools[d.Slug] = toolServers
@@ -690,6 +798,7 @@ func (v *validator) checkPack(packDir, packName string) {
 				add("ERROR", "技能名 %q 跨包重复（%s 已占用；技能名是全局唯一空间）", sf.Name, prev)
 			} else if sf.Name != "" {
 				v.skillOwner[sf.Name] = packName
+				v.skillVersions[sf.Name] = sf.Version
 			}
 		}
 	}
@@ -931,6 +1040,93 @@ func (v *validator) checkChangeRefs() {
 			}
 		}
 	}
+}
+
+// checkDepends pack.yaml depends_on 环境前提闭包核对（bianque 批次四百四十二装包闸
+// 对齐）：平台装包/升级时对目标实例判定，不满足即拒装（allow_missing_deps 才放行）——
+// hub 在 CI 提前拦。
+//   - 技能依赖：名字必须能在本仓技能空间解析（本仓都解析不了 ⇒ 从本仓同步的实例
+//     更不会有，装包必被拒）；版本区间表达式必须可被平台同款解析器（Masterminds/semver，
+//     skillkit skill.VersionInRange 逐字同款语义）解析，且须覆盖本仓现值——区间合法但
+//     现值不满足 = 本仓两个包互相不兼容，凡同装必被闸拦。pack 级 optional 被平台忽略
+//     （一律按必需判），声明即误描 → WARN。
+//   - MCP 依赖：平台只核「已配置且启用」（conf ⊕ 各包声明 ⊕ DB 覆盖层），hub 看不到
+//     实例配置面——只做命名法度核对；本仓无任何包声明该 server 且非宿主面时 WARN 提示
+//     站点确认。min_version 平台不判（无版本源），不在此做漂移核对。
+func (v *validator) checkDepends() {
+	packs := make([]string, 0, len(v.packDependsOn))
+	for name := range v.packDependsOn {
+		packs = append(packs, name)
+	}
+	sort.Strings(packs)
+	for _, pack := range packs {
+		deps := v.packDependsOn[pack]
+		for _, dep := range deps.Skills {
+			if strings.TrimSpace(dep.Name) == "" {
+				v.add("ERROR", pack, "depends_on.skills 含空条目（平台判定按缺失处理）")
+				continue
+			}
+			if dep.Optional {
+				v.add("WARN", pack, "depends_on.skills %q 声明 optional——pack 级依赖的 optional 被平台忽略（一律按必需判），声明即误描", dep.Name)
+			}
+			owner, ok := v.skillOwner[dep.Name]
+			if !ok {
+				v.add("ERROR", pack, "depends_on.skills %q 不存在于本仓任何包——装包环境前提闸会因实例技能库无此技能拒装（跨包依赖请确认目标包在本仓且先装）", dep.Name)
+				continue
+			}
+			if dep.Version == "" {
+				continue // 区间空 = 任意版本（skill.VersionInRange 同款语义）
+			}
+			sat, err := versionInRange(v.skillVersions[dep.Name], dep.Version)
+			if err != nil {
+				v.add("ERROR", pack, "depends_on.skills %q 版本区间非法: %v（平台按不满足判，装包必拒）", dep.Name, err)
+				continue
+			}
+			if !sat {
+				v.add("ERROR", pack, "depends_on.skills %q 版本区间 %q 不满足本仓现值 %s（属 %s）——从本仓同步的实例同装必被环境前提闸拒", dep.Name, dep.Version, v.skillVersions[dep.Name], owner)
+			}
+		}
+		for _, dep := range deps.MCP {
+			if strings.TrimSpace(dep.Name) == "" {
+				v.add("ERROR", pack, "depends_on.mcp 含空条目")
+				continue
+			}
+			if !toolServerAllowRe.MatchString(dep.Name) {
+				v.add("ERROR", pack, "depends_on.mcp name=%q 命名非法（小写中划线）", dep.Name)
+			}
+			if hostSideMCP[dep.Name] || v.declaredInAnyPack(dep.Name) {
+				continue
+			}
+			v.add("WARN", pack, "depends_on.mcp %q 本仓无包声明且非宿主面——平台只核实例「已配置且启用」（conf 或控制台 MCP 页激活），装包前请确认目标实例已配置", dep.Name)
+		}
+	}
+}
+
+// declaredInAnyPack 该 server 是否被本仓任一包的 mcp/ 契约声明。
+func (v *validator) declaredInAnyPack(server string) bool {
+	for _, set := range v.packMCP {
+		if set[server] {
+			return true
+		}
+	}
+	return false
+}
+
+// versionInRange 平台 skillkit skill.VersionInRange 逐字同款语义（独立实现，漂移以
+// 平台侧为准绳同步）：expr 空=任意（恒真）；区间/版本非法返回错误。
+func versionInRange(version, expr string) (bool, error) {
+	if strings.TrimSpace(expr) == "" {
+		return true, nil
+	}
+	c, err := semver.NewConstraint(expr)
+	if err != nil {
+		return false, fmt.Errorf("版本区间非法 %q", expr)
+	}
+	ver, err := semver.NewVersion(version)
+	if err != nil {
+		return false, fmt.Errorf("版本 %q 非 SemVer", version)
+	}
+	return c.Check(ver), nil
 }
 
 // changeTainted 变更模板结构层快检（平台 agents.changeTainted 同构镜像：命令替换

@@ -179,7 +179,7 @@ func writeMinimalPack(t *testing.T, dir string) {
 	must("pack.yaml", "api_version: 1\nname: demo\nversion: 1.0.0\ndescription: 测试包\nprovides:\n  experts: [imports/demo-expert]\n  skills: [demo-skill]\nchangelog: CHANGELOG.md\n")
 	must("CHANGELOG.md", "# CHANGELOG\n\n## 1.0.0 (2026-10-02)\n\n- 首发。\n")
 	must("provenance.json", `{"base_url": "https://example.com", "pack": "demo"}`)
-	must("demo-expert/agent.yaml", "slug: imports/demo-expert\nname: 测试专家\nlayer: expert\nkind: llm\nprompt_file: prompt.md\nskills: [demo-skill]\ntools:\n  - server: ask-ops\n    allow: []\nroute_priority: P3\nroute_group: tooling\nroute_keywords: [测试词]\nroute_desc: 测试专家路由描述\n")
+	must("demo-expert/agent.yaml", "slug: imports/demo-expert\nname: 测试专家\nlayer: expert\nkind: llm\nprompt_file: prompt.md\nskills: [demo-skill]\ntools:\n  - server: ask-ops\n    allow: [get_logs, probe_host, run_readonly_command]\nroute_priority: P3\nroute_group: tooling\nroute_keywords: [测试词]\nroute_desc: 测试专家路由描述\n")
 	must("demo-expert/prompt.md", "你是测试专家。\n")
 	must("skills/demo-skill/SKILL.md", "---\nname: demo-skill\ndescription: 测试技能\nmode: on_demand\nversion: 1.0.0\nmaturity: experimental\n---\n\n## 触发条件\n\n- 测试场景\n")
 }
@@ -288,7 +288,7 @@ func TestCheckExpertInstall(t *testing.T) {
 	write("demo/pack.yaml", "api_version: 1\nname: demo\nversion: 1.0.0\ndescription: 测试\nprovides:\n  experts:\n    - imports/e1\n")
 	write("demo/provenance.json", `{"base_url":"https://github.com/yi-nology/bianque-hub"}`)
 	write("demo/CHANGELOG.md", "## 1.0.0\n- init\n")
-	write("demo/e1/agent.yaml", "slug: imports/e1\nname: E1\nkind: llm\nprompt_file: prompt.md\nroute_priority: P2\nroute_keywords: [k1]\nskills:\n  - mine\n  - foreign\ntools:\n  - server: ghost-mcp\n    allow: []\n  - server: ask-ops\n    allow: []\n")
+	write("demo/e1/agent.yaml", "slug: imports/e1\nname: E1\nkind: llm\nprompt_file: prompt.md\nroute_priority: P2\nroute_keywords: [k1]\nskills:\n  - mine\n  - foreign\ntools:\n  - server: ghost-mcp\n    allow: [ghost_query]\n  - server: ask-ops\n    allow: [get_logs]\n")
 	write("demo/e1/prompt.md", "p")
 	write("demo/skills/mine/SKILL.md", "---\nname: mine\ndescription: d\nversion: 0.1.0\n---\nbody\n")
 	write("other/pack.yaml", "api_version: 1\nname: other\nversion: 1.0.0\ndescription: 测试\nprovides:\n  skills: [foreign]\n")
@@ -568,5 +568,116 @@ func TestParseArgs(t *testing.T) {
 	}
 	if _, _, err := parseArgs([]string{"--bogus"}); err == nil {
 		t.Fatal("未知参数应报错（不静默吞掉）")
+	}
+}
+
+// TestDestructiveGrantGate 装包知情同意闸对账（bianque 批次四百四十三/四百四十四）：
+// 含破坏面 server 的空白 allow（契约=全量授予，按最坏记 server/* 变更面）/ 未豁免的
+// 显式破坏面授予 = ERROR（bq-markettool API 通道不带 consent 参数，装机必 400）；
+// 登记豁免的设计内执行档 = WARN（知情同意要求保持可见）；非破坏面空白 allow = WARN。
+func TestDestructiveGrantGate(t *testing.T) {
+	base := func(t *testing.T, toolsYAML string) string {
+		t.Helper()
+		pack := filepath.Join(t.TempDir(), "demo")
+		writeMinimalPack(t, pack)
+		agent := readFileT(t, filepath.Join(pack, "demo-expert", "agent.yaml"))
+		agent = strings.Replace(agent,
+			"allow: [get_logs, probe_host, run_readonly_command]", toolsYAML, 1)
+		writeFileT(t, filepath.Join(pack, "demo-expert", "agent.yaml"), agent)
+		return pack
+	}
+
+	// ask-ops（破坏面 server）空白 allow → ERROR
+	findings, errN, _ := run([]string{base(t, "allow: []")})
+	if errN == 0 || !hasMsg(findings, "知情同意闸拦") {
+		t.Fatalf("ask-ops 空 allow 应 ERROR：%v", errorMessages(findings))
+	}
+
+	// 显式授予 run_approved_command → ERROR（点名 server.tool）
+	findings, errN, _ = run([]string{base(t, "allow: [get_logs, run_approved_command]")})
+	if errN == 0 || !hasMsg(findings, "ask-ops.run_approved_command") {
+		t.Fatalf("显式破坏面授予应 ERROR：%v", errorMessages(findings))
+	}
+
+	// 登记豁免 → WARN 且 0 error（知情同意要求保持可见）
+	pack := base(t, "allow: [get_logs, run_approved_command]")
+	destructiveExemptions["demo/imports/demo-expert"] = "测试豁免"
+	defer delete(destructiveExemptions, "demo/imports/demo-expert")
+	findings, errN, _ = run([]string{pack})
+	if errN != 0 || !hasMsg(findings, "已登记设计内执行档豁免") {
+		t.Fatalf("豁免后应 WARN 且 0 error：errN=%d %v", errN, findings)
+	}
+
+	// 非破坏面 server 空白 allow → WARN（静默扩权提示），破坏面那条仍 ERROR
+	findings, errN, _ = run([]string{base(t, "allow: []\n  - server: datasources\n    allow: []")})
+	if !hasMsg(findings, "静默扩权") {
+		t.Fatalf("非破坏面空 allow 应 WARN：%v", findings)
+	}
+	if errN != 1 || !hasMsg(findings, "ask-ops 用空 allow") {
+		t.Fatalf("破坏面空 allow 应为唯一 ERROR：errN=%d %v", errN, errorMessages(findings))
+	}
+}
+
+// TestDependsOnGate depends_on 环境前提闭包核对（bianque 批次四百四十二装包闸对齐）：
+// 区间非法/不覆盖本仓现值/未知技能 = ERROR（平台装包同判）；pack 级 optional 误描与
+// 实例配置面不可判的 mcp 依赖 = WARN。
+func TestDependsOnGate(t *testing.T) {
+	mk := func(t *testing.T, dependsYAML string) string {
+		t.Helper()
+		pack := filepath.Join(t.TempDir(), "demo")
+		writeMinimalPack(t, pack)
+		manifest := readFileT(t, filepath.Join(pack, "pack.yaml"))
+		writeFileT(t, filepath.Join(pack, "pack.yaml"), manifest+"depends_on:\n"+dependsYAML)
+		return pack
+	}
+
+	// 裸串形态 + 本仓技能存在 → 0 error
+	findings, errN, _ := run([]string{mk(t, "  skills: [demo-skill]\n")})
+	if errN != 0 {
+		t.Fatalf("合法依赖应 0 error：%v", errorMessages(findings))
+	}
+
+	// 对象形态 + 区间覆盖现值 1.0.0 → 0 error
+	findings, errN, _ = run([]string{mk(t, "  skills:\n    - {name: demo-skill, version: '>=1.0.0 <2.0.0'}\n")})
+	if errN != 0 {
+		t.Fatalf("满足区间应 0 error：%v", errorMessages(findings))
+	}
+
+	// 区间不含现值 → ERROR（本仓两包互不兼容，同装必被闸拦）
+	findings, errN, _ = run([]string{mk(t, "  skills:\n    - {name: demo-skill, version: '>=2.0.0'}\n")})
+	if errN == 0 || !hasMsg(findings, "不满足本仓现值") {
+		t.Fatalf("区间不含现值应 ERROR：%v", errorMessages(findings))
+	}
+
+	// 区间表达式非法 → ERROR（平台按不满足判）
+	findings, errN, _ = run([]string{mk(t, "  skills:\n    - {name: demo-skill, version: 'not-a-constraint::'}\n")})
+	if errN == 0 || !hasMsg(findings, "版本区间非法") {
+		t.Fatalf("非法区间应 ERROR：%v", errorMessages(findings))
+	}
+
+	// 未知技能 → ERROR
+	findings, errN, _ = run([]string{mk(t, "  skills: [ghost-skill]\n")})
+	if errN == 0 || !hasMsg(findings, "ghost-skill") {
+		t.Fatalf("未知技能依赖应 ERROR：%v", errorMessages(findings))
+	}
+
+	// pack 级 optional 声明 → WARN（平台忽略、一律按必需判）
+	findings, _, _ = run([]string{mk(t, "  skills:\n    - {name: demo-skill, optional: true}\n")})
+	if !hasMsg(findings, "optional 被平台忽略") {
+		t.Fatalf("optional 声明应 WARN：%v", findings)
+	}
+
+	// MCP 依赖（平台契约仅对象形态 {name, min_version}）：宿主面静默；本仓无声明 WARN；空名 ERROR
+	findings, errN, _ = run([]string{mk(t, "  mcp: [{name: ask-ops}]\n")})
+	if errN != 0 || hasMsg(findings, "depends_on.mcp") {
+		t.Fatalf("宿主面 mcp 依赖应静默：errN=%d %v", errN, errorMessages(findings))
+	}
+	findings, _, _ = run([]string{mk(t, "  mcp: [{name: ghost-mcp}]\n")})
+	if !hasMsg(findings, `depends_on.mcp "ghost-mcp" 本仓无包声明`) || !hasMsg(findings, "已配置且启用") {
+		t.Fatalf("无声明 mcp 依赖应 WARN 提示：%v", findings)
+	}
+	findings, errN, _ = run([]string{mk(t, "  mcp:\n    - name: ''\n")})
+	if errN == 0 || !hasMsg(findings, "depends_on.mcp 含空条目") {
+		t.Fatalf("空 mcp 条目应 ERROR：%v", errorMessages(findings))
 	}
 }

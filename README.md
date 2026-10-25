@@ -159,7 +159,7 @@ bianque markettool search --json k8s | jq '.results[].name'
 | [n8n-ops](packs/n8n-ops/) | 0.3.0 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
 | [docker-ops](packs/docker-ops/) | 0.2.0 | Docker Engine 运维：引擎本体/容器运行面（退出码/OOMKilled）/镜像磁盘面（拉取失败/回收）/网络面/Compose 编排面五技能 + 平台诊断专家（ask-ops 只读面）+ 编目变更块三件（容器重启/内存上限在线调整/悬空镜像回收）；K8s 编排容器归 k8s-ops |
 | [chain-starter](packs/chain-starter/) | 0.1.2 | 最小示例包（贡献模板，含技能钉扎演示） |
-| [oo-devops](packs/oo-devops/) | 1.2.0 | OpenOcta 归化参考库（31 员工 + 189 技能 + 7 MCP 声明）——**不进缺省分发**：方法论已按域收割进四领域包，本包作参考库维护（A 案：hub 为内容唯一编辑点） |
+| [oo-devops](packs/oo-devops/) | 1.3.0 | OpenOcta 归化参考库（31 员工 + 189 技能 + 7 MCP 声明）——**不进缺省分发**：方法论已按域收割进四领域包，本包作参考库维护（A 案：hub 为内容唯一编辑点）；1.3.0 工具授权面显式化（ask-ops 只读十二件套等，对齐装包知情同意闸） |
 
 ## oo-devops 迁移说明
 
