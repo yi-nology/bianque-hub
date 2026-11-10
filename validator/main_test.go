@@ -362,6 +362,58 @@ func TestRunIndexConsistency(t *testing.T) {
 	}
 }
 
+// TestCheckIndexTrailingSlashEquivalent 尾斜杠等价性回归（issue #3）：同一容器
+// 路径带不带尾斜杠（相对/绝对/点前缀各种写法）必须产出**同一份** index 对账
+// findings 与错误计数——修复前 Dir("./packs/")="packs" 把索引找成
+// packs/index.json，读不到走 IsNotExist 分支只 WARN「缺失」便 return，版本漂移
+// ERROR 整段消失（0 error 假绿）。
+func TestCheckIndexTrailingSlashEquivalent(t *testing.T) {
+	tests := []struct {
+		name string
+		// mk 返回容器路径写法；chdir 为 true 时先 t.Chdir(hub) 再用相对写法
+		// （复现 issue 的 ./packs 与 ./packs/ 调用形态）
+		chdir bool
+		mk    func(hub string) string
+	}{
+		{"无尾斜杠（基准）", true, func(hub string) string { return "packs" }},
+		{"尾斜杠", true, func(hub string) string { return "packs/" }},
+		{"点前缀无尾斜杠", true, func(hub string) string { return "./packs" }},
+		{"点前缀+尾斜杠", true, func(hub string) string { return "./packs/" }},
+		{"绝对路径+尾斜杠", false, func(hub string) string { return filepath.Join(hub, "packs") + "/" }},
+		{"冗余段+尾斜杠", false, func(hub string) string { return filepath.Join(hub, "packs") + "/../packs/" }},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			hub := t.TempDir()
+			packs := filepath.Join(hub, "packs")
+			writeMinimalPack(t, filepath.Join(packs, "demo"))
+			// 故意漂移：索引 9.9.9 / pack.yaml 1.0.0——对账必须抓到 ERROR。
+			writeFileT(t, filepath.Join(hub, "index.json"),
+				`{"generated_at":"2026-11-11","packs":[{"name":"demo","version":"9.9.9"}]}`)
+			if tt.chdir {
+				t.Chdir(hub) // 相对写法基准：cwd = 仓根
+			}
+
+			findings, errN, _ := run([]string{tt.mk(hub)})
+			if errN == 0 || !hasMsg(findings, "版本漂移") {
+				t.Fatalf("索引在仓根且已漂移，必须报 ERROR（假绿回归）：%v", errorMessages(findings))
+			}
+			if hasMsg(findings, "index.json 缺失") {
+				t.Fatalf("仓根有 index.json 不应再报缺失（路径归一化失效）：%v", errorMessages(findings))
+			}
+
+			// 缺索引口径同样等价：真缺失 = WARN 不 ERROR（渐进采用契约不变）。
+			if err := os.Remove(filepath.Join(hub, "index.json")); err != nil {
+				t.Fatal(err)
+			}
+			findings, errN, _ = run([]string{tt.mk(hub)})
+			if errN != 0 || !hasMsg(findings, "index.json 缺失") {
+				t.Fatalf("真缺失应恰为 WARN 且无 ERROR：%v", errorMessages(findings))
+			}
+		})
+	}
+}
+
 // TestScanDangerous 发布侧内容扫描（批次一百四十，G4b）：正文 WARN / changes/
 // 执行面升 ERROR / 干净文档零报——分档依据实弹校准（oo-devops 正文存在合法
 // curl|sh 安装指引）。
