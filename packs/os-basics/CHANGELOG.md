@@ -5,7 +5,7 @@
 - **k8s-health 凭证绑定背书通道（bianque 批次三百四十一）**：批340 集群变体 server
   机制（`<base>@<集群凭证名>`，runner 按会话绑定切工具面）落地后，1.9.2 硬证据
   规则对「平台已按凭证绑定接入目标集群」的工具面仍过度对冲（终复测
-  sess-1014-55x2kg8d：变体真切到 rd2、数据全对，结论却仍以「无法硬核验」双轨
+  sess-1014-55x2kg8d：变体真切到 cluster-b、数据全对，结论却仍以「无法硬核验」双轨
   限定）。新增第 2 条背书通道：委派信息含「工具面集群变体：<server>@<集群>」声明
   （平台侧 assemble.go 仅在变体真切时注入，与工具面实况恒一致）时，做一次软核验
   （节点名网段与目标集群凭证相符）即可按目标集群处置；软核验冲突=凭证内容疑似
@@ -17,7 +17,7 @@
 - **k8s-health 集群身份硬证据规则（bianque 批次三百三十九追加二）**：1.9.1 核验纪律
   终复测（sess-1014-puw86g8j）暴露残余形态——专家做了 cluster-info 核验、也限定
   「工具面可见集群」措辞，却用资源指纹+历史记忆案例匹配把可见集群（argocd
-  instance=insights-rd1、节点 103~106）错误认定为 rd2「按 rd2 处置」（记忆原子被
+  instance=insights-cluster-a、节点 103~106）错误认定为 cluster-b「按 cluster-b 处置」（记忆原子被
   前两轮错集群诊断污染，指纹匹配错上加错）。新规则：身份判定只认硬证据（API
   Server 端点/证书 SAN/集群自报名），禁止资源指纹、节点名网段、argocd 实例名或
   历史记忆相似性认定；硬证据拿不到一律按「不覆盖目标集群」声明缺口处置，不得
@@ -25,10 +25,10 @@
 
 ## 1.9.1 (2026-10-13)
 
-- **k8s-health 集群身份核验纪律（bianque 批次三百三十九追加，215 实弹两轮错集群
+- **k8s-health 集群身份核验纪律（bianque 批次三百三十九追加，生产实弹两轮错集群
   诊断在案）**：k8sgpt 是单集群 sidecar 工具面，可见集群与会话「目标集群」/用户
-  点名集群不保证一致——sess-1013-8bz5hmr7/sess-1014-2ev2knq7 实弹：对 rd2 集群
-  诉求拿 rd1 工具面诊断，高置信产出「insights-mcp-gateway 不存在」结论并写入
+  点名集群不保证一致——sess-1013-8bz5hmr7/sess-1014-2ev2knq7 实弹：对 cluster-b 集群
+  诉求拿 cluster-a 工具面诊断，高置信产出「insights-mcp-gateway 不存在」结论并写入
   患者画像错误记忆。新纪律：诊断开始先 cluster-info 核验可见集群身份；与目标
   集群不符时结论首行显式声明「工具面可见集群为 Y，不覆盖目标集群 X」，全部发现
   限定「可见集群 Y 内」，禁止对 X 下资源存在性/健康结论；覆盖缺口进
@@ -198,7 +198,7 @@
 
 ## 1.4.2 (2026-10-07)
 
-- 215 八会话实弹扫描修复批：①报告协议 steps 硬钉补齐——memory/io/network/security/k8s-health
+- 生产八会话实弹扫描修复批：①报告协议 steps 硬钉补齐——memory/io/network/security/k8s-health
   五专家 prompt 输出铁律统一加「steps[] 每项=单条可执行命令字符串，说明放 needs_followup」
   （实弹 sess-1007-mrydrs8w：memory 独立会话 steps 写成散文被 schema 白名单拒收，用户拿到
   错误串而会话仍 succeeded）；②k8s 集群健康路由劫持修复——system-patrol 裸词「健康」拆为
@@ -207,7 +207,7 @@
   （「k8s」3 rune 过不了短拉丁词闸，原词表 k8s集群诊断 覆盖不了健康构式）。
 ## 1.4.1 (2026-10-07)
 
-- 部署形态分诊前置（215 实弹 sess-1007-hxr6k25b 教训：localhost=扁鹊容器（Alpine
+- 部署形态分诊前置（生产实弹 sess-1007-hxr6k25b 教训：localhost=扁鹊容器（Alpine
   最小镜像）被当"这台机器"审计，容器识别靠模型自觉而非制度）：平台适配矩阵
   （hub knowledge/ 单源 + seed-sync 三份同步）新增「部署形态分诊」节——容器证据
   （.dockerenv/containerenv/overlay/PID1）→ 容器口径（主机级项标「容器内不可验证，
@@ -227,7 +227,7 @@
   使用的 collect_network_status/list_directory/read_file；`changes/sysctl-kv-tune`
   持久化改按 key 幂等 upsert（整文件覆盖会抹掉同站点首次调参）；四专家补
   route_desc；k8s-health prompt 显式钉 requires_approval/decision 语义、agent 注释
-  指针更新。（注：曾试随包带 mcp/k8sgpt.yaml 契约，215 实测 reload 报「tool_manifest
+  指针更新。（注：曾试随包带 mcp/k8sgpt.yaml 契约，生产实测 reload 报「tool_manifest
   同名冲突」——k8s-ops 已带同名契约，平台按包名字典序取 k8s-ops，双份纯噪音，故撤出；
   hub 侧对应 WARN 由「契约单源在 k8s-ops」口径收口。）
 
@@ -241,7 +241,7 @@
 
 ## 1.3.1 (2026-10-01)
 
-- k8s-health 提示词补 k8sgpt 工具契约：analyze 一律 explain:false（explain:true 走哑后端必失败、有发现的扫描整体报错——rd1/106 实弹 9 条发现被吞）；零发现必须带过滤器口径；系统 ConfigMap 未引用降权；事件计数标注时效。
+- k8s-health 提示词补 k8sgpt 工具契约：analyze 一律 explain:false（explain:true 走哑后端必失败、有发现的扫描整体报错——cluster-a/106 实弹 9 条发现被吞）；零发现必须带过滤器口径；系统 ConfigMap 未引用降权；事件计数标注时效。
 
 ## 1.3.0 (2026-09-30)
 
