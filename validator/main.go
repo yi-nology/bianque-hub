@@ -23,7 +23,6 @@ import (
 	"path/filepath"
 	"regexp"
 	"slices"
-	"sort"
 	"strings"
 
 	"github.com/Masterminds/semver/v3"
@@ -1058,7 +1057,7 @@ func (v *validator) checkDepends() {
 	for name := range v.packDependsOn {
 		packs = append(packs, name)
 	}
-	sort.Strings(packs)
+	slices.Sort(packs)
 	for _, pack := range packs {
 		deps := v.packDependsOn[pack]
 		for _, dep := range deps.Skills {
@@ -1134,7 +1133,7 @@ func versionInRange(version, expr string) (bool, error) {
 func changeTainted(s string) string {
 	inSingle := false
 	runes := []rune(s)
-	for i := 0; i < len(runes); i++ {
+	for i := range runes {
 		r := runes[i]
 		if inSingle {
 			if r == '\'' {
@@ -1185,7 +1184,7 @@ func (v *validator) checkReadme() {
 	for name := range v.packVersions {
 		names = append(names, name)
 	}
-	sort.Strings(names)
+	slices.Sort(names)
 	for _, name := range names {
 		ver := v.packVersions[name]
 		rv, ok := table[name]
@@ -1332,7 +1331,7 @@ func scanDangerous(roots ...string) []finding {
 			return nil
 		})
 	}
-	sort.Slice(out, func(i, j int) bool { return out[i].pack < out[j].pack })
+	slices.SortFunc(out, func(a, b finding) int { return strings.Compare(a.pack, b.pack) })
 	return out
 }
 
@@ -1404,6 +1403,6 @@ func scanSensitive(roots ...string) []finding {
 			return nil
 		})
 	}
-	sort.Slice(out, func(i, j int) bool { return out[i].pack < out[j].pack })
+	slices.SortFunc(out, func(a, b finding) int { return strings.Compare(a.pack, b.pack) })
 	return out
 }
