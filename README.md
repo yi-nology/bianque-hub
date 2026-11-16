@@ -149,6 +149,7 @@ bianque markettool search --json k8s | jq '.results[].name'
 |---|---|---|
 | [os-basics](packs/os-basics/) | 1.9.3 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
 | [k8s-ops](packs/k8s-ops/) | 0.2.0 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
+| [kylin-insight](packs/kylin-insight/) | 0.2.0 | KylinInsight 查询诊断 + AI 分析：31 工具（13 查询诊断 + 18 AI，insights-mcp 聚合）+ 主/子专家 + 两层知识库 + `render/charts.yaml` 确定性出图；写工具走编目审批 |
 | [mw-ops](packs/mw-ops/) | 0.3.0 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
 | [db-ops](packs/db-ops/) | 0.3.0 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
 | [web-ops](packs/web-ops/) | 0.3.0 | 网页巡检取证：SPA 渲染正文/全页截图取证/白屏四分型（browser-ops 工具面，conf 缺省关） |

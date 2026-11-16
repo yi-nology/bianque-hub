@@ -82,6 +82,21 @@
       "chain": true
     },
     {
+      "name": "kylin-insight",
+      "version": "0.2.0",
+      "api_version": 1,
+      "description": "KylinInsight 查询诊断 + AI 分析插件：31 个 MCP 工具（13 查询诊断 + 18 AI，由 insights-mcp 聚合）、主/子专家、两层知识库（上游内置知识子集 + 扁鹊专用）与 render/charts.yaml 确定性图表映射；写工具不授予 LLM，走编目审批。默认装包不激活，站点覆盖 URL/令牌并开启 X-Kylin-Render 后生效。",
+      "path": "packs/kylin-insight",
+      "experts": [
+        "imports/kylin-insight-analyst",
+        "imports/kylin-insight-query",
+        "imports/kylin-insight-ai"
+      ],
+      "skills": 4,
+      "changes": 3,
+      "chain": false
+    },
+    {
       "name": "mw-ops",
       "version": "0.3.0",
       "api_version": 1,
