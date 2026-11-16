@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.9.4 (2026-11-17)
+
+- 链模板升 v3 图模型（`version: 3` + nodes/edges）；模板变量改用显式 `{{sys.input}}`，
+  v2 兼容占位 `{{input}}` 退役。
+
 ## 1.9.3 (2026-10-14)
 
 - **k8s-health 凭证绑定背书通道（bianque 批次三百四十一）**：批340 集群变体 server

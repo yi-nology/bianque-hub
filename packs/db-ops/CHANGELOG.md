@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.3.1 (2026-11-17)
+
+- 链模板升 v3 图模型（`version: 3` + nodes/edges）；模板变量改用显式 `{{sys.input}}`，
+  v2 兼容占位 `{{input}}` 退役。
+
 ## 0.3.0 (2026-10-10)
 
 - **mysql-analyst/pg-analyst 工具授权最小权限收敛**（bianque 批次二百六十四，除 oo-devops 外全 hub 清扫）：

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.1.3 (2026-11-17)
+
+- 链模板升 v3 图模型（`version: 3` + nodes/edges），模板变量改用显式 v3 写法：
+  `{{sys.input}}` / `{{sys.host}}`，上一步产出按节点 id 引用
+  （`{{n1.output.summary}}` / `{{n1.output.followups}}`）。v2 兼容占位
+  `{{input}}` / `{{host}}` / `{{summary}}` / `{{followups}}` 退役。
+
 ## 0.1.2 (2026-10-06)
 
 - 模板专家 prompt 示范平台统一报告 schema：starter-analyst 原自造 `conclusion`

@@ -147,11 +147,11 @@ bianque markettool search --json k8s | jq '.results[].name'
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [os-basics](packs/os-basics/) | 1.9.3 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
-| [k8s-ops](packs/k8s-ops/) | 0.2.0 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
+| [os-basics](packs/os-basics/) | 1.9.4 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
+| [k8s-ops](packs/k8s-ops/) | 0.2.1 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
 | [kylin-insight](packs/kylin-insight/) | 0.2.0 | KylinInsight 查询诊断 + AI 分析：31 工具（13 查询诊断 + 18 AI，insights-mcp 聚合）+ 主/子专家 + 两层知识库 + `render/charts.yaml` 确定性出图；写工具走编目审批 |
-| [mw-ops](packs/mw-ops/) | 0.3.0 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
-| [db-ops](packs/db-ops/) | 0.3.0 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
+| [mw-ops](packs/mw-ops/) | 0.3.1 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
+| [db-ops](packs/db-ops/) | 0.3.1 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
 | [web-ops](packs/web-ops/) | 0.3.0 | 网页巡检取证：SPA 渲染正文/全页截图取证/白屏四分型（browser-ops 工具面，conf 缺省关） |
 | [cicd-ops](packs/cicd-ops/) | 0.4.0 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位；GitLab 面含身份预检/状态语义/trace 下钻，参考官方 CLI glab 方法论）+ 编目变更块五件（argocd sync/rollback + GitLab 作业级/流水线级重跑与取消） |
 | [obs-ops](packs/obs-ops/) | 0.4.0 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景）+ 编目变更块两件（flood 解锁/分配恢复） |
@@ -159,7 +159,7 @@ bianque markettool search --json k8s | jq '.results[].name'
 | [nginx-ops](packs/nginx-ops/) | 0.2.0 | Nginx 自托管运维：可用性/路由重写/TLS/生命周期四技能 + 平台诊断专家（ask-ops 只读面，reload 类变更恒审批后执行）；纯宿主形态不依赖凭证平面；K8s Ingress 与 openresty/lua 不在范围 |
 | [n8n-ops](packs/n8n-ops/) | 0.3.0 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
 | [docker-ops](packs/docker-ops/) | 0.2.0 | Docker Engine 运维：引擎本体/容器运行面（退出码/OOMKilled）/镜像磁盘面（拉取失败/回收）/网络面/Compose 编排面五技能 + 平台诊断专家（ask-ops 只读面）+ 编目变更块三件（容器重启/内存上限在线调整/悬空镜像回收）；K8s 编排容器归 k8s-ops |
-| [chain-starter](packs/chain-starter/) | 0.1.2 | 最小示例包（贡献模板，含技能钉扎演示） |
+| [chain-starter](packs/chain-starter/) | 0.1.3 | 最小示例包（贡献模板，含技能钉扎演示） |
 | [oo-devops](packs/oo-devops/) | 1.3.0 | OpenOcta 归化参考库（31 员工 + 189 技能 + 7 MCP 声明）——**不进缺省分发**：方法论已按域收割进四领域包，本包作参考库维护（A 案：hub 为内容唯一编辑点）；1.3.0 工具授权面显式化（ask-ops 只读十二件套等，对齐装包知情同意闸） |
 
 ## oo-devops 迁移说明
