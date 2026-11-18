@@ -2,8 +2,11 @@
 name: nginx-lifecycle-ops
 description: Nginx 生命周期面方法论：nginx -t 前置纪律、reload 与 restart 的进程语义差（master/worker 继承与连接排空）、-t 过但 reload 失败的冤案形态、logrotate 与 USR1、平滑升级二进制——固定顺序与判读基准（ask-ops 只读采集面；变更动作一律审批后执行）。
 mode: on_demand
-version: 0.1.0
+version: 0.2.0
 maturity: experimental
+provides_changes:
+  - nginx-config-reload
+  - nginx-log-reopen
 requires_mcp:
   - server: ask-ops
     tools: [run_readonly_command, run_readonly_commands]

@@ -2,6 +2,7 @@ api_version: 1
 changelog: CHANGELOG.md
 description: OpenOcta 生态运维技能包：31 位数字员工 × 189 项运维技能，覆盖中间件、数据库、CI/CD、可观测与云厂商运维（主机与 K8s 集群域归内置核心包 os-basics）
 name: oo-devops
+requires_credentials: [datasources] # 专家经 datasources 采集面消费外部实例（n8n/ES/loki 等）——凭证平面警告级声明（批607 披露面普及）
 provides:
     experts:
         - imports/zabbix-employee

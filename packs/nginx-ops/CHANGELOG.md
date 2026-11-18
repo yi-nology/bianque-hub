@@ -1,3 +1,10 @@
+## 0.3.0 (2026-11-18)
+
+- 编目变更卡首批两张（批607 能力普及轮）：`nginx-config-reload`（-t 前置纪律 + reload
+  连接排空语义，risk 2）与 `nginx-log-reopen`（logrotate 后 USR1 重开日志句柄，risk 1）
+  ——承接 nginx-lifecycle-ops 技能既有方法论；包侧只声明编目，审批/执行/验证归平台。
+- 技能 nginx-lifecycle-ops 升 0.2.0（frontmatter 增 provides_changes 挂靠两张卡）。
+
 ## 0.2.0 (2026-10-10)
 
 - **nginx-platform-analyst 工具授权最小权限收敛**（bianque 批次二百六十四，除 oo-devops 外全 hub 清扫）：

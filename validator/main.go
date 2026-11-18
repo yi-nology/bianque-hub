@@ -147,7 +147,10 @@ type packManifest struct {
 	Changelog   string                 `yaml:"changelog"`
 	DependsOn   *packDepends           `yaml:"depends_on"`
 	UserConfig  []packUserConfigOption `yaml:"user_config"`
-	Provides    struct {
+	// RequiresCredentials 凭证类型前提（警告级声明，与主仓 PackManifest 同名同构；
+	// 批607 披露面普及：消费专用凭证面的包必须如实声明）。
+	RequiresCredentials []string `yaml:"requires_credentials"`
+	Provides            struct {
 		Experts []string `yaml:"experts"`
 		Skills  []string `yaml:"skills"`
 	} `yaml:"provides"`
@@ -399,7 +402,8 @@ func (v *validator) checkPack(packDir, packName string) {
 	}
 
 	m := v.checkPackManifestGate(packDir, packName, add)
-	expertSlugs, skillRefs := v.checkPackExperts(packDir, packName, add)
+	expertSlugs, skillRefs, servers := v.checkPackExperts(packDir, packName, add)
+	v.checkPackCredentialDisclosure(packName, m.RequiresCredentials, servers, add)
 	present := v.checkPackSkills(packDir, packName, m, add)
 	v.checkPackProvides(packDir, packName, m, expertSlugs, skillRefs, present, add)
 	v.checkPackChanges(packDir, packName, add)

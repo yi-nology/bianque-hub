@@ -61,10 +61,11 @@ func (v *validator) checkExpertInstall() {
 // 注意不做工具面交叉核对：受审执行走引擎直取（不经专家 allowlist），与
 // requires_mcp 的工具面覆盖语义不同（那是技能采集面的授权）。
 
-func (v *validator) checkPackExperts(packDir, packName string, add func(level, format string, a ...any)) (map[string]string, map[string][]string) {
+func (v *validator) checkPackExperts(packDir, packName string, add func(level, format string, a ...any)) (map[string]string, map[string][]string, map[string]bool) {
 	// 专家目录
-	expertSlugs := map[string]string{} // slug → kind
-	skillRefs := map[string][]string{} // slug → 挂载技能名（存在性核对用）
+	expertSlugs := map[string]string{}   // slug → kind
+	skillRefs := map[string][]string{}   // slug → 挂载技能名（存在性核对用）
+	consumedServers := map[string]bool{} // 包内专家 tools 引用过的 server 集合（披露面判据用，批607）
 	expertDirs, _ := os.ReadDir(packDir)
 	for _, e := range expertDirs {
 		if !e.IsDir() || e.Name() == "skills" || e.Name() == "prompts" || e.Name() == "mcp" || e.Name() == "credentials" || e.Name() == "knowledge" || e.Name() == "render" {
@@ -172,6 +173,9 @@ func (v *validator) checkPackExperts(packDir, packName string, add func(level, f
 			toolServers = append(toolServers, t.Server)
 		}
 		v.expertTools[d.Slug] = toolServers
+		for _, srv := range toolServers {
+			consumedServers[srv] = true
+		}
 		for _, s := range d.Skills {
 			name := skillRefName(s)
 			if name == "" {
@@ -183,7 +187,7 @@ func (v *validator) checkPackExperts(packDir, packName string, add func(level, f
 		v.expertRefs[d.Slug] = expertRef{pack: packName, skills: skillRefs[d.Slug], tools: toolServers}
 	}
 
-	return expertSlugs, skillRefs
+	return expertSlugs, skillRefs, consumedServers
 }
 
 func (v *validator) checkPackProvides(packDir, packName string, m packManifest, expertSlugs map[string]string, skillRefs map[string][]string, present map[string]bool, add func(level, format string, a ...any)) {

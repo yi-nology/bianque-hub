@@ -209,6 +209,16 @@ func hasMsg(findings []finding, sub string) bool {
 	return false
 }
 
+func warningMessages(findings []finding) []string {
+	var out []string
+	for _, f := range findings {
+		if f.level == "WARN" {
+			out = append(out, f.msg)
+		}
+	}
+	return out
+}
+
 func errorMessages(findings []finding) []string {
 	var out []string
 	for _, f := range findings {
@@ -731,5 +741,36 @@ func TestDependsOnGate(t *testing.T) {
 	findings, errN, _ = run([]string{mk(t, "  mcp:\n    - name: ''\n")})
 	if errN == 0 || !hasMsg(findings, "depends_on.mcp 含空条目") {
 		t.Fatalf("空 mcp 条目应 ERROR：%v", errorMessages(findings))
+	}
+}
+
+// TestRunCredentialDisclosure 披露面判据（批607）：专家 tools 引用 datasources
+// server 而未声明 requires_credentials ⇒ WARN；补声明后 WARN 消失（双向验证）。
+func TestRunCredentialDisclosure(t *testing.T) {
+	root := t.TempDir()
+	pack := filepath.Join(root, "demo")
+	writeMinimalPack(t, pack)
+	manifest := readFileT(t, filepath.Join(pack, "pack.yaml"))
+	agent := readFileT(t, filepath.Join(pack, "demo-expert", "agent.yaml"))
+	// 专家 tools 增引 datasources server（不声明前提）
+	writeFileT(t, filepath.Join(pack, "demo-expert", "agent.yaml"), strings.Replace(agent,
+		"route_keywords: [测试词]", "route_keywords: [测试词]\nextra_tools_probe: datasources", 1))
+	_ = manifest
+	// 用 tools 面真引用：直接改 tools 段加第二个 server
+	agent2 := readFileT(t, filepath.Join(pack, "demo-expert", "agent.yaml"))
+	writeFileT(t, filepath.Join(pack, "demo-expert", "agent.yaml"), strings.Replace(agent2,
+		"    allow: [get_logs, probe_host, run_readonly_command]",
+		"    allow: [get_logs, probe_host, run_readonly_command]\n  - server: datasources\n    allow: [query_datasource]", 1))
+	findings, _, _ := run([]string{pack})
+	if !hasMsg(findings, "未声明 requires_credentials: [datasources]") {
+		t.Fatalf("datasources 消费未声明应 WARN：%v", warningMessages(findings))
+	}
+	// 补声明 ⇒ WARN 消失
+	m := readFileT(t, filepath.Join(pack, "pack.yaml"))
+	writeFileT(t, filepath.Join(pack, "pack.yaml"), strings.Replace(m,
+		"description: 测试包", "description: 测试包\nrequires_credentials: [datasources]", 1))
+	findings2, _, _ := run([]string{pack})
+	if hasMsg(findings2, "未声明 requires_credentials: [datasources]") {
+		t.Fatalf("声明后 WARN 应消失：%v", warningMessages(findings2))
 	}
 }
