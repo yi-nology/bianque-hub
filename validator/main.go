@@ -111,16 +111,83 @@ var destructiveExemptions = map[string]string{
 // ---- 结构 ----
 
 type packManifest struct {
-	APIVersion  int          `yaml:"api_version"`
-	Name        string       `yaml:"name"`
-	Version     string       `yaml:"version"`
-	Description string       `yaml:"description"`
-	Changelog   string       `yaml:"changelog"`
-	DependsOn   *packDepends `yaml:"depends_on"`
+	APIVersion  int                    `yaml:"api_version"`
+	Name        string                 `yaml:"name"`
+	Version     string                 `yaml:"version"`
+	Description string                 `yaml:"description"`
+	Changelog   string                 `yaml:"changelog"`
+	DependsOn   *packDepends           `yaml:"depends_on"`
+	UserConfig  []packUserConfigOption `yaml:"user_config"`
 	Provides    struct {
 		Experts []string `yaml:"experts"`
 		Skills  []string `yaml:"skills"`
 	} `yaml:"provides"`
+}
+
+// packUserConfigOption pack.yaml user_config[] 项（批601，形态与 bianque 批598E
+// PackUserConfigOption 同构；key/label/type/required/sensitive/default）。
+type packUserConfigOption struct {
+	Key       string `yaml:"key"`
+	Label     string `yaml:"label"`
+	Type      string `yaml:"type"`
+	Required  bool   `yaml:"required"`
+	Sensitive bool   `yaml:"sensitive"`
+	Default   any    `yaml:"default"`
+}
+
+// checkPackUserConfig user_config 声明面校验（批601，判据与 bianque 批598E
+// validatePackUserConfig 逐字同源：key 法度/唯一/type 词表/default 类型匹配。
+// 源头挡非法声明——hub CI 拒收即进不了市场；平台装载期是第二道同判据闸，
+// 两处判据文字互指，改一处必须同步另一处）。
+func checkPackUserConfig(add func(level, format string, a ...any), opts []packUserConfigOption) {
+	seen := map[string]bool{}
+	for i := range opts {
+		o := &opts[i]
+		if !userConfigKeyRe.MatchString(o.Key) {
+			add("ERROR", "pack.yaml user_config[%d]: 键 %q 非法（须 ^[a-z][a-z0-9_]{0,63}$）", i, o.Key)
+			continue
+		}
+		if seen[o.Key] {
+			add("ERROR", "pack.yaml user_config: 键 %q 重复声明", o.Key)
+			continue
+		}
+		seen[o.Key] = true
+		if !userConfigTypes[o.Type] {
+			add("ERROR", "pack.yaml user_config[%s]: 类型 %q 非法（词表 string|bool|number）", o.Key, o.Type)
+			continue
+		}
+		if o.Default == nil {
+			continue
+		}
+		if !userConfigDefaultMatches(o.Type, o.Default) {
+			add("ERROR", "pack.yaml user_config[%s]: default 值 %v 与声明类型 %q 不匹配", o.Key, o.Default, o.Type)
+		}
+	}
+}
+
+// userConfigKeyRe 键法度（bianque packs_load.go packUserConfigKeyRe 同源）。
+var userConfigKeyRe = regexp.MustCompile(`^[a-z][a-z0-9_]{0,63}$`)
+
+// userConfigTypes 类型词表（bianque packs_load.go packUserConfigTypes 同源）。
+var userConfigTypes = map[string]bool{"string": true, "bool": true, "number": true}
+
+// userConfigDefaultMatches default 类型匹配（yaml.v3 解码面：整数=int、
+// 小数=float64；bool/string 直判——bianque userConfigDefaultMatches 同源）。
+func userConfigDefaultMatches(typ string, v any) bool {
+	switch typ {
+	case "string":
+		_, ok := v.(string)
+		return ok
+	case "bool":
+		_, ok := v.(bool)
+		return ok
+	case "number":
+		switch v.(type) {
+		case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
+			return true
+		}
+	}
+	return false
 }
 
 // packDepends pack.yaml 顶层 depends_on（bianque 批次四百四十二装包环境前提校验对齐）。
@@ -586,6 +653,9 @@ func (v *validator) checkPack(packDir, packName string) {
 	if m.DependsOn != nil {
 		v.packDependsOn[packName] = m.DependsOn
 	}
+	// user_config 声明面校验（批601，镜像 bianque 批598E validatePackUserConfig 同判据：
+	// 源头挡非法声明——hub CI 拒收后包进不了市场，平台装载期是第二道同判据闸）。
+	checkPackUserConfig(add, m.UserConfig)
 	// provenance.json 是**市场包**的来源标记：hub 仓根的每个包都要有（装进扁鹊
 	// 靠它识别为市场版），内嵌快照按内容资产单源纪律本就不该有（它是 hub packs/
 	// 的副本）。故「必须有」这条要求只在 hub 模式成立；在场就照常校验内容

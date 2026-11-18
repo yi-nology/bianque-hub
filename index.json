@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-17",
+  "generated_at": "2026-11-18",
   "tool": "bq-markettool index-gen",
   "packs": [
     {
@@ -66,7 +66,10 @@
       ],
       "skills": 4,
       "changes": 0,
-      "chain": false
+      "chain": false,
+      "requires_credentials": [
+        "gitlab"
+      ]
     },
     {
       "name": "k8s-ops",
@@ -209,7 +212,10 @@
       ],
       "skills": 5,
       "changes": 1,
-      "chain": true
+      "chain": true,
+      "requires_credentials": [
+        "kubeconfig"
+      ]
     },
     {
       "name": "web-ops",
