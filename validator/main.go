@@ -23,7 +23,6 @@ import (
 	"path/filepath"
 	"regexp"
 	"slices"
-	"sort"
 	"strings"
 
 	"github.com/Masterminds/semver/v3"
@@ -1170,7 +1169,7 @@ func (v *validator) checkDepends() {
 	for name := range v.packDependsOn {
 		packs = append(packs, name)
 	}
-	sort.Strings(packs)
+	slices.Sort(packs)
 	for _, pack := range packs {
 		deps := v.packDependsOn[pack]
 		for _, dep := range deps.Skills {
@@ -1246,7 +1245,7 @@ func versionInRange(version, expr string) (bool, error) {
 func changeTainted(s string) string {
 	inSingle := false
 	runes := []rune(s)
-	for i := 0; i < len(runes); i++ {
+	for i := range runes {
 		r := runes[i]
 		if inSingle {
 			if r == '\'' {
@@ -1297,7 +1296,7 @@ func (v *validator) checkReadme() {
 	for name := range v.packVersions {
 		names = append(names, name)
 	}
-	sort.Strings(names)
+	slices.Sort(names)
 	for _, name := range names {
 		ver := v.packVersions[name]
 		rv, ok := table[name]
@@ -1316,8 +1315,13 @@ func (v *validator) checkReadme() {
 // 侧自动降级现场扫描）；在而漂移=ERROR——多录/漏包/版本不符逼 CI 重新
 // `bq-markettool index-gen` 后入库，安装正确性不依赖索引（install 仍现扫目录）。
 // 包清单自本容器目录现扫（不依赖跨根累积的 packVersions——多根调用互不污染）。
+//
+// 索引是仓级资产，恒取 packs 容器的父目录（仓根）。packsRoot 先 Clean 再 Dir：
+// 带尾斜杠的 "./packs/" 不归一时 Dir("./packs/")="packs"，索引被找成
+// packs/index.json——读不到即走 IsNotExist 分支只 WARN 便 return，ERROR 级
+// 对账（漏包/多录/版本漂移）整段被静默跳过，退出码 0 假绿（issue #3）。
 func (v *validator) checkIndex(packsRoot string) {
-	raw, err := os.ReadFile(filepath.Join(filepath.Dir(packsRoot), "index.json"))
+	raw, err := os.ReadFile(filepath.Join(filepath.Dir(filepath.Clean(packsRoot)), "index.json"))
 	if err != nil {
 		if os.IsNotExist(err) {
 			v.add("WARN", "index", "index.json 缺失（仓根）——跑 `bq-markettool index-gen -hub <本仓>` 生成并提交（检索面走索引，缺省降级现场扫描；校验内嵌快照请用 --mode=embedded）")
@@ -1439,7 +1443,7 @@ func scanDangerous(roots ...string) []finding {
 			return nil
 		})
 	}
-	sort.Slice(out, func(i, j int) bool { return out[i].pack < out[j].pack })
+	slices.SortFunc(out, func(a, b finding) int { return strings.Compare(a.pack, b.pack) })
 	return out
 }
 
@@ -1511,7 +1515,7 @@ func scanSensitive(roots ...string) []finding {
 			return nil
 		})
 	}
-	sort.Slice(out, func(i, j int) bool { return out[i].pack < out[j].pack })
+	slices.SortFunc(out, func(a, b finding) int { return strings.Compare(a.pack, b.pack) })
 	return out
 }
 
