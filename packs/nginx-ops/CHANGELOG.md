@@ -1,3 +1,10 @@
+## 0.4.0 (2026-11-19)
+
+- 新增可用性诊断链 `workflow/nginx-availability-audit`（v3 图模型，批607 C 段）：
+  可用性面分诊（502/504/连接拒/worker 打满，钉扎 nginx-availability-triage）→
+  路由面深挖（404/重定向循环/location，钉扎 nginx-route-triage）两步收口；
+  路由词避开「巡检/体检」域词防劫持全域入口。
+
 ## 0.3.0 (2026-11-18)
 
 - 编目变更卡首批两张（批607 能力普及轮）：`nginx-config-reload`（-t 前置纪律 + reload
