@@ -7,6 +7,35 @@
 // 规则与扁鹊 internal/agents 装载校验（packs.go）同源，但独立实现——平台私仓
 // 不外泄，规则漂移以本文件注释为准绳同步。
 //
+// # 文件布局（批607 拆分；判据逐字未动，validator 输出与拆分前逐字节一致）
+//
+//	main.go        编排器（mode/validator 核心结构 + main/parseArgs/runWithMode
+//	               + checkPack 薄编排 + checkPackManifestGate 契约门）
+//	manifest 相关常量（api_version/插件名法度/semver/正则）也在本文件头部——
+//	它们是「契约常量」，与主仓 pack-lint（对账型判据）共享的事实：改这里须同步
+//	主仓 internal/tooling/packlint 与 PACK_GUIDE。
+//	experts.go     专家目录判据 + provides/experts 装配核对 + 独立安装性
+//	skills.go      技能 frontmatter 判据 + frontmatter/skillRef 工具
+//	changes.go     changes/*.yaml 契约门 + changeTainted 模板快检
+//	chains.go      chain.yaml（v2 steps / v3 graph 双形态）判据 + 节点视图
+//	depends.go     depends_on 环境前提 + 版本区间判据
+//	userconfig.go  user_config 声明面校验（镜像主仓批598E 同判据）
+//	crossrefs.go   跨包核对（技能钉扎工具面覆盖 / 变更块 slug 唯一）
+//	repoassets.go  仓级资产（README 包清单表 / index.json 对账）
+//	scans.go       脱敏扫描 + 危险命令扫描
+//	assets.go      包资产域（render/charts/挂载核对 + 平台耦合文件 + mcp 契约集）
+//	keywords.go    路由关键词跨包唯一性登记
+//
+// # 与主仓 pack-lint 的判据分工（两份判据同管包内容，分工面必须清楚）
+//
+//   - 本校验器 = **内容契约**（独立可跑）：包内容 vs PACK_GUIDE 契约。
+//   - 主仓 internal/tooling/packlint = **登记面对账**（只能在主仓跑）：
+//     工具面 registry 对账 / 破坏性工具单源镜像对账 / skills-lock 核对——
+//     它判的是「内容 vs 平台登记面」，没有平台登记面就判不了。
+//   - 共享契约常量（api_version=1、插件名法度、SemVer 形态）两仓各有一份：
+//     漂移形态 = 同一份 pack.yaml 两边裁决不一致。改任一侧须对表另一侧
+//     （本文件头部常量 ↔ 主仓 internal/agents packs.go / tooling/packlint）。
+//
 // 用法（约定在仓库根运行，脱敏扫描自动覆盖当前目录，无需显式传入）：
 //
 //	go run ./validator              # 等价于 ./packs
@@ -25,7 +54,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/Masterminds/semver/v3"
 	"gopkg.in/yaml.v3"
 )
 
@@ -109,6 +137,8 @@ var destructiveExemptions = map[string]string{
 
 // ---- 结构 ----
 
+// ---- 结构 ----
+
 type packManifest struct {
 	APIVersion  int                    `yaml:"api_version"`
 	Name        string                 `yaml:"name"`
@@ -125,85 +155,6 @@ type packManifest struct {
 
 // packUserConfigOption pack.yaml user_config[] 项（批601，形态与 bianque 批598E
 // PackUserConfigOption 同构；key/label/type/required/sensitive/default）。
-type packUserConfigOption struct {
-	Key       string `yaml:"key"`
-	Label     string `yaml:"label"`
-	Type      string `yaml:"type"`
-	Required  bool   `yaml:"required"`
-	Sensitive bool   `yaml:"sensitive"`
-	Default   any    `yaml:"default"`
-}
-
-// checkPackUserConfig user_config 声明面校验（批601，判据与 bianque 批598E
-// validatePackUserConfig 逐字同源：key 法度/唯一/type 词表/default 类型匹配。
-// 源头挡非法声明——hub CI 拒收即进不了市场；平台装载期是第二道同判据闸，
-// 两处判据文字互指，改一处必须同步另一处）。
-func checkPackUserConfig(add func(level, format string, a ...any), opts []packUserConfigOption) {
-	seen := map[string]bool{}
-	for i := range opts {
-		o := &opts[i]
-		if !userConfigKeyRe.MatchString(o.Key) {
-			add("ERROR", "pack.yaml user_config[%d]: 键 %q 非法（须 ^[a-z][a-z0-9_]{0,63}$）", i, o.Key)
-			continue
-		}
-		if seen[o.Key] {
-			add("ERROR", "pack.yaml user_config: 键 %q 重复声明", o.Key)
-			continue
-		}
-		seen[o.Key] = true
-		if !userConfigTypes[o.Type] {
-			add("ERROR", "pack.yaml user_config[%s]: 类型 %q 非法（词表 string|bool|number）", o.Key, o.Type)
-			continue
-		}
-		if o.Default == nil {
-			continue
-		}
-		if !userConfigDefaultMatches(o.Type, o.Default) {
-			add("ERROR", "pack.yaml user_config[%s]: default 值 %v 与声明类型 %q 不匹配", o.Key, o.Default, o.Type)
-		}
-	}
-}
-
-// userConfigKeyRe 键法度（bianque packs_load.go packUserConfigKeyRe 同源）。
-var userConfigKeyRe = regexp.MustCompile(`^[a-z][a-z0-9_]{0,63}$`)
-
-// userConfigTypes 类型词表（bianque packs_load.go packUserConfigTypes 同源）。
-var userConfigTypes = map[string]bool{"string": true, "bool": true, "number": true}
-
-// userConfigDefaultMatches default 类型匹配（yaml.v3 解码面：整数=int、
-// 小数=float64；bool/string 直判——bianque userConfigDefaultMatches 同源）。
-func userConfigDefaultMatches(typ string, v any) bool {
-	switch typ {
-	case "string":
-		_, ok := v.(string)
-		return ok
-	case "bool":
-		_, ok := v.(bool)
-		return ok
-	case "number":
-		switch v.(type) {
-		case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
-			return true
-		}
-	}
-	return false
-}
-
-// packDepends pack.yaml 顶层 depends_on（bianque 批次四百四十二装包环境前提校验对齐）。
-// 平台在 Install/Upgrade 暂存后、激活前判定：技能依赖核目标实例技能库的存在性+版本区间
-// （不满足即拒装并删除暂存，allow_missing_deps 才放行）；MCP 依赖只核「已配置且启用」
-// （min_version 无版本源不判，属展示面字段）。技能依赖是 skill.Decl 双形态（裸串 /
-// {name, version, optional}）；**pack 级 optional 被平台忽略、一律按必需判**——声明即误描。
-type packDepends struct {
-	Skills []packDepSkill `yaml:"skills"`
-	MCP    []packDepMCP   `yaml:"mcp"`
-}
-
-type packDepSkill struct {
-	Name     string `yaml:"name"`
-	Version  string `yaml:"version"`
-	Optional bool   `yaml:"optional"`
-}
 
 // UnmarshalYAML 兼容裸串形态（平台 skill.Decl 同款双形态）。
 func (s *packDepSkill) UnmarshalYAML(unmarshal func(any) error) error {
@@ -221,160 +172,6 @@ func (s *packDepSkill) UnmarshalYAML(unmarshal func(any) error) error {
 	return nil
 }
 
-type packDepMCP struct {
-	Name       string `yaml:"name"`
-	MinVersion string `yaml:"min_version"`
-}
-
-// mcpServer 工具面声明（agent.yaml 的 tools 与 SKILL.md 的 requires_mcp 同构）。
-type mcpServer struct {
-	Server string   `yaml:"server"`
-	Tools  []string `yaml:"tools"`
-	Allow  []string `yaml:"allow"`
-}
-
-type agentDef struct {
-	Slug           string      `yaml:"slug"`
-	Name           string      `yaml:"name"`
-	Kind           string      `yaml:"kind"`
-	PromptFile     string      `yaml:"prompt_file"`
-	PromptIncludes []string    `yaml:"prompt_includes"`
-	Skills         []any       `yaml:"skills"`
-	RoutePriority  string      `yaml:"route_priority"`
-	RouteGroup     string      `yaml:"route_group"`
-	RouteDesc      string      `yaml:"route_desc"`
-	RouteKeywords  []string    `yaml:"route_keywords"`
-	Symptoms       []string    `yaml:"symptoms"`
-	Tools          []mcpServer `yaml:"tools"`
-}
-
-type chainStep struct {
-	Type        string `yaml:"type"`
-	Agent       string `yaml:"agent"`
-	Instruction string `yaml:"instruction"`
-	Skill       any    `yaml:"skill"`
-}
-
-// graphNode 图模型链的节点（v3；spec 2026-10-22 §5.1）。
-//
-// 只镜像**内容契约**要用到的字段：链内执行单元引用谁、钉扎哪个技能、
-// 有没有指令。图的拓扑（边/环/可达性/变量引用/预算）由平台装载期深判，
-// 本仓不重复实现（见 chainNodeViews）。
-type graphNode struct {
-	ID          string `yaml:"id"`
-	Type        string `yaml:"type"`
-	Title       string `yaml:"title"`
-	Agent       string `yaml:"agent"`
-	Instruction string `yaml:"instruction"`
-	Skill       any    `yaml:"skill"`
-}
-
-type chainDef struct {
-	Slug          string      `yaml:"slug"`
-	Name          string      `yaml:"name"`
-	RoutePriority string      `yaml:"route_priority"`
-	RouteGroup    string      `yaml:"route_group"`
-	RouteDesc     string      `yaml:"route_desc"`
-	RouteKeywords []string    `yaml:"route_keywords"`
-	Symptoms      []string    `yaml:"symptoms"`
-	Steps         []chainStep `yaml:"steps"`
-	// Version 链形状版本：0/缺省 = v2 树模型（steps）；≥3 = 图模型（nodes+edges）。
-	Version int         `yaml:"version"`
-	Nodes   []graphNode `yaml:"nodes"`
-}
-
-// isGraph 是否图模型链（与平台 ChainDef.IsGraph 同口径：version≥3 或有节点）。
-func (c chainDef) isGraph() bool { return c.Version >= 3 || len(c.Nodes) > 0 }
-
-// chainNodeView 链内一个执行单元的归一视图：v2 步骤与 v3 节点共用同一套内容判据。
-type chainNodeView struct {
-	pos         string // 定位串：v2「步骤1」、v3「节点 n1」
-	kind        string
-	agent       string
-	instruction string
-	skill       any
-}
-
-// chainNodeViews 把链的步骤/节点归一成同一套判据的视图。
-//
-// v2（steps）与 v3（nodes+edges，spec 2026-10-22 §5.1）是**两种链形状**，
-// 但**内容契约同源**：链内执行单元只能引用叶子专家、禁 engine 专家、
-// 技能钉扎须能在本包找到。平台侧的次序也是「先按 v2 原样校验再迁移」，
-// 故本仓对两种形状用同一套内容判据。
-//
-// 图的**拓扑**判据（边指向不存在的节点 / 有环 / 可达性 / 变量引用 /
-// 节点与层数预算）**不在这里重复实现**——那是平台装载期的深判，
-// 在此重写一份就是两份真相，且必然漂移。
-func chainNodeViews(c chainDef) []chainNodeView {
-	if c.isGraph() {
-		out := make([]chainNodeView, 0, len(c.Nodes))
-		for _, n := range c.Nodes {
-			kind := n.Type
-			if kind == "" {
-				kind = "agent"
-			}
-			pos := n.ID
-			if pos == "" {
-				pos = "?" // 缺 id 是平台装载期的判据；此处不重复判，只为定位不空
-			}
-			out = append(out, chainNodeView{
-				pos:         "节点 " + pos,
-				kind:        kind,
-				agent:       n.Agent,
-				instruction: n.Instruction,
-				skill:       n.Skill,
-			})
-		}
-		return out
-	}
-	out := make([]chainNodeView, 0, len(c.Steps))
-	for i, st := range c.Steps {
-		kind := st.Type
-		if kind == "" {
-			kind = "agent"
-		}
-		out = append(out, chainNodeView{
-			pos:         fmt.Sprintf("步骤%d", i+1),
-			kind:        kind,
-			agent:       st.Agent,
-			instruction: st.Instruction,
-			skill:       st.Skill,
-		})
-	}
-	return out
-}
-
-type skillFront struct {
-	Name        string      `yaml:"name"`
-	Description string      `yaml:"description"`
-	Mode        string      `yaml:"mode"`
-	Version     string      `yaml:"version"`
-	Maturity    string      `yaml:"maturity"`
-	RequiresMCP []mcpServer `yaml:"requires_mcp"`
-	// ProvidesChanges 编目变更块引用（批次九十四「受审执行」）：本技能方法论
-	// 覆盖的处方编目 slug 清单，须与包内（或跨包）changes/*.yaml 对上——
-	// 开放键，其他运行时可忽略（requires_mcp 同例）。
-	ProvidesChanges []string `yaml:"provides_changes"`
-}
-
-// changeDef 编目变更块（<包>/changes/<slug>.yaml；平台 agents.ChangeDef 同构镜像，
-// 校验子集）。治理红线：包侧只声明编目，审批/执行/验证归平台。
-type changeDef struct {
-	APIVersion          int      `yaml:"api_version"`
-	Slug                string   `yaml:"slug"`
-	Title               string   `yaml:"title"`
-	RequestType         string   `yaml:"request_type"`
-	Risk                int      `yaml:"risk"`
-	Kind                string   `yaml:"kind"`
-	Server              string   `yaml:"server"`
-	Tool                string   `yaml:"tool"`
-	Rollback            string   `yaml:"rollback"`
-	Commands            []string `yaml:"commands"`
-	VerifyReadonlyTools []struct {
-		Tool string `yaml:"tool"`
-	} `yaml:"verify_readonly_tools"`
-}
-
 type finding struct {
 	level string // ERROR | WARN
 	pack  string
@@ -382,26 +179,6 @@ type finding struct {
 }
 
 // kwFirst 路由词首登记录（平台 packs.go registerRouteKeyword 同构镜像）。
-type kwFirst struct{ prio, pack string }
-
-// registerKeyword 镜像平台跨包冲突规则：同包 OK；跨包同优先级 = 真歧义（ERROR，
-// 平台装载会失败——PR 必须在 CI 拦下）；跨层 = 警告（高优先级胜出）。
-// 局限：hub 只见本仓包，与平台内置域词（_shared/os-basics 内置版）的冲突在此
-// 查不到，靠 CONTRIBUTING 路由词纪律人工把关。
-func registerKeyword(kwOwner map[string]kwFirst, kw, pack, prio string) (level, msg string, dup bool) {
-	first, hit := kwOwner[kw]
-	if !hit {
-		kwOwner[kw] = kwFirst{prio: prio, pack: pack}
-		return "", "", false
-	}
-	if first.pack == pack {
-		return "", "", false
-	}
-	if first.prio == prio {
-		return "ERROR", fmt.Sprintf("关键词/症状 %q 在 %s 与 %s 同优先级 %s 重复（真歧义，平台装载会失败）", kw, first.pack, pack, prio), true
-	}
-	return "WARN", fmt.Sprintf("关键词/症状 %q 跨层重复（%s@%s 与 %s@%s），高优先级胜出", kw, first.pack, first.prio, pack, prio), true
-}
 
 // mode 校验模式：判据按「被校验对象是什么」分档。
 //
@@ -432,6 +209,8 @@ const (
 )
 
 // validator 全仓校验状态：跨包唯一性登记 + 全包扫描后才能判的延迟核对项。
+
+// validator 全仓校验状态：跨包唯一性登记 + 全包扫描后才能判的延迟核对项。
 type validator struct {
 	mode         mode
 	findings     []finding
@@ -454,16 +233,6 @@ type validator struct {
 }
 
 // expertRef 专家闭包引用快照（checkExpertInstall 的核对输入）。
-type expertRef struct {
-	pack   string
-	skills []string
-	tools  []string
-}
-
-// mountCheck 记一处「专家↔技能」绑定：chainSlug 空 = 专家挂载，非空 = 链步骤钉扎。
-type mountCheck struct {
-	pack, expert, skill, chainSlug string
-}
 
 func (v *validator) add(level, pack, format string, a ...any) {
 	v.findings = append(v.findings, finding{level, pack, fmt.Sprintf(format, a...)})
@@ -487,6 +256,11 @@ func main() {
 		os.Exit(1)
 	}
 }
+
+// parseArgs 解析命令行：`--mode=hub|embedded`（默认 hub）+ 位置参数（校验目录）。
+//
+// 不用 flag 包：flag.Parse 遇首个位置参数即停，
+// `validator ./packs --mode=embedded` 里的模式开关会被当成目录参数吞掉。
 
 // parseArgs 解析命令行：`--mode=hub|embedded`（默认 hub）+ 位置参数（校验目录）。
 //
@@ -528,9 +302,14 @@ func parseArgs(args []string) (mode, []string, error) {
 }
 
 // run 执行全部校验层（hub 模式；独立于 main 以便测试）。
+
+// run 执行全部校验层（hub 模式；独立于 main 以便测试）。
 func run(dirs []string) ([]finding, int, int) {
 	return runWithMode(dirs, modeHub)
 }
+
+// runWithMode 按模式执行全部校验层：包发现 → 包级校验 → 跨包核对 →
+// 版本同步核对 → 脱敏扫描，返回 findings 与 error/warning 计数。
 
 // runWithMode 按模式执行全部校验层：包发现 → 包级校验 → 跨包核对 →
 // 版本同步核对 → 脱敏扫描，返回 findings 与 error/warning 计数。
@@ -619,16 +398,32 @@ func (v *validator) checkPack(packDir, packName string) {
 		v.add(level, packName, format, a...)
 	}
 
+	m := v.checkPackManifestGate(packDir, packName, add)
+	expertSlugs, skillRefs := v.checkPackExperts(packDir, packName, add)
+	present := v.checkPackSkills(packDir, packName, m, add)
+	v.checkPackProvides(packDir, packName, m, expertSlugs, skillRefs, present, add)
+	v.checkPackChanges(packDir, packName, add)
+	v.checkPackCoupledFiles(packDir, expertSlugs, add)
+	v.checkPackChain(packDir, packName, expertSlugs, present, add)
+	v.checkPackAssets(packDir, packName, add)
+}
+
+// checkCrossRefs 全包扫描后核对工具面覆盖：技能 requires_mcp 声明的 server 必须
+// 出现在挂载它的专家（或链步骤目标专家）的 tools 授权里——「技能钉了面、专家
+// 没授权」是发布后不可达事故（obs-ops 0.3.0 loki-triage 即此形态），CI 必拦。
+// 目标专家或技能不在本仓（跨包/平台内置）时无法判定，跳过（存在性另有 WARN）。
+
+func (v *validator) checkPackManifestGate(packDir, packName string, add func(level, format string, a ...any)) packManifest {
 	// pack.yaml 契约门
 	raw, err := os.ReadFile(filepath.Join(packDir, "pack.yaml"))
 	if err != nil {
 		add("ERROR", "读 pack.yaml: %v", err)
-		return
+		return packManifest{}
 	}
 	var m packManifest
 	if err := yaml.Unmarshal(raw, &m); err != nil {
 		add("ERROR", "pack.yaml 解析: %v", err)
-		return
+		return packManifest{}
 	}
 	if m.APIVersion != wantAPIVersion {
 		add("ERROR", "pack.yaml api_version=%d 与契约 %d 不兼容", m.APIVersion, wantAPIVersion)
@@ -686,1085 +481,5 @@ func (v *validator) checkPack(packDir, packName string) {
 	}
 	v.packVersions[packName] = m.Version
 
-	// 专家目录
-	expertSlugs := map[string]string{} // slug → kind
-	skillRefs := map[string][]string{} // slug → 挂载技能名（存在性核对用）
-	expertDirs, _ := os.ReadDir(packDir)
-	for _, e := range expertDirs {
-		if !e.IsDir() || e.Name() == "skills" || e.Name() == "prompts" || e.Name() == "mcp" || e.Name() == "credentials" || e.Name() == "knowledge" || e.Name() == "render" {
-			continue
-		}
-		agentPath := filepath.Join(packDir, e.Name(), "agent.yaml")
-		araw, err := os.ReadFile(agentPath)
-		if err != nil {
-			continue // 无 agent.yaml 的目录（如 _trash 类）跳过
-		}
-		var d agentDef
-		if err := yaml.Unmarshal(araw, &d); err != nil {
-			add("ERROR", "%s/agent.yaml 解析: %v", e.Name(), err)
-			continue
-		}
-		if d.Slug == "" {
-			add("ERROR", "%s/agent.yaml 缺 slug", e.Name())
-			continue
-		}
-		if prev, dup := v.expertOwner[d.Slug]; dup {
-			add("ERROR", "专家 slug %q 跨包重复（%s 已占用）", d.Slug, prev)
-		} else {
-			v.expertOwner[d.Slug] = packName
-		}
-		expertSlugs[d.Slug] = d.Kind
-		if !kinds[d.Kind] {
-			add("ERROR", "%s kind=%q 非法（engine|llm|stub）", d.Slug, d.Kind)
-		}
-		if !prioRe.MatchString(d.RoutePriority) {
-			add("ERROR", "%s route_priority=%q 非法（P0-P6）", d.Slug, d.RoutePriority)
-		}
-		if d.RouteGroup != "" && !routeGroups[d.RouteGroup] {
-			add("ERROR", "%s route_group=%q 不在平台 route_groups 白名单", d.Slug, d.RouteGroup)
-		}
-		// 包侧新契约（imports/ 前缀专家）：P0 红线禁用、P2 起步、route_desc 必备。
-		// 等位接管包（specialists/、workflow/ 等平台前缀）镜像内置优先级与形态，不受此限。
-		if strings.HasPrefix(d.Slug, "imports/") {
-			if d.RoutePriority == "P0" {
-				add("ERROR", "%s 包侧专家禁用 P0（P0 红线是平台专家域）", d.Slug)
-			} else if d.RoutePriority == "P1" {
-				add("WARN", "%s 包侧专家应从 P2 起步（P1 需与内置入口错位的充分理由）", d.Slug)
-			}
-			if d.RouteDesc == "" {
-				add("WARN", "%s 缺 route_desc（LLM 语义面，防路由错位的第一防线）", d.Slug)
-			}
-		}
-		if len(d.RouteKeywords) == 0 {
-			add("WARN", "%s 无 route_keywords（路由不可达，孤立专家）", d.Slug)
-		}
-		for _, kw := range append(slices.Clone(d.RouteKeywords), d.Symptoms...) {
-			if level, msg, dup := registerKeyword(v.kwOwner, kw, packName, d.RoutePriority); dup {
-				add(level, "%s: %s", d.Slug, msg)
-			}
-		}
-		if d.Kind == "llm" {
-			if d.PromptFile == "" {
-				add("ERROR", "%s kind=llm 必填 prompt_file", d.Slug)
-			} else if _, err := os.Stat(filepath.Join(packDir, e.Name(), d.PromptFile)); err != nil {
-				add("ERROR", "%s prompt_file %q 不存在", d.Slug, d.PromptFile)
-			}
-		}
-		for _, inc := range d.PromptIncludes {
-			if strings.HasPrefix(inc, "_shared/") {
-				continue // 平台共享层（根相对路径，任意扁鹊实例必有）；非扁鹊读者见仓内 knowledge/ 副本
-			}
-			if _, err := os.Stat(filepath.Join(packDir, e.Name(), inc)); err != nil {
-				add("ERROR", "%s prompt_includes %q 不存在（专家目录内相对路径）", d.Slug, inc)
-			}
-		}
-		var toolServers []string
-		for _, t := range d.Tools {
-			if t.Server == "" {
-				add("ERROR", "%s tools 条目缺 server", d.Slug)
-				continue
-			}
-			if !toolServerAllowRe.MatchString(t.Server) {
-				add("ERROR", "%s tools server=%q 命名非法（小写中划线）", d.Slug, t.Server)
-			}
-			// 变更面（破坏性）授权对账（批次四四三/四四四装包知情同意闸镜像）：
-			// allow 空 = 该 server 全量授予，含破坏性工具的 server 按最坏记 server/*，
-			// 装包/升级被平台闸拦（bq-markettool API 通道不带 consent 参数，装机必 400）。
-			if len(t.Allow) == 0 {
-				if destructiveTools[t.Server] != nil {
-					add("ERROR", "%s tools 对 %s 用空 allow 全量授予（含破坏性受审执行，装包被知情同意闸拦）——请显式列出只读白名单（批次二百六十四收敛范式）", d.Slug, t.Server)
-				} else {
-					add("WARN", "%s tools 对 %s 空 allow=全量授予（新工具注册时静默扩权）——请显式列出工具", d.Slug, t.Server)
-				}
-			} else {
-				// 显式 allow：命中破坏面清单 ⇒ 未登记豁免 ERROR（新增破坏面授权必须
-				// 在 destructiveExemptions 登记理由）；已登记 ⇒ WARN 保持知情同意要求可见。
-				var hits []string
-				for _, tool := range t.Allow {
-					if destructiveTools[t.Server][tool] {
-						hits = append(hits, tool)
-					}
-				}
-				if len(hits) > 0 {
-					if _, ok := destructiveExemptions[packName+"/"+d.Slug]; ok {
-						add("WARN", "%s 显式授予变更面工具 %s.%s（已登记设计内执行档豁免）——该包装/升级时站点须知情同意（allow_destructive_tools）", d.Slug, t.Server, strings.Join(hits, "/"))
-					} else {
-						add("ERROR", "%s 显式授予变更面（破坏性）工具 %s.%s——装包/升级被知情同意闸拦；若系设计内执行档请在 validator destructiveExemptions 登记理由", d.Slug, t.Server, strings.Join(hits, "/"))
-					}
-				}
-			}
-			toolServers = append(toolServers, t.Server)
-		}
-		v.expertTools[d.Slug] = toolServers
-		for _, s := range d.Skills {
-			name := skillRefName(s)
-			if name == "" {
-				continue
-			}
-			skillRefs[d.Slug] = append(skillRefs[d.Slug], name)
-			v.mountChecks = append(v.mountChecks, mountCheck{pack: packName, expert: d.Slug, skill: name})
-		}
-		v.expertRefs[d.Slug] = expertRef{pack: packName, skills: skillRefs[d.Slug], tools: toolServers}
-	}
-
-	// 技能
-	skillDirs, _ := os.ReadDir(filepath.Join(packDir, "skills"))
-	present := map[string]bool{}
-	if skillDirs != nil {
-		for _, e := range skillDirs {
-			if !e.IsDir() {
-				continue
-			}
-			name := e.Name()
-			present[name] = true
-			p := filepath.Join(packDir, "skills", name, "SKILL.md")
-			front, body, err := readFrontmatter(p)
-			if err != nil {
-				add("ERROR", "skills/%s/SKILL.md: %v", name, err)
-				continue
-			}
-			var sf skillFront
-			if err := yaml.Unmarshal([]byte(front), &sf); err != nil {
-				add("ERROR", "skills/%s frontmatter 非 YAML: %v", name, err)
-				continue
-			}
-			if sf.Name == "" || sf.Description == "" {
-				add("ERROR", "skills/%s frontmatter 缺 name/description（开放技能标准必填）", name)
-			}
-			if sf.Name != name {
-				add("ERROR", "skills/%s frontmatter name=%q 与目录名不一致", name, sf.Name)
-			}
-			if sf.Mode != "" && !skillModes[sf.Mode] {
-				add("ERROR", "skills/%s mode=%q 非法（static|on_demand）", name, sf.Mode)
-			}
-			if sf.Version == "" {
-				add("ERROR", "skills/%s frontmatter 缺 version（技能内容变更须同步升版）", name)
-			} else if !semverRe.MatchString(sf.Version) {
-				add("ERROR", "skills/%s version=%q 非 SemVer", name, sf.Version)
-			}
-			if sf.Maturity != "" && !maturities[sf.Maturity] {
-				add("ERROR", "skills/%s maturity=%q 非法", name, sf.Maturity)
-			}
-			for _, mc := range sf.RequiresMCP {
-				if mc.Server == "" {
-					add("ERROR", "skills/%s requires_mcp 条目缺 server", name)
-					continue
-				}
-				if !toolServerAllowRe.MatchString(mc.Server) {
-					add("ERROR", "skills/%s requires_mcp server=%q 命名非法（小写中划线）", name, mc.Server)
-				}
-				for _, t := range mc.Tools {
-					if strings.TrimSpace(t) == "" {
-						add("ERROR", "skills/%s requires_mcp server %q 的 tools 含空工具名", name, mc.Server)
-					}
-				}
-				v.skillNeeds[sf.Name] = append(v.skillNeeds[sf.Name], mc.Server)
-			}
-			for _, cs := range sf.ProvidesChanges {
-				if strings.TrimSpace(cs) == "" {
-					add("ERROR", "skills/%s provides_changes 含空 slug", name)
-					continue
-				}
-				v.skillChanges[sf.Name] = append(v.skillChanges[sf.Name], cs)
-			}
-			if strings.TrimSpace(body) == "" {
-				add("ERROR", "skills/%s 正文为空", name)
-			}
-			if prev, dup := v.skillOwner[sf.Name]; dup {
-				add("ERROR", "技能名 %q 跨包重复（%s 已占用；技能名是全局唯一空间）", sf.Name, prev)
-			} else if sf.Name != "" {
-				v.skillOwner[sf.Name] = packName
-				v.skillVersions[sf.Name] = sf.Version
-			}
-		}
-	}
-	for _, s := range m.Provides.Skills {
-		if !present[s] {
-			add("ERROR", "provides.skills 声明 %q 但 skills/%s/SKILL.md 不存在", s, s)
-		}
-	}
-	for name := range present {
-		if !slices.Contains(m.Provides.Skills, name) {
-			add("WARN", "skills/%s 存在但未登记 provides.skills（平台按 provides 装配，漏登记=装不进）", name)
-		}
-	}
-	// 包内 MCP 契约集（专家独立安装性核对：tools server 须有包内契约或属宿主面）
-	if mcpDirs, _ := os.ReadDir(filepath.Join(packDir, "mcp")); mcpDirs != nil {
-		set := map[string]bool{}
-		for _, e := range mcpDirs {
-			if !e.IsDir() && strings.HasSuffix(e.Name(), ".yaml") {
-				set[strings.TrimSuffix(e.Name(), ".yaml")] = true
-			}
-		}
-		v.packMCP[packName] = set
-	}
-	for _, s := range m.Provides.Experts {
-		if _, ok := expertSlugs[s]; !ok {
-			add("ERROR", "provides.experts 声明 %q 但包内无此 slug", s)
-		}
-	}
-	for slug := range expertSlugs {
-		if !slices.Contains(m.Provides.Experts, slug) {
-			add("WARN", "专家 %s 存在但未登记 provides.experts（平台按 provides 装配，漏登记=装不进）", slug)
-		}
-	}
-	// 专家技能引用存在性（包内或声明 requires 跨包时降级 warn）
-	for slug, names := range skillRefs {
-		for _, n := range names {
-			if !present[n] {
-				add("WARN", "%s 引用技能 %q 不在本包（跨包引用合法，请确认目标包已安装）", slug, n)
-			}
-		}
-	}
-
-	// 编目变更块（批次九十四「受审执行」）：changes/*.yaml 契约门 + 跨包 slug 唯一
-	// + 模板结构层快检（命令替换/控制字符拒——平台装载同规则，CI 先拦）。
-	if changeDirs, _ := os.ReadDir(filepath.Join(packDir, "changes")); changeDirs != nil {
-		for _, e := range changeDirs {
-			if e.IsDir() || !strings.HasSuffix(e.Name(), ".yaml") {
-				continue
-			}
-			craw, cerr := os.ReadFile(filepath.Join(packDir, "changes", e.Name()))
-			if cerr != nil {
-				add("ERROR", "changes/%s: %v", e.Name(), cerr)
-				continue
-			}
-			var cd changeDef
-			if yerr := yaml.Unmarshal(craw, &cd); yerr != nil {
-				add("ERROR", "changes/%s 解析: %v", e.Name(), yerr)
-				continue
-			}
-			if cd.APIVersion != wantAPIVersion {
-				add("ERROR", "changes/%s api_version=%d 与契约 %d 不兼容", e.Name(), cd.APIVersion, wantAPIVersion)
-			}
-			if cd.Slug == "" || cd.Title == "" || cd.RequestType == "" {
-				add("ERROR", "changes/%s 缺 slug/title/request_type（变更块最小契约）", e.Name())
-				continue
-			}
-			if cd.Risk < 1 || cd.Risk > 4 {
-				add("ERROR", "changes/%s risk=%d 越界（1-4）", e.Name(), cd.Risk)
-			}
-			kind := cd.Kind
-			if kind == "" {
-				kind = "command"
-			}
-			switch kind {
-			case "command":
-				if len(cd.Commands) == 0 {
-					add("ERROR", "changes/%s kind=command 缺 commands", e.Name())
-					continue
-				}
-				for _, tmpl := range cd.Commands {
-					if msg := changeTainted(tmpl); msg != "" {
-						add("ERROR", "changes/%s 命令模板非法: %s", e.Name(), msg)
-					}
-				}
-			case "mcp_tool":
-				if len(cd.Commands) > 0 {
-					add("ERROR", "changes/%s kind=mcp_tool 不能声明 commands", e.Name())
-				}
-				if cd.Server == "" || cd.Tool == "" {
-					add("ERROR", "changes/%s kind=mcp_tool 缺 server/tool", e.Name())
-					continue
-				}
-				all, write := mcpToolSets(packDir)
-				if !write[cd.Server][cd.Tool] {
-					add("ERROR", "changes/%s mcp_tool %s/%s 不在 mcp/%s.yaml 的 write_tools", e.Name(), cd.Server, cd.Tool, cd.Server)
-				}
-				for _, call := range cd.VerifyReadonlyTools {
-					if call.Tool == "" {
-						add("ERROR", "changes/%s verify_readonly_tools 含空 tool", e.Name())
-						continue
-					}
-					if !all[cd.Server][call.Tool] || write[cd.Server][call.Tool] {
-						add("ERROR", "changes/%s verify_readonly_tools %s/%s 不是只读工具", e.Name(), cd.Server, call.Tool)
-					}
-				}
-			default:
-				add("ERROR", "changes/%s kind=%q 非法（command|mcp_tool）", e.Name(), kind)
-			}
-			if strings.TrimSpace(cd.Rollback) == "" {
-				add("WARN", "changes/%s 缺 rollback（审批卡回退说明，人读必需）", e.Name())
-			}
-			if prev, dup := v.changeOwner[cd.Slug]; dup {
-				add("ERROR", "变更块 slug %q 跨包重复（%s 与 %s；平台装载同规则 fail）", cd.Slug, prev, packName)
-			} else {
-				v.changeOwner[cd.Slug] = packName
-			}
-		}
-	}
-
-	// 平台耦合文件（等位接管包携带）：语法门 + 映射目标核对
-	if araw, err := os.ReadFile(filepath.Join(packDir, "analyzers.yaml")); err == nil {
-		var an struct {
-			Analyzers []struct {
-				Slug string `yaml:"slug"`
-			} `yaml:"analyzers"`
-		}
-		if err := yaml.Unmarshal(araw, &an); err != nil {
-			add("ERROR", "analyzers.yaml 解析: %v", err)
-		} else {
-			for _, a := range an.Analyzers {
-				if _, ok := expertSlugs[a.Slug]; !ok {
-					add("ERROR", "analyzers.yaml 映射未知专家 %q（装载期会整体回落成检查盲区）", a.Slug)
-				}
-			}
-		}
-	}
-	if draw, err := os.ReadFile(filepath.Join(packDir, "disambiguation.yaml")); err == nil {
-		var x any // 消歧目标可指向平台内置 slug，只做语法门不做存在性核对
-		if yaml.Unmarshal(draw, &x) != nil {
-			add("ERROR", "disambiguation.yaml 解析失败")
-		}
-	}
-
-	// chain.yaml（可选）
-	craw, err := os.ReadFile(filepath.Join(packDir, "chain.yaml"))
-	if err == nil {
-		var c chainDef
-		if err := yaml.Unmarshal(craw, &c); err != nil {
-			add("ERROR", "chain.yaml 解析: %v", err)
-		} else {
-			if !strings.HasPrefix(c.Slug, "workflow/") {
-				add("ERROR", "chain slug %q 必须 workflow/ 前缀", c.Slug)
-			}
-			if prev, dup := v.chainOwner[c.Slug]; dup {
-				add("ERROR", "chain slug %q 跨包重复（%s 已占用）", c.Slug, prev)
-			} else if c.Slug != "" {
-				v.chainOwner[c.Slug] = packName
-			}
-			views := chainNodeViews(c)
-			if len(views) == 0 {
-				if c.isGraph() {
-					add("ERROR", "chain %s 无节点", c.Slug)
-				} else {
-					add("ERROR", "chain %s 无步骤", c.Slug)
-				}
-			}
-			if c.RoutePriority == "" {
-				add("ERROR", "chain %s 缺 route_priority", c.Slug)
-			} else if c.RoutePriority == "P0" {
-				add("ERROR", "chain %s 禁用 P0（P0 红线是专家域）", c.Slug)
-			} else if !prioRe.MatchString(c.RoutePriority) {
-				add("ERROR", "chain %s route_priority=%q 非法", c.Slug, c.RoutePriority)
-			}
-			if c.RouteGroup != "" && !routeGroups[c.RouteGroup] {
-				add("ERROR", "chain %s route_group=%q 不在白名单", c.Slug, c.RouteGroup)
-			}
-			if c.RouteDesc == "" {
-				add("WARN", "chain %s 缺 route_desc（链入口的 LLM 语义面）", c.Slug)
-			}
-			for _, kw := range append(slices.Clone(c.RouteKeywords), c.Symptoms...) {
-				if level, msg, dup := registerKeyword(v.kwOwner, kw, packName, c.RoutePriority); dup {
-					add(level, "chain %s: %s", c.Slug, msg)
-				}
-			}
-			for _, nv := range views {
-				if nv.kind != "agent" {
-					continue
-				}
-				if strings.HasPrefix(nv.agent, "workflow/") {
-					add("ERROR", "chain %s %s 引用 %q 非法：链步骤只能是叶子专家（治理闭环由平台衔接）", c.Slug, nv.pos, nv.agent)
-				}
-				if k, ok := expertSlugs[nv.agent]; ok && k == "engine" {
-					add("ERROR", "chain %s %s 引用 engine 专家 %q（链步骤禁 engine）", c.Slug, nv.pos, nv.agent)
-				} else if !ok {
-					add("WARN", "chain %s %s 引用 %q 不在本包（跨包引用合法，请确认目标包已安装）", c.Slug, nv.pos, nv.agent)
-				}
-				if pin := skillRefName(nv.skill); pin != "" {
-					if !present[pin] {
-						add("WARN", "chain %s %s 钉扎技能 %q 不在本包（跨包引用合法，请确认目标包已安装且技能名无误）", c.Slug, nv.pos, pin)
-					}
-					v.mountChecks = append(v.mountChecks, mountCheck{pack: packName, expert: nv.agent, skill: pin, chainSlug: c.Slug})
-				}
-				if nv.instruction == "" && nv.skill == nil {
-					add("WARN", "chain %s %s 无 instruction 且未钉扎技能", c.Slug, nv.pos)
-				}
-			}
-		}
-	}
-	v.checkPackAssets(packDir, packName, add)
-}
-
-// checkCrossRefs 全包扫描后核对工具面覆盖：技能 requires_mcp 声明的 server 必须
-// 出现在挂载它的专家（或链步骤目标专家）的 tools 授权里——「技能钉了面、专家
-// 没授权」是发布后不可达事故（obs-ops 0.3.0 loki-triage 即此形态），CI 必拦。
-// 目标专家或技能不在本仓（跨包/平台内置）时无法判定，跳过（存在性另有 WARN）。
-func (v *validator) checkCrossRefs() {
-	for _, mc := range v.mountChecks {
-		if _, ok := v.skillOwner[mc.skill]; !ok {
-			continue
-		}
-		granted, known := v.expertTools[mc.expert]
-		if !known {
-			continue
-		}
-		for _, srv := range v.skillNeeds[mc.skill] {
-			if slices.Contains(granted, srv) {
-				continue
-			}
-			if mc.chainSlug == "" {
-				v.add("ERROR", mc.pack, "专家 %s 挂载技能 %s 声明 requires_mcp server %q，但 agent.yaml tools 未授权该 server", mc.expert, mc.skill, srv)
-			} else {
-				v.add("ERROR", mc.pack, "链 %s 步骤钉扎技能 %s 声明 requires_mcp server %q，但目标专家 %s 的 tools 未授权", mc.chainSlug, mc.skill, srv, mc.expert)
-			}
-		}
-	}
-}
-
-// checkExpertInstall 专家可独立安装性（spec 2026-10-05-per-expert-install §6）：
-// 子集安装按闭包合成迷你包，闭包只含本包资产——跨包技能引用、无契约又非宿主面的
-// tools server 都让该专家装不出去（安装器会拒），CI 提前拦。
-func (v *validator) checkExpertInstall() {
-	for slug, ref := range v.expertRefs {
-		for _, s := range ref.skills {
-			if owner, ok := v.skillOwner[s]; ok && owner != ref.pack {
-				v.add("ERROR", ref.pack, "专家 %s 引用跨包技能 %s（属 %s）——专家级子集安装无法携带，须整包安装；如确需跨包挂载请在 provenance 说明并走整包设计", slug, s, owner)
-			}
-		}
-		for _, srv := range ref.tools {
-			if v.packMCP[ref.pack][srv] || hostSideMCP[srv] {
-				continue
-			}
-			// 契约清单是工具面事实记录（inventory），平台对缺席容忍（os-basics
-			// k8s-health 引 k8sgpt、契约在 k8s-ops 即现状）——降 WARN：迷你包
-			// 不带该契约，站点须确认 server 已在平台挂载。
-			v.add("WARN", ref.pack, "专家 %s tools server %q 无包内契约（mcp/%s.yaml）且不属宿主面白名单——专家级安装不带该契约清单，站点须确认平台已挂载", slug, srv, srv)
-		}
-	}
-}
-
-// checkChangeRefs 全包扫描后核对 provides_changes 引用闭包：技能声明的编目 slug
-// 必须真实存在（本仓任一包）；跨包引用合法但 WARN 提示依赖目标包安装。
-// 注意不做工具面交叉核对：受审执行走引擎直取（不经专家 allowlist），与
-// requires_mcp 的工具面覆盖语义不同（那是技能采集面的授权）。
-func (v *validator) checkChangeRefs() {
-	for skill, refs := range v.skillChanges {
-		for _, slug := range refs {
-			owner, ok := v.changeOwner[slug]
-			if !ok {
-				v.add("ERROR", v.skillOwner[skill], "技能 %s provides_changes 引用 %q 不存在于本仓任何包（编目引用闭包）", skill, slug)
-				continue
-			}
-			if owner != v.skillOwner[skill] {
-				v.add("WARN", v.skillOwner[skill], "技能 %s provides_changes 引用 %q 属于包 %s（跨包引用合法，站点须同时安装）", skill, slug, owner)
-			}
-		}
-	}
-}
-
-// checkDepends pack.yaml depends_on 环境前提闭包核对（bianque 批次四百四十二装包闸
-// 对齐）：平台装包/升级时对目标实例判定，不满足即拒装（allow_missing_deps 才放行）——
-// hub 在 CI 提前拦。
-//   - 技能依赖：名字必须能在本仓技能空间解析（本仓都解析不了 ⇒ 从本仓同步的实例
-//     更不会有，装包必被拒）；版本区间表达式必须可被平台同款解析器（Masterminds/semver，
-//     skillkit skill.VersionInRange 逐字同款语义）解析，且须覆盖本仓现值——区间合法但
-//     现值不满足 = 本仓两个包互相不兼容，凡同装必被闸拦。pack 级 optional 被平台忽略
-//     （一律按必需判），声明即误描 → WARN。
-//   - MCP 依赖：平台只核「已配置且启用」（conf ⊕ 各包声明 ⊕ DB 覆盖层），hub 看不到
-//     实例配置面——只做命名法度核对；本仓无任何包声明该 server 且非宿主面时 WARN 提示
-//     站点确认。min_version 平台不判（无版本源），不在此做漂移核对。
-func (v *validator) checkDepends() {
-	packs := make([]string, 0, len(v.packDependsOn))
-	for name := range v.packDependsOn {
-		packs = append(packs, name)
-	}
-	slices.Sort(packs)
-	for _, pack := range packs {
-		deps := v.packDependsOn[pack]
-		for _, dep := range deps.Skills {
-			if strings.TrimSpace(dep.Name) == "" {
-				v.add("ERROR", pack, "depends_on.skills 含空条目（平台判定按缺失处理）")
-				continue
-			}
-			if dep.Optional {
-				v.add("WARN", pack, "depends_on.skills %q 声明 optional——pack 级依赖的 optional 被平台忽略（一律按必需判），声明即误描", dep.Name)
-			}
-			owner, ok := v.skillOwner[dep.Name]
-			if !ok {
-				v.add("ERROR", pack, "depends_on.skills %q 不存在于本仓任何包——装包环境前提闸会因实例技能库无此技能拒装（跨包依赖请确认目标包在本仓且先装）", dep.Name)
-				continue
-			}
-			if dep.Version == "" {
-				continue // 区间空 = 任意版本（skill.VersionInRange 同款语义）
-			}
-			sat, err := versionInRange(v.skillVersions[dep.Name], dep.Version)
-			if err != nil {
-				v.add("ERROR", pack, "depends_on.skills %q 版本区间非法: %v（平台按不满足判，装包必拒）", dep.Name, err)
-				continue
-			}
-			if !sat {
-				v.add("ERROR", pack, "depends_on.skills %q 版本区间 %q 不满足本仓现值 %s（属 %s）——从本仓同步的实例同装必被环境前提闸拒", dep.Name, dep.Version, v.skillVersions[dep.Name], owner)
-			}
-		}
-		for _, dep := range deps.MCP {
-			if strings.TrimSpace(dep.Name) == "" {
-				v.add("ERROR", pack, "depends_on.mcp 含空条目")
-				continue
-			}
-			if !toolServerAllowRe.MatchString(dep.Name) {
-				v.add("ERROR", pack, "depends_on.mcp name=%q 命名非法（小写中划线）", dep.Name)
-			}
-			if hostSideMCP[dep.Name] || v.declaredInAnyPack(dep.Name) {
-				continue
-			}
-			v.add("WARN", pack, "depends_on.mcp %q 本仓无包声明且非宿主面——平台只核实例「已配置且启用」（conf 或控制台 MCP 页激活），装包前请确认目标实例已配置", dep.Name)
-		}
-	}
-}
-
-// declaredInAnyPack 该 server 是否被本仓任一包的 mcp/ 契约声明。
-func (v *validator) declaredInAnyPack(server string) bool {
-	for _, set := range v.packMCP {
-		if set[server] {
-			return true
-		}
-	}
-	return false
-}
-
-// versionInRange 平台 skillkit skill.VersionInRange 逐字同款语义（独立实现，漂移以
-// 平台侧为准绳同步）：expr 空=任意（恒真）；区间/版本非法返回错误。
-func versionInRange(version, expr string) (bool, error) {
-	if strings.TrimSpace(expr) == "" {
-		return true, nil
-	}
-	c, err := semver.NewConstraint(expr)
-	if err != nil {
-		return false, fmt.Errorf("版本区间非法 %q", expr)
-	}
-	ver, err := semver.NewVersion(version)
-	if err != nil {
-		return false, fmt.Errorf("版本 %q 非 SemVer", version)
-	}
-	return c.Check(ver), nil
-}
-
-// changeTainted 变更模板结构层快检（平台 agents.changeTainted 同构镜像：命令替换
-// /控制字符/未闭合引号拒；管道/重定向属审批文本合法组成）。
-func changeTainted(s string) string {
-	inSingle := false
-	runes := []rune(s)
-	for i := range runes {
-		r := runes[i]
-		if inSingle {
-			if r == '\'' {
-				inSingle = false
-			}
-			continue
-		}
-		if r < 0x20 || r == 0x7f {
-			return "control character / newline in command"
-		}
-		switch r {
-		case '\'':
-			inSingle = true
-		case '`':
-			return "backtick (command substitution)"
-		case '$':
-			if i+1 < len(runes) && runes[i+1] == '(' {
-				return "$( (command substitution)"
-			}
-		}
-	}
-	if inSingle {
-		return "unterminated quote"
-	}
-	return ""
-}
-
-// checkReadme 核对 README 包清单版本表与各 pack.yaml 同步（手工表格是版本纪律
-// 最常漂移之处）。约定在仓库根运行；找不到 README.md 时降级 WARN 跳过。
-func (v *validator) checkReadme() {
-	if len(v.packVersions) == 0 {
-		return
-	}
-	raw, err := os.ReadFile("README.md")
-	if err != nil {
-		v.add("WARN", "README", "未在当前目录找到 README.md，跳过包清单版本核对（应在仓库根运行）")
-		return
-	}
-	table := map[string]string{}
-	for _, m := range readmeRowRe.FindAllStringSubmatch(string(raw), -1) {
-		table[m[1]] = m[2]
-	}
-	if len(table) == 0 {
-		v.add("WARN", "README", "README 未识别到包清单表行（| [包名](packs/包名/) | 版本 |），跳过版本核对")
-		return
-	}
-	names := make([]string, 0, len(v.packVersions))
-	for name := range v.packVersions {
-		names = append(names, name)
-	}
-	slices.Sort(names)
-	for _, name := range names {
-		ver := v.packVersions[name]
-		rv, ok := table[name]
-		if !ok {
-			v.add("WARN", name, "README 包清单缺 %s 行", name)
-			continue
-		}
-		if rv != ver {
-			v.add("ERROR", name, "README 包清单版本 %s 与 pack.yaml %s 不一致（发版须同步 README 表；README 清单表是 hub 仓级资产，校验内嵌快照请用 --mode=embedded）", rv, ver)
-		}
-	}
-}
-
-// checkIndex index.json 对账（批次一百三十九）：索引是 bq-markettool search/info 的
-// 机器可读事实源（Claude Code marketplace.json 同构物）。缺失=WARN（渐进采用，检索
-// 侧自动降级现场扫描）；在而漂移=ERROR——多录/漏包/版本不符逼 CI 重新
-// `bq-markettool index-gen` 后入库，安装正确性不依赖索引（install 仍现扫目录）。
-// 包清单自本容器目录现扫（不依赖跨根累积的 packVersions——多根调用互不污染）。
-//
-// 索引是仓级资产，恒取 packs 容器的父目录（仓根）。packsRoot 先 Clean 再 Dir：
-// 带尾斜杠的 "./packs/" 不归一时 Dir("./packs/")="packs"，索引被找成
-// packs/index.json——读不到即走 IsNotExist 分支只 WARN 便 return，ERROR 级
-// 对账（漏包/多录/版本漂移）整段被静默跳过，退出码 0 假绿（issue #3）。
-func (v *validator) checkIndex(packsRoot string) {
-	raw, err := os.ReadFile(filepath.Join(filepath.Dir(filepath.Clean(packsRoot)), "index.json"))
-	if err != nil {
-		if os.IsNotExist(err) {
-			v.add("WARN", "index", "index.json 缺失（仓根）——跑 `bq-markettool index-gen -hub <本仓>` 生成并提交（检索面走索引，缺省降级现场扫描；校验内嵌快照请用 --mode=embedded）")
-			return
-		}
-		v.add("ERROR", "index", "读取 index.json: %v", err)
-		return
-	}
-	var idx struct {
-		Packs []struct {
-			Name    string `json:"name"`
-			Version string `json:"version"`
-		} `json:"packs"`
-	}
-	if err := json.Unmarshal(raw, &idx); err != nil {
-		v.add("ERROR", "index", "index.json 解析失败: %v", err)
-		return
-	}
-	onDisk := map[string]string{}
-	entries, err := os.ReadDir(packsRoot)
-	if err != nil {
-		return // run 的容器发现已报，此处不双报
-	}
-	for _, e := range entries {
-		if !e.IsDir() || strings.HasPrefix(e.Name(), ".") || strings.HasPrefix(e.Name(), "_") {
-			continue
-		}
-		rawManifest, err := os.ReadFile(filepath.Join(packsRoot, e.Name(), "pack.yaml"))
-		if err != nil {
-			continue // 非包目录不校验（与 run 同口径）
-		}
-		var m packManifest
-		if yaml.Unmarshal(rawManifest, &m) != nil || m.Name == "" {
-			continue
-		}
-		onDisk[m.Name] = m.Version
-	}
-	seen := map[string]bool{}
-	for _, p := range idx.Packs {
-		if seen[p.Name] {
-			v.add("ERROR", "index", "index.json 重复条目 %s", p.Name)
-			continue
-		}
-		seen[p.Name] = true
-		ver, ok := onDisk[p.Name]
-		if !ok {
-			v.add("ERROR", "index", "index.json 多录 %s（packs/ 无此包——重跑 index-gen 刷新）", p.Name)
-			continue
-		}
-		if ver != "" && ver != p.Version {
-			v.add("ERROR", p.Name, "index.json 版本漂移：索引 %s / pack.yaml %s（重跑 index-gen 刷新）", p.Version, ver)
-		}
-	}
-	for name := range onDisk {
-		if !seen[name] {
-			v.add("ERROR", "index", "index.json 漏包 %s（重跑 index-gen 刷新）", name)
-		}
-	}
-}
-
-// dangerousPatterns 发布侧内容扫描（批次一百四十，G4b；ClawHub「SKILL.md 变安装器」
-// 投毒案对标）：技能/专家正文是喂给 LLM 的执行面指令。分档依据实弹校准——
-// `curl|sh` 在运维指引正文有合法形态（helm/tidb 等工具安装，oo-devops 现存 4 处）
-// → 正文 WARN；**changes/ 变更块是受审执行通道的实际执行面 → 任何命中升 ERROR**
-// （声明层零容忍）。启发式有边界：只拦明文形态，变形/编码载荷靠平台执行面治理
-// （受审命令+审批门）兜底——扫描是内容审的第一道网，不是替代执行面治理。
-var dangerousPatterns = []struct {
-	re    *regexp.Regexp
-	level string
-	why   string
-}{
-	{regexp.MustCompile(`(?i)(curl|wget)\b[^|\n]{0,200}\|\s*(sudo\s+)?(ba|z|da|k)?sh\b`), "WARN", "pipe-to-shell 安装形态（curl|sh——投毒标准载荷；正文指引供复核）"},
-	{regexp.MustCompile(`(?im)^\s*rm\s+-rf\s+/(?:\s|$|\*)`), "WARN", "根目录递归删除形态（rm -rf /；示例/反例文档供复核）"},
-	{regexp.MustCompile(`(?i)(ignore|disregard|override)\s+(all\s+|any\s+)?(previous|prior|above)\s+(instructions|rules|prompts?)`), "WARN", "英文提示注入短语（ignore previous instructions 形态）"},
-	{regexp.MustCompile(`忽略(之前|上面|以上|先前)(的)?(所有)?(系统|历史)?指令|无视(之前|系统|上面)(的)?指令`), "WARN", "中文提示注入短语（忽略之前指令形态）"},
-	{regexp.MustCompile(`(?i)(cat|less|more|head|tail)\s+[^|\n;]*(id_rsa|\.aws/credentials|\.kube/config|/etc/shadow|\.ssh/)`), "WARN", "凭证文件直读建议（应走平台凭证面 requires_credentials）"},
-}
-
-// scanDangerous 对 packs 文本做危险内容扫描（walk 与 scanSensitive 同口径：跳过
-// ./_ 前缀目录、scanExts 文件类型、跨根去重）。changes/ 目录命中一律升 ERROR。
-func scanDangerous(roots ...string) []finding {
-	var out []finding
-	seen := map[string]bool{}
-	for _, root := range roots {
-		abs, err := filepath.Abs(root)
-		if err != nil {
-			continue
-		}
-		filepath.WalkDir(abs, func(p string, d os.DirEntry, err error) error {
-			if err != nil {
-				return nil
-			}
-			if d.IsDir() {
-				if p != abs && (strings.HasPrefix(d.Name(), ".") || strings.HasPrefix(d.Name(), "_")) {
-					return filepath.SkipDir
-				}
-				return nil
-			}
-			if seen[p] {
-				return nil
-			}
-			seen[p] = true
-			if !scanExts[strings.ToLower(filepath.Ext(p))] {
-				return nil
-			}
-			raw, _ := os.ReadFile(p)
-			rel, _ := filepath.Rel(abs, p)
-			rel = filepath.ToSlash(rel)
-			executable := strings.HasPrefix(rel, "changes/")
-			for _, pat := range dangerousPatterns {
-				if pat.re.Match(raw) {
-					level := pat.level
-					if executable {
-						level = "ERROR" // 受审执行通道的实际执行面，声明层零容忍
-					}
-					out = append(out, finding{level, rel, "内容扫描：" + pat.why})
-				}
-			}
-			return nil
-		})
-	}
-	slices.SortFunc(out, func(a, b finding) int { return strings.Compare(a.pack, b.pack) })
-	return out
-}
-
-func skillRefName(v any) string {
-	switch t := v.(type) {
-	case string:
-		return t
-	case map[string]any:
-		if n, ok := t["name"].(string); ok {
-			return n
-		}
-	}
-	return ""
-}
-
-// readFrontmatter 拆 SKILL.md 的 YAML 围栏（--- ... ---），返回 frontmatter 与正文。
-// 行尾统一 LF、去 BOM——Windows 编辑器产出的 CRLF/BOM 文件不误报「缺围栏」。
-func readFrontmatter(p string) (front, body string, err error) {
-	raw, err := os.ReadFile(p)
-	if err != nil {
-		return "", "", err
-	}
-	s := strings.TrimPrefix(strings.ReplaceAll(string(raw), "\r\n", "\n"), "\ufeff")
-	if !strings.HasPrefix(s, "---\n") {
-		return "", "", fmt.Errorf("缺 frontmatter 起始围栏")
-	}
-	end := strings.Index(s[4:], "\n---")
-	if end < 0 {
-		return "", "", fmt.Errorf("缺 frontmatter 结束围栏")
-	}
-	return s[4 : 4+end], s[4+end+4:], nil
-}
-
-// scanSensitive 脱敏扫描（error 级）：多个根去重遍历；隐藏/下划线目录（.git、
-// .v2c、_trash）不入；文本类文件全扫（含无扩展名），防凭证藏在白名单外类型里。
-func scanSensitive(roots ...string) []finding {
-	var out []finding
-	seen := map[string]bool{}
-	for _, root := range roots {
-		abs, err := filepath.Abs(root)
-		if err != nil {
-			continue
-		}
-		filepath.WalkDir(abs, func(p string, d os.DirEntry, err error) error {
-			if err != nil {
-				return nil
-			}
-			if d.IsDir() {
-				if p != abs && (strings.HasPrefix(d.Name(), ".") || strings.HasPrefix(d.Name(), "_")) {
-					return filepath.SkipDir
-				}
-				return nil
-			}
-			if seen[p] {
-				return nil
-			}
-			seen[p] = true
-			if !scanExts[strings.ToLower(filepath.Ext(p))] {
-				return nil
-			}
-			raw, _ := os.ReadFile(p)
-			for _, pat := range sensitivePatterns {
-				if loc := pat.re.Find(raw); loc != nil {
-					rel, _ := filepath.Rel(abs, p)
-					out = append(out, finding{"ERROR", rel, "脱敏拦截：" + pat.why})
-					break
-				}
-			}
-			return nil
-		})
-	}
-	slices.SortFunc(out, func(a, b finding) int { return strings.Compare(a.pack, b.pack) })
-	return out
-}
-
-// checkPackAssets 校验 P1 新增包资产：knowledge/（manifest + frontmatter）与
-// render/charts.yaml（受限路径 + 图表类型）；另核对 mcp write_tools 只引用已声明工具。
-// 与扁鹊平台 agents.loadPackKnowledge/loadPackRenderRules 同口径，CI 先拦。
-func (v *validator) checkPackAssets(packDir, packName string, add func(level, format string, a ...any)) {
-	knowledgeDir := filepath.Join(packDir, "knowledge")
-	if info, err := os.Stat(knowledgeDir); err == nil && info.IsDir() {
-		raw, err := os.ReadFile(filepath.Join(knowledgeDir, "manifest.yaml"))
-		if err != nil {
-			add("ERROR", "knowledge/manifest.yaml: %v", err)
-		} else {
-			var m struct {
-				APIVersion int    `yaml:"api_version"`
-				Pack       string `yaml:"pack"`
-				Docs       []struct {
-					Path  string `yaml:"path"`
-					Layer string `yaml:"layer"`
-				} `yaml:"docs"`
-			}
-			if err := yaml.Unmarshal(raw, &m); err != nil {
-				add("ERROR", "knowledge/manifest.yaml 解析: %v", err)
-			} else {
-				if m.APIVersion != wantAPIVersion {
-					add("ERROR", "knowledge/manifest.yaml api_version=%d 与契约 %d 不兼容", m.APIVersion, wantAPIVersion)
-				}
-				if m.Pack != "" && m.Pack != packName {
-					add("ERROR", "knowledge/manifest.yaml pack=%q 与目录名 %q 不一致", m.Pack, packName)
-				}
-				if len(m.Docs) == 0 {
-					add("ERROR", "knowledge/manifest.yaml docs 为空（删除 knowledge/ 目录=零知识，不留空壳）")
-				}
-				for _, doc := range m.Docs {
-					rel := strings.TrimSpace(doc.Path)
-					if rel == "" {
-						add("ERROR", "knowledge/manifest.yaml 存在空 path")
-						continue
-					}
-					content, rerr := os.ReadFile(filepath.Join(knowledgeDir, filepath.FromSlash(rel)))
-					if rerr != nil {
-						add("ERROR", "knowledge/%s 读取: %v", rel, rerr)
-						continue
-					}
-					text := strings.ReplaceAll(string(content), "\r\n", "\n")
-					if !strings.HasPrefix(text, "---\n") {
-						add("ERROR", "knowledge/%s 缺 frontmatter（--- 开头）", rel)
-						continue
-					}
-					rest := text[4:]
-					end := strings.Index(rest, "\n---")
-					if end < 0 {
-						add("ERROR", "knowledge/%s frontmatter 未闭合", rel)
-						continue
-					}
-					var fm struct {
-						Title string `yaml:"title"`
-						Layer string `yaml:"layer"`
-						Scope string `yaml:"scope"`
-					}
-					if yerr := yaml.Unmarshal([]byte(rest[:end]), &fm); yerr != nil {
-						add("ERROR", "knowledge/%s frontmatter 解析: %v", rel, yerr)
-						continue
-					}
-					if strings.TrimSpace(fm.Title) == "" {
-						add("ERROR", "knowledge/%s frontmatter 缺 title", rel)
-					}
-					layer := strings.TrimSpace(fm.Layer)
-					if layer == "" {
-						layer = strings.TrimSpace(doc.Layer)
-					}
-					if layer == "" {
-						add("ERROR", "knowledge/%s 缺 layer（frontmatter 或 manifest docs.layer）", rel)
-					}
-					if fm.Scope != "" && fm.Scope != "global" {
-						add("ERROR", "knowledge/%s scope=%q 非法（本期仅支持 global）", rel, fm.Scope)
-					}
-				}
-			}
-		}
-	}
-
-	renderDir := filepath.Join(packDir, "render")
-	if info, err := os.Stat(renderDir); err == nil && info.IsDir() {
-		raw, err := os.ReadFile(filepath.Join(renderDir, "charts.yaml"))
-		if err != nil {
-			add("ERROR", "render/charts.yaml: %v", err)
-		} else {
-			var m struct {
-				APIVersion int `yaml:"api_version"`
-				Rules      []struct {
-					ID    string `yaml:"id"`
-					Match struct {
-						Tool string `yaml:"tool"`
-					} `yaml:"match"`
-					Foreach string `yaml:"foreach"`
-					Chart   struct {
-						Type        string `yaml:"type"`
-						Title       string `yaml:"title"`
-						Unit        string `yaml:"unit"`
-						Series      string `yaml:"series"`
-						SeriesLabel string `yaml:"seriesLabel"`
-						Items       []struct {
-							Label string `yaml:"label"`
-							Value string `yaml:"value"`
-						} `yaml:"items"`
-						Events []struct {
-							Time   string `yaml:"time"`
-							Label  string `yaml:"label"`
-							Desc   string `yaml:"desc"`
-							Status string `yaml:"status"`
-						} `yaml:"events"`
-					} `yaml:"chart"`
-				} `yaml:"rules"`
-			}
-			if err := yaml.Unmarshal(raw, &m); err != nil {
-				add("ERROR", "render/charts.yaml 解析: %v", err)
-			} else {
-				if m.APIVersion != wantAPIVersion {
-					add("ERROR", "render/charts.yaml api_version=%d 与契约 %d 不兼容", m.APIVersion, wantAPIVersion)
-				}
-				if len(m.Rules) == 0 {
-					add("ERROR", "render/charts.yaml rules 为空（删除 render/ 目录=零规则，不留空壳）")
-				}
-				checkPath := func(ruleID, field, value string, required bool) {
-					value = strings.TrimSpace(value)
-					if value == "" {
-						if required {
-							add("ERROR", "render/charts.yaml 规则 %s: %s 不能为空", ruleID, field)
-						}
-						return
-					}
-					if strings.HasPrefix(value, "$") && !renderPathRe.MatchString(value) {
-						add("ERROR", "render/charts.yaml 规则 %s: %s 路径非法 %q", ruleID, field, value)
-					}
-				}
-				seen := map[string]bool{}
-				for _, rule := range m.Rules {
-					id := strings.TrimSpace(rule.ID)
-					if id == "" {
-						add("ERROR", "render/charts.yaml 存在空规则 id")
-						continue
-					}
-					if seen[id] {
-						add("ERROR", "render/charts.yaml 规则 id 重复: %s", id)
-					}
-					seen[id] = true
-					if strings.TrimSpace(rule.Match.Tool) == "" {
-						add("ERROR", "render/charts.yaml 规则 %s 缺 match.tool", id)
-					}
-					switch rule.Chart.Type {
-					case "bar", "line", "pie", "timeline", "topo":
-					default:
-						add("ERROR", "render/charts.yaml 规则 %s: type=%q 非法", id, rule.Chart.Type)
-					}
-					checkPath(id, "foreach", rule.Foreach, false)
-					checkPath(id, "title", rule.Chart.Title, true)
-					checkPath(id, "unit", rule.Chart.Unit, false)
-					checkPath(id, "series", rule.Chart.Series, false)
-					checkPath(id, "seriesLabel", rule.Chart.SeriesLabel, false)
-					for i, item := range rule.Chart.Items {
-						checkPath(id, fmt.Sprintf("items[%d].label", i), item.Label, true)
-						checkPath(id, fmt.Sprintf("items[%d].value", i), item.Value, true)
-					}
-					for i, event := range rule.Chart.Events {
-						checkPath(id, fmt.Sprintf("events[%d].time", i), event.Time, false)
-						checkPath(id, fmt.Sprintf("events[%d].label", i), event.Label, true)
-						checkPath(id, fmt.Sprintf("events[%d].desc", i), event.Desc, false)
-						checkPath(id, fmt.Sprintf("events[%d].status", i), event.Status, false)
-					}
-				}
-			}
-		}
-	}
-
-	// write_tools 只能引用同文件 tools 清单里已声明的工具（与平台 loader 同口径）。
-	if files, err := os.ReadDir(filepath.Join(packDir, "mcp")); err == nil {
-		for _, f := range files {
-			if f.IsDir() || !strings.HasSuffix(f.Name(), ".yaml") {
-				continue
-			}
-			raw, rerr := os.ReadFile(filepath.Join(packDir, "mcp", f.Name()))
-			if rerr != nil {
-				add("ERROR", "mcp/%s: %v", f.Name(), rerr)
-				continue
-			}
-			var doc struct {
-				Tools []struct {
-					Name string `yaml:"name"`
-				} `yaml:"tools"`
-				WriteTools []string `yaml:"write_tools"`
-			}
-			if yerr := yaml.Unmarshal(raw, &doc); yerr != nil {
-				add("ERROR", "mcp/%s 解析: %v", f.Name(), yerr)
-				continue
-			}
-			declared := map[string]bool{}
-			for _, tool := range doc.Tools {
-				declared[tool.Name] = true
-			}
-			for _, tool := range doc.WriteTools {
-				tool = strings.TrimSpace(tool)
-				if tool == "" {
-					continue
-				}
-				if !declared[tool] {
-					add("ERROR", "mcp/%s write_tools 含未声明工具 %q", f.Name(), tool)
-				}
-			}
-		}
-	}
-}
-
-// mcpToolSets 读取包内 mcp/*.yaml 的工具面：server → 全部工具 / write_tools。
-func mcpToolSets(packDir string) (map[string]map[string]bool, map[string]map[string]bool) {
-	all := map[string]map[string]bool{}
-	write := map[string]map[string]bool{}
-	entries, err := os.ReadDir(filepath.Join(packDir, "mcp"))
-	if err != nil {
-		return all, write
-	}
-	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".yaml") {
-			continue
-		}
-		server := strings.TrimSuffix(entry.Name(), ".yaml")
-		raw, rerr := os.ReadFile(filepath.Join(packDir, "mcp", entry.Name()))
-		if rerr != nil {
-			continue
-		}
-		var doc struct {
-			Tools []struct {
-				Name string `yaml:"name"`
-			} `yaml:"tools"`
-			WriteTools []string `yaml:"write_tools"`
-		}
-		if yaml.Unmarshal(raw, &doc) != nil {
-			continue
-		}
-		if all[server] == nil {
-			all[server] = map[string]bool{}
-			write[server] = map[string]bool{}
-		}
-		for _, tool := range doc.Tools {
-			all[server][tool.Name] = true
-		}
-		for _, tool := range doc.WriteTools {
-			write[server][strings.TrimSpace(tool)] = true
-		}
-	}
-	return all, write
+	return m
 }
