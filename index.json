@@ -89,9 +89,9 @@
     },
     {
       "name": "kylin-insight",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "api_version": 1,
-      "description": "KylinInsight 查询诊断 + AI 分析插件：31 个 MCP 工具（13 查询诊断 + 18 AI）、主/子专家、两层知识库、确定性图表映射与写操作审批。目标发现经 KylinInsight 资源服务，诊断/观测/AI 分析经 Gateway 与 AI 中间层；默认只读，写操作走编目审批。",
+      "description": "KylinInsight 查询诊断 + AI 分析插件：两 server 面（AI 中间层 15 只读工具 + querier 13 只读工具，均默认 enabled:false 站点激活）、主/子专家、两层知识库、确定性图表映射与写操作审批。2026-11-19 实测拆分：querier 面独立部署（未部署站点停用 query 专家）；默认只读，写操作走编目审批。",
       "path": "packs/kylin-insight",
       "experts": [
         "kylin-insight-ai",
