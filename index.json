@@ -89,7 +89,7 @@
     },
     {
       "name": "kylin-insight",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "api_version": 1,
       "description": "KylinInsight 查询诊断 + AI 分析插件：两 server 面（AI 中间层 18 内建工具 = 13 只读 + 4 写门控 + 1 brief 门控；querier 13 只读，均默认 enabled:false 站点激活）、主/子专家、两层知识库、确定性图表映射与写操作审批。2026-11-20 对齐网关仓内实现：AI 面支持 Gateway 聚合源（聚合网关 381 面，不含 querier 13）；变异写工具 3 个不授予 LLM 走编目审批；querier 未部署站点停用 query 专家。",
       "path": "packs/kylin-insight",
