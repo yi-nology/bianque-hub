@@ -22,6 +22,11 @@ type changeDef struct {
 	Tool                string   `yaml:"tool"`
 	Rollback            string   `yaml:"rollback"`
 	Commands            []string `yaml:"commands"`
+	Params              []struct {
+		Name   string   `yaml:"name"`
+		Kind   string   `yaml:"kind"`
+		Values []string `yaml:"values"`
+	} `yaml:"params"`
 	VerifyReadonlyTools []struct {
 		Tool string `yaml:"tool"`
 	} `yaml:"verify_readonly_tools"`
@@ -129,6 +134,20 @@ func (v *validator) checkPackChanges(packDir, packName string, add func(level, f
 				}
 			default:
 				add("ERROR", "changes/%s kind=%q 非法（command|mcp_tool）", e.Name(), kind)
+			}
+			// params[].kind 必须落在平台装载器接受集（agents.ChangeParam*：
+			// 缺省 string / string_list / enum 需 values）——批 633 补：此前只校验
+			// 条目 kind，kylin-insight 0.4.2 的 kind: list 过检后被平台拒载。
+			for _, p := range cd.Params {
+				switch p.Kind {
+				case "", "string", "string_list":
+				case "enum":
+					if len(p.Values) == 0 {
+						add("ERROR", "changes/%s 参数 %q kind=enum 但缺 values", e.Name(), p.Name)
+					}
+				default:
+					add("ERROR", "changes/%s 参数 %q kind=%q 非法（string|string_list|enum）", e.Name(), p.Name, p.Kind)
+				}
 			}
 			if strings.TrimSpace(cd.Rollback) == "" {
 				add("WARN", "changes/%s 缺 rollback（审批卡回退说明，人读必需）", e.Name())
