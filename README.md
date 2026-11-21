@@ -5,17 +5,16 @@
 扁鹊平台一条命令导入。
 
 ```
-├── packs/                  # 可安装的领域包（每个子目录 = 一个包）
-│   ├── os-basics/          # 主机/OS + K8s 诊断包（社区版，内置同名包的上游）
-│   ├── k8s-ops/            # Kubernetes 集群诊断包（工作负载/事件/Helm/证书）
-│   ├── mw-ops/             # 中间件诊断包（Redis 缓存 / Kafka / RabbitMQ）
-│   ├── db-ops/             # 数据库诊断包（MySQL / PostgreSQL）
-│   ├── web-ops/            # 网页巡检取证包（无头 Chromium 渲染采集——SPA 正文/截图/白屏分型）
-│   ├── cicd-ops/           # 交付链诊断包（Jenkins / GitLab CI / Harbor / ArgoCD）
-│   ├── obs-ops/            # 可观测自诊包（Prometheus / Grafana / ES / Loki——监控失明场景）
-│   ├── n8n-ops/            # n8n 自托管平台运维包（实例/执行/webhook/队列模式/生命周期）
-│   ├── docker-ops/         # Docker Engine 运维包（引擎/容器/镜像磁盘/网络/Compose 编排）
+├── packs/                  # 可安装的领域包（每个子目录 = 一个包；生态/站点对接为主）
+│   ├── gitlab-ops/         # GitLab 自托管平台运维包
+│   ├── n8n-ops/            # n8n 自托管平台运维包
+│   ├── oo-devops/          # OpenOcta 生态参考库（31 员工 + 189 技能）
+│   ├── kylin-insight/      # KylinInsight 观测对接包
 │   └── chain-starter/      # 最小示例包（贡献模板：专家+技能+链逐文件拆解）
+│                           #   ⚠ 通用运维域基础包（os-basics/db/docker/mw/nginx/obs/
+│                           #   k8s/cicd/web 九包）已于 2026-11-21 批643 移入扁鹊内置
+│                           #   seed（随二进制分发，新机开箱即用）——本仓不再是其编辑点，
+│                           #   改动请走扁鹊仓 internal/agents/seed/ + PR。
 ├── index.json              # 包索引（机器可读清单：名称/版本/专家/构成计数；
 │                           #   bq-markettool index-gen 维护，validator 对账）
 ├── knowledge/              # 平台速查知识副本（platform-matrix 等，供非扁鹊运行时）
@@ -61,21 +60,21 @@ bianque markettool install os-basics --url https://github.com/you/bianque-hub --
 `BQMT_USER`+`BQMT_PASS`（=`--user`/`--pass`）：仅在对应 flag 未给出时生效，
 凭据不落命令行历史。`bianque markettool`（不带参）看全部子命令与缺省规则。
 
-已装过的包再次导入即**升级**；`os-basics` 社区版与扁鹊内置同名包**等位可接管**
-（slug/路由/技能完全一致，升级后原位替换，卸载并重启自动还原内置版）。
+已装过的包再次导入即**升级**。（⚠ 2026-11-21 批643：通用运维域基础九包已移入扁鹊
+内置 seed——`os-basics` 的「等位可接管」语义随之退役，本仓不再提供该包。）
 
 也可以在扁鹊控制台「插件」页上传/安装本仓包目录的 zip，或直接调 API：
 
 ```bash
 curl -X POST http://127.0.0.1:8900/api/v1/plugins/install \
   -H 'Authorization: Bearer <admin-token>' -H 'Content-Type: application/json' \
-  -d '{"path": "/path/to/bianque-hub/packs/os-basics", "operator": "you"}'
+  -d '{"path": "/path/to/bianque-hub/packs/gitlab-ops", "operator": "you"}'
 ```
 
 只装某个专家（专家级子集安装）：
 
 ```bash
-bianque markettool install k8s-ops --expert k8s-workload-analyst
+bianque markettool install gitlab-ops --expert gitlab-platform-analyst
 ```
 
 `--expert` 可重复；每个专家安装为**独立插件**（`<包>.<专家>`，如
@@ -147,29 +146,21 @@ bianque markettool search --json k8s | jq '.results[].name'
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [os-basics](packs/os-basics/) | 1.9.4 | 巡检/性能/内存/IO/网络/安全六域专家 + 安全四技能 + K8s 诊断（k8sgpt 桥）+ 主机快查链 |
-| [k8s-ops](packs/k8s-ops/) | 0.2.1 | K8s 集群诊断：工作负载分诊/事件时间线/Helm/证书四技能 + 集群巡检链（k8sgpt + ask-ops 只读命令面）+ 编目变更块三件（回滚/续期/滚动重启） |
 | [kylin-insight](packs/kylin-insight/) | 0.4.3 | KylinInsight 查询诊断 + AI 分析：两 server 面（AI 中间层 18 内建 = 13 只读 + 4 写门控 + 1 brief；querier 13 只读，均默认关闭站点激活）+ 主/子专家 + 两层知识库 + `render/charts.yaml` 确定性出图（含抓包统计映射）；AI 面支持 Gateway 聚合源（聚合网关 381 面，不含 querier 13）；写工具走编目审批；querier 未部署站点停用 query 专家 |
-| [mw-ops](packs/mw-ops/) | 0.3.1 | 中间件诊断：Redis 五类分诊/热Key大Key + Kafka/RabbitMQ 积压与集群面 + 中间件例检链 + 编目变更块三件（UNLINK/清队列/位点重置） |
-| [db-ops](packs/db-ops/) | 0.3.1 | 数据库诊断：MySQL 连接/锁/慢查询/复制链 + PG 膨胀/WAL/复制槽 + 数据库例检链 |
-| [web-ops](packs/web-ops/) | 0.3.0 | 网页巡检取证：SPA 渲染正文/全页截图取证/白屏四分型（browser-ops 工具面，conf 缺省关） |
-| [cicd-ops](packs/cicd-ops/) | 0.4.0 | 交付链诊断：Jenkins/GitLab CI/Harbor/ArgoCD 四排障技能（构建→推送→同步三段定位；GitLab 面含身份预检/状态语义/trace 下钻，参考官方 CLI glab 方法论）+ 编目变更块五件（argocd sync/rollback + GitLab 作业级/流水线级重跑与取消） |
-| [obs-ops](packs/obs-ops/) | 0.4.0 | 可观测自诊：Prometheus 采集/规则面 + Grafana 数据源/面板面 + ES 集群/分片面 + Loki 日志查询面（监控失明场景）+ 编目变更块两件（flood 解锁/分配恢复） |
 | [gitlab-ops](packs/gitlab-ops/) | 0.4.0 | GitLab 自托管平台运维：实例本体/仓库推拉/认证权限/生命周期四技能 + 平台诊断专家（ask-ops 只读面）+ gitlab 凭证类型与 mcp/gitlab 只读桥声明（控制台治理面激活+凭证绑定）；CI 流水线与 runner 面归 cicd-ops |
-| [nginx-ops](packs/nginx-ops/) | 0.4.0 | Nginx 自托管运维：可用性/路由重写/TLS/生命周期四技能 + 平台诊断专家（ask-ops 只读面，reload 类变更恒审批后执行）；纯宿主形态不依赖凭证平面；K8s Ingress 与 openresty/lua 不在范围 |
 | [n8n-ops](packs/n8n-ops/) | 0.3.0 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
-| [docker-ops](packs/docker-ops/) | 0.2.0 | Docker Engine 运维：引擎本体/容器运行面（退出码/OOMKilled）/镜像磁盘面（拉取失败/回收）/网络面/Compose 编排面五技能 + 平台诊断专家（ask-ops 只读面）+ 编目变更块三件（容器重启/内存上限在线调整/悬空镜像回收）；K8s 编排容器归 k8s-ops |
 | [chain-starter](packs/chain-starter/) | 0.1.3 | 最小示例包（贡献模板，含技能钉扎演示） |
 | [oo-devops](packs/oo-devops/) | 1.3.0 | OpenOcta 归化参考库（31 员工 + 189 技能 + 7 MCP 声明）——**不进缺省分发**：方法论已按域收割进四领域包，本包作参考库维护（A 案：hub 为内容唯一编辑点）；1.3.0 工具授权面显式化（ask-ops 只读十二件套等，对齐装包知情同意闸） |
 
 ## oo-devops 迁移说明
 
 扁鹊仓原 `experts/oo-devops`（openocta 市场归化整包：31 员工 + 189 技能）**不再整包
-承接**。其中有诊断价值的方法论按域收割重写为本仓四包：**mw-ops / db-ops / cicd-ops /
-obs-ops**（血缘与未搬运清单见各包 provenance.json 与 README 改造说明）。该域能力的
-日常维护在对应领域包进行；oo-devops 本体按 2026-10-05 A 案转为 hub 托管参考库——
-内容唯一编辑点即 `packs/oo-devops/`（市场转换管线已退役，改动直接编辑并走 PR），
-不进 seed-sync 缺省分发，整包安装走控制台 bundle 路径。
+承接**。其中有诊断价值的方法论按域收割重写为四领域包：**mw-ops / db-ops / cicd-ops /
+obs-ops**（血缘与未搬运清单见各包 provenance.json）——⚠ 这四包已于 2026-11-21 批643
+移入扁鹊内置 seed（`internal/agents/seed/`），本仓不再托管；该域能力的日常维护在
+扁鹊仓对应 seed 包进行。oo-devops 本体按 2026-10-05 A 案转为 hub 托管参考库——
+内容唯一编辑点即 `packs/oo-devops/`（改动直接编辑并走 PR），整包安装走控制台
+bundle 路径。
 
 ## 本地校验
 

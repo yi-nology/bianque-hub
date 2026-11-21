@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20",
+  "generated_at": "2026-11-21",
   "tool": "bq-markettool index-gen",
   "packs": [
     {
@@ -14,46 +14,6 @@
       "skills": 1,
       "changes": 0,
       "chain": true
-    },
-    {
-      "name": "cicd-ops",
-      "version": "0.4.0",
-      "api_version": 1,
-      "description": "交付链诊断包（社区版首批）：Jenkins / GitLab CI / Harbor / ArgoCD 四技能 + 流水线分析专家，覆盖构建失败、runner 掉线、制品库异常、GitOps 同步失败分诊。方法论由 oo-devops 市场包收割重写（去工具耦合），GitLab 流水线面参考 GitLab 官方 CLI（glab）方法论学生级改写（身份/可见性预检、created/pending 两分、状态语义、trace 尾部下钻）；统一 ask-ops 只读采集面；编目变更块五件（argocd sync/rollback + GitLab 作业级/流水线级重跑与流水线取消）接「诊断+处方+受审执行」范式。",
-      "path": "packs/cicd-ops",
-      "experts": [
-        "pipeline-analyst"
-      ],
-      "skills": 4,
-      "changes": 5,
-      "chain": false
-    },
-    {
-      "name": "db-ops",
-      "version": "0.3.1",
-      "api_version": 1,
-      "description": "数据库诊断包（社区版首批）：MySQL 与 PostgreSQL 双专家，连接/锁/慢查询/容量五类分诊、复制链专项、PG 膨胀与 WAL 判读三技能 + 数据库例检链。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面。",
-      "path": "packs/db-ops",
-      "experts": [
-        "mysql-analyst",
-        "pg-analyst"
-      ],
-      "skills": 3,
-      "changes": 1,
-      "chain": true
-    },
-    {
-      "name": "docker-ops",
-      "version": "0.2.0",
-      "api_version": 1,
-      "description": "Docker Engine 运维包（社区版）：引擎本体（daemon 起不来/daemon.json/存储驱动/live-restore）、容器运行面（退出码/OOMKilled/重启循环/资源上限）、镜像与磁盘面（拉取失败/加速器/system df/回收）、网络面（端口映射/bridge DNS/自定义网络）、Compose 编排面五技能 + 平台诊断专家。方法论基于 Docker 官方文档原生编写，oo-devops 参考库 docker-employee/docker-ops 技能仅作素材对账（env 注入/MCP 示例/PowerShell 变体未搬）；宿主侧统一 ask-ops 只读采集面（dockerGuard 只读子命令白名单：ps/logs --tail/inspect/stats --no-stream/events --until/port/history/diff/images/network|volume|system 子面；docker exec/run/pull/update/prune/compose 不在只读面）；编目变更块三件（容器重启/内存上限在线调整/悬空镜像回收）接「诊断+处方+受审执行」范式。边界：K8s 编排容器归 k8s-ops，宿主机本体归 os-basics，应用平台本体（n8n/GitLab/Nginx）归各自领域包，Harbor 仓库面归 cicd-ops。",
-      "path": "packs/docker-ops",
-      "experts": [
-        "docker-analyst"
-      ],
-      "skills": 5,
-      "changes": 3,
-      "chain": false
     },
     {
       "name": "gitlab-ops",
@@ -72,22 +32,6 @@
       ]
     },
     {
-      "name": "k8s-ops",
-      "version": "0.2.1",
-      "api_version": 1,
-      "description": "Kubernetes 集群诊断包（社区版首批）：工作负载异常分诊/事件时间线/Helm 排查/证书巡检四技能 + 工作负载分析专家 + 集群巡检链（链入口直达，不经意图路由）。工具面声明 k8sgpt 0.4.39 契约清单 + ask-ops 宿主侧只读命令面（helm/kubeadm/kubectl）；编目变更块三件（helm 应急回滚/证书续期/滚动重启）接「诊断+处方+受审执行」范式。",
-      "path": "packs/k8s-ops",
-      "experts": [
-        "k8s-workload-analyst"
-      ],
-      "skills": 4,
-      "changes": 3,
-      "chain": true,
-      "requires_credentials": [
-        "kubeconfig"
-      ]
-    },
-    {
       "name": "kylin-insight",
       "version": "0.4.3",
       "api_version": 1,
@@ -103,20 +47,6 @@
       "chain": false
     },
     {
-      "name": "mw-ops",
-      "version": "0.3.1",
-      "api_version": 1,
-      "description": "中间件诊断包（社区版首批）：缓存（Redis）与消息队列（Kafka/RabbitMQ）双专家，五类分诊/热Key大Key/消费积压/队列堆积四技能 + 中间件例检链。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面；编目变更块三件（UNLINK 删除/清队列/位点重置）接「诊断+处方+受审执行」范式。",
-      "path": "packs/mw-ops",
-      "experts": [
-        "cache-analyst",
-        "mq-analyst"
-      ],
-      "skills": 4,
-      "changes": 3,
-      "chain": true
-    },
-    {
       "name": "n8n-ops",
       "version": "0.3.0",
       "api_version": 1,
@@ -127,35 +57,6 @@
       ],
       "skills": 5,
       "changes": 1,
-      "chain": false,
-      "requires_credentials": [
-        "datasources"
-      ]
-    },
-    {
-      "name": "nginx-ops",
-      "version": "0.4.0",
-      "api_version": 1,
-      "description": "Nginx 自托管运维包（社区版）：可用性面（502/504/连接拒/worker 打满）、路由重写面（404/重定向循环/location/try_files）、TLS 面（证书链/握手/混合内容）、生命周期面（-t 校验/reload vs restart/平滑升级/日志轮转）四技能 + 平台诊断专家。方法论基于 Nginx 官方文档与社区共识原生编写；统一 ask-ops 只读采集面（curl 本地端点、systemctl/journalctl、nginx -t/-T、ss/lsof、tail 日志）；reload/restart 类变更动作一律审批后宿主侧执行（不在只读白名单）。纯宿主形态不依赖凭证平面；K8s Ingress 形态与 openresty/lua 扩展面不在本包范围。",
-      "path": "packs/nginx-ops",
-      "experts": [
-        "nginx-platform-analyst"
-      ],
-      "skills": 4,
-      "changes": 2,
-      "chain": true
-    },
-    {
-      "name": "obs-ops",
-      "version": "0.4.0",
-      "api_version": 1,
-      "description": "可观测自诊包（社区版首批）：“监控系统的监控”——Prometheus 采集与规则面、Grafana 数据源与面板面、Elasticsearch 集群与分片面、Loki 日志查询面四技能 + 可观测自诊专家，专治监控失明场景。方法论由 oo-devops 市场包收割重写（去工具耦合），统一 ask-ops 只读采集面；编目变更块两件（flood 只读锁解除/分片分配恢复）接「诊断+处方+受审执行」范式。",
-      "path": "packs/obs-ops",
-      "experts": [
-        "obs-analyst"
-      ],
-      "skills": 4,
-      "changes": 2,
       "chain": false,
       "requires_credentials": [
         "datasources"
@@ -206,41 +107,6 @@
       "requires_credentials": [
         "datasources"
       ]
-    },
-    {
-      "name": "os-basics",
-      "version": "1.9.4",
-      "api_version": 1,
-      "description": "主机/OS + Kubernetes 集群诊断包（社区版）：巡检、性能、内存、IO、网络、安全六域专家与安全四技能，附主机快查链。与扁鹊内置同名包等位可接管，上游更新以本仓为准。",
-      "path": "packs/os-basics",
-      "experts": [
-        "io-analysis",
-        "k8s-health",
-        "memory-analysis",
-        "network-analysis",
-        "perf-tuning",
-        "security-assistant",
-        "system-patrol"
-      ],
-      "skills": 5,
-      "changes": 1,
-      "chain": true,
-      "requires_credentials": [
-        "kubeconfig"
-      ]
-    },
-    {
-      "name": "web-ops",
-      "version": "0.3.0",
-      "api_version": 1,
-      "description": "网页巡检取证包：无头 Chromium 渲染采集（SPA 正文/截图/白屏判读）——依赖 browser-ops 工具面（bianque-tools ≥ 含 browser-ops 的版本，conf mcp.servers 启用）。",
-      "path": "packs/web-ops",
-      "experts": [
-        "web-inspector"
-      ],
-      "skills": 2,
-      "changes": 0,
-      "chain": false
     }
   ]
 }
