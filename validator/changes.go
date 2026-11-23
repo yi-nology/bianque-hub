@@ -12,17 +12,17 @@ import (
 // changeDef 编目变更块（<包>/changes/<slug>.yaml；平台 agents.ChangeDef 同构镜像，
 // 校验子集）。治理红线：包侧只声明编目，审批/执行/验证归平台。
 type changeDef struct {
-	APIVersion          int      `yaml:"api_version"`
-	Slug                string   `yaml:"slug"`
-	Title               string   `yaml:"title"`
-	RequestType         string   `yaml:"request_type"`
-	Risk                int      `yaml:"risk"`
-	Kind                string   `yaml:"kind"`
-	Server              string   `yaml:"server"`
-	Tool                string   `yaml:"tool"`
-	Rollback            string   `yaml:"rollback"`
-	Commands            []string `yaml:"commands"`
-	Params              []struct {
+	APIVersion  int      `yaml:"api_version"`
+	Slug        string   `yaml:"slug"`
+	Title       string   `yaml:"title"`
+	RequestType string   `yaml:"request_type"`
+	Risk        int      `yaml:"risk"`
+	Kind        string   `yaml:"kind"`
+	Server      string   `yaml:"server"`
+	Tool        string   `yaml:"tool"`
+	Rollback    string   `yaml:"rollback"`
+	Commands    []string `yaml:"commands"`
+	Params      []struct {
 		Name   string   `yaml:"name"`
 		Kind   string   `yaml:"kind"`
 		Values []string `yaml:"values"`

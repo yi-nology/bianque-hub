@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-21",
+  "generated_at": "2026-11-23",
   "tool": "bq-markettool index-gen",
   "packs": [
     {
@@ -33,9 +33,9 @@
     },
     {
       "name": "kylin-insight",
-      "version": "0.4.3",
+      "version": "0.5.0",
       "api_version": 1,
-      "description": "KylinInsight 查询诊断 + AI 分析插件：两 server 面（AI 中间层 18 内建工具 = 13 只读 + 4 写门控 + 1 brief 门控；querier 13 只读，均默认 enabled:false 站点激活）、主/子专家、两层知识库、确定性图表映射与写操作审批。2026-11-20 对齐网关仓内实现：AI 面支持 Gateway 聚合源（聚合网关 381 面，不含 querier 13）；变异写工具 3 个不授予 LLM 走编目审批；querier 未部署站点停用 query 专家。",
+      "description": "KylinInsight 查询诊断 + AI 分析插件：单一 MCP 面（三合一进程 insights-gateway：agent 族 18 内建 = 13 只读 + 4 写门控 + 1 brief 门控 + gateway 族同实例按 MCP_TOOLSET；querier 13 只读独立部署，均默认 enabled:false 站点激活）、主/子专家、两层知识库、确定性图表映射与写操作审批。2026-11-23 适配网关单一 MCP 面（1d474c2）；变异写工具 3 个不授予 LLM 走编目审批；querier 未部署站点停用 query 专家。",
       "path": "packs/kylin-insight",
       "experts": [
         "kylin-insight-ai",
