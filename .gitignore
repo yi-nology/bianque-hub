@@ -1,3 +1,5 @@
 .DS_Store
 *.log
 .v2c/
+# ZCode 插件本地缓存指针（video-agent-kit），本机状态不入库
+.video_agent/
