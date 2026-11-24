@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-23",
+  "generated_at": "2026-11-25",
   "tool": "bq-markettool index-gen",
   "packs": [
     {
@@ -33,9 +33,9 @@
     },
     {
       "name": "kylin-insight",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "api_version": 1,
-      "description": "KylinInsight 查询诊断 + AI 分析插件：单一 MCP 面（三合一进程 insights-gateway：agent 族 18 内建 = 13 只读 + 4 写门控 + 1 brief 门控 + gateway 族同实例按 MCP_TOOLSET；querier 13 只读独立部署，均默认 enabled:false 站点激活）、主/子专家、两层知识库、确定性图表映射与写操作审批。2026-11-23 适配网关单一 MCP 面（1d474c2）；变异写工具 3 个不授予 LLM 走编目审批；querier 未部署站点停用 query 专家。",
+      "description": "KylinInsight 查询诊断 + AI 分析插件：单一 MCP 面（三合一进程 insights-gateway：agent 族 18 内建 = 13 只读 + 4 写门控 + 1 brief 门控 + gateway 族同实例按 MCP_TOOLSET；querier 13 只读独立部署，均默认 enabled:false 站点激活）、主/子专家、四步全面诊断链（目标发现→应用面 RED→网络面 L4→下钻收口，跑 querier 面）、两层知识库、确定性图表映射与写操作审批。2026-11-23 适配网关单一 MCP 面（1d474c2）；变异写工具 3 个不授予 LLM 走编目审批；querier 未部署站点停用 query 专家与诊断链。",
       "path": "packs/kylin-insight",
       "experts": [
         "kylin-insight-ai",
@@ -44,7 +44,8 @@
       ],
       "skills": 4,
       "changes": 3,
-      "chain": false
+      "chain": true,
+      "user_config": 2
     },
     {
       "name": "n8n-ops",
