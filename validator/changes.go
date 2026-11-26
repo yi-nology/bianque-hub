@@ -137,7 +137,7 @@ func (v *validator) checkPackChanges(packDir, packName string, add func(level, f
 			}
 			// params[].kind 必须落在平台装载器接受集（agents.ChangeParam*：
 			// 缺省 string / string_list / enum 需 values）——批 633 补：此前只校验
-			// 条目 kind，kylin-insight 0.4.2 的 kind: list 过检后被平台拒载。
+			// 条目 kind，此前某包 0.4.2 的 kind: list 过检后被平台拒载。
 			for _, p := range cd.Params {
 				switch p.Kind {
 				case "", "string", "string_list":

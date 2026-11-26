@@ -9,7 +9,6 @@
 │   ├── gitlab-ops/         # GitLab 自托管平台运维包
 │   ├── n8n-ops/            # n8n 自托管平台运维包
 │   ├── oo-devops/          # OpenOcta 生态参考库（31 员工 + 189 技能）
-│   ├── kylin-insight/      # KylinInsight 观测对接包
 │   └── chain-starter/      # 最小示例包（贡献模板：专家+技能+链逐文件拆解）
 │                           #   ⚠ 通用运维域基础包（os-basics/db/docker/mw/nginx/obs/
 │                           #   k8s/cicd/web 九包）已于 2026-11-21 批643 移入扁鹊内置
@@ -146,7 +145,6 @@ bianque markettool search --json k8s | jq '.results[].name'
 
 | 包 | 版本 | 内容 |
 |---|---|---|
-| [kylin-insight](packs/kylin-insight/) | 0.7.3 | KylinInsight 查询诊断 + AI 分析：pack 自带 stdio MCP runtime（13 分析工具，`insights_status` 探测 gateway 连通性）+ gateway 原始证据面（41 只读，gateway toolset=pack 42）+ 五步证据组合诊断链（runtime 定范围 → 应用/网络/K8s/Profile 证据 → 结论）；querier 13 工具可选增强，未部署不影响 query 专家；主/子专家 + 两层知识库 + `render/charts.yaml` 确定性出图；写工具走编目审批；`user_config` 页内配 gateway `/mcp` 地址 |
 | [gitlab-ops](packs/gitlab-ops/) | 0.4.0 | GitLab 自托管平台运维：实例本体/仓库推拉/认证权限/生命周期四技能 + 平台诊断专家（ask-ops 只读面）+ gitlab 凭证类型与 mcp/gitlab 只读桥声明（控制台治理面激活+凭证绑定）；CI 流水线与 runner 面归 cicd-ops |
 | [n8n-ops](packs/n8n-ops/) | 0.3.0 | n8n 自托管平台运维：实例本体/执行面/webhook 触发面/队列模式/生命周期五技能 + 平台诊断专家（datasources n8n 查询面 + ask-ops 主机面）+ 编目变更块一件（容器重启） |
 | [chain-starter](packs/chain-starter/) | 0.1.3 | 最小示例包（贡献模板，含技能钉扎演示） |
